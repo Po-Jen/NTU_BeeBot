@@ -77,6 +77,6 @@ Install rgbdslam_v2:
 	sudo apt-get install ros-hydro-libg2o
 	catkin_make
 
-Run rgbdslam_v2(with GUI):
+Run rgbdslam_v2 with Xtion(with GUI):
 
-	roslaunch rgbdslam openni+rgbdslam.launch
+	roslaunch mobile_safeguard_primitive xtion+rgbdslam.launch
