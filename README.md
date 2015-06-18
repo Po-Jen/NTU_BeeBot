@@ -69,3 +69,14 @@ Fires up the driver:
 Send the goal via Rviz:
 
 	rosrun rviz rviz
+
+## 2.4 Run rgbdslam (only on Hydro)
+Install rgbdslam_v2:
+
+	git clone https://github.com/felixendres/rgbdslam_v2.git
+	sudo apt-get install ros-hydro-libg2o
+	catkin_make
+
+Run rgbdslam_v2(with GUI):
+
+	roslaunch rgbdslam openni+rgbdslam.launch
