@@ -27,7 +27,7 @@ Execute teleop for testing if the driver works by:
 
 	rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 
-## 2.2 use Beebot to run gmapping node
+## 2.2 2D SLAM by gmapping
 Launch the tf and laser on Beebot:
 
 	roslaunch mobile_safeguard_primitive start_tf.launch
@@ -36,7 +36,7 @@ Run gmapping
 	
 	roslaunch mobile_safeguard_primitive gmapping.launch
 
-Run Driver:
+Fires up the driver:
 
 	roslaunch tobotdrivers TobotDriver.launch
 
@@ -51,3 +51,21 @@ Use teleop to control robot fot building map:
 Save the map if you're satisfied:
 
 	rosrun map_server map_saver -f map
+
+
+## 2.3 2D Navigation
+Launch the tf and laser:
+
+	roslaunch mobile_safeguard_primitive start_tf.launch
+
+Start move_base and amcl:
+
+	roslaunch mobile_safeguard_primitive start_navigation.launch
+
+Fires up the driver:
+
+	roslaunch tobotdrivers TobotDriver.launch
+
+Send the goal via Rviz:
+
+	rosrun rviz rviz
