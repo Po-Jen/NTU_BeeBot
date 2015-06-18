@@ -1,0 +1,11 @@
+
+Radius: 0.26
+WheelRadius: 0.075
+NodeLeftWheel: '1'
+NodeRightWheel: '2'
+NodeLifter: '3'
+TICKNUM: 600000
+Port: "/dev/ttyUSB0"
+BaudRate: 9600
+hightobject: 10
+maxTick: 15'

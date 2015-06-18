@@ -1,0 +1,39 @@
+#include <iostream>
+#define BOOST_TEST_DYN_LINK
+#include <time.h>
+#include <cstdlib>
+#define BOOST_TEST_MODULE MyTest
+#include <boost/test/unit_test.hpp>
+/*********************
+
+*************************/
+
+BOOST_AUTO_TEST_CASE(trying)
+{
+
+	simplePID p;
+	
+	BOOST_CHECK_EQUAL(p.getKp(),0);
+	BOOST_CHECK_EQUAL(p.getKi(),0);
+	BOOST_CHECK_EQUAL(p.getKd(),0);
+	
+	p.setPID(2,5,4);
+	
+	BOOST_CHECK_EQUAL(p.getKp(),2);
+	BOOST_CHECK_EQUAL(p.getKi(),5);
+	BOOST_CHECK_EQUAL(p.getKd(),4);
+	
+	p.setKp(8);
+	p.setKd(9);
+	p.setKi(7);
+	
+	BOOST_CHECK_EQUAL(p.getKp(),8);
+	BOOST_CHECK_EQUAL(p.getKi(),7);
+	BOOST_CHECK_EQUAL(p.getKd(),9);
+	
+	p.compute();
+	
+	
+	
+	
+}

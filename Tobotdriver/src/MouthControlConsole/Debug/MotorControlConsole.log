@@ -1,0 +1,23 @@
+﻿已經開始建置於 2012/8/22 下午 09:43:46。
+     1>節點 2 (build 目標) 上的專案 "C:\Users\R\Dropbox\IRA\PMC競賽\MotorControlConsole\MotorControlConsole\MotorControlConsole\MotorControlConsole.vcxproj"。
+     1>InitializeBuildStatus:
+         由於指定了 "AlwaysCreate"，因此正在建立 "Debug\MotorControlConsole.unsuccessfulbuild"。
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
+       Link:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\R\Dropbox\IRA\PMC競賽\MotorControlConsole\MotorControlConsole\Debug\MotorControlConsole.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\MotorControlConsole.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\R\Dropbox\IRA\PMC競賽\MotorControlConsole\MotorControlConsole\Debug\MotorControlConsole.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\R\Dropbox\IRA\PMC競賽\MotorControlConsole\MotorControlConsole\Debug\MotorControlConsole.lib" /MACHINE:X86 Debug\main.obj
+         Debug\Platform.obj
+         Debug\SerialPortControl.obj
+         LINK : 最後的累加連結找不到或未建置 C:\Users\R\Dropbox\IRA\PMC競賽\MotorControlConsole\MotorControlConsole\Debug\MotorControlConsole.exe，正在執行完整連結
+         MotorControlConsole.vcxproj -> C:\Users\R\Dropbox\IRA\PMC競賽\MotorControlConsole\MotorControlConsole\Debug\MotorControlConsole.exe
+       Manifest:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\R\Dropbox\IRA\PMC競賽\MotorControlConsole\MotorControlConsole\Debug\MotorControlConsole.exe;#1" /manifest Debug\MotorControlConsole.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         正在刪除檔案 "Debug\MotorControlConsole.unsuccessfulbuild"。
+         正在變更時間戳記 "Debug\MotorControlConsole.lastbuildstate"。
+     1>專案 "C:\Users\R\Dropbox\IRA\PMC競賽\MotorControlConsole\MotorControlConsole\MotorControlConsole\MotorControlConsole.vcxproj" (build 目標) 建置完成。
+
+建置成功。
+
+經過時間 00:00:02.13

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>5</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>555</x>
+      <y>30</y>
+      <w>240</w>
+      <h>125</h>
+    </coordinates>
+    <panel_attributes>Poete
+--
+#_verbose : bool
+#_topic_name : std::string 
+#_poete : ros::Publisher
+#_odom : nav_mesgs::Odometry 
+--
++Poete(ao_nh : ros::NodeHandle, topic  std::string)
++Poete(verb : bool, ao_nh : ros::NodeHandle, topic  std::string)
++publish() : void
++publish(Robot* platoon) : void
++publish(msg : const nav_msgs::Odometry&amp;) : void
++getMsg() : nav_mesgs::Odometry;
++setMsg(nav_mesgs::Odometry newer) : void
++setVerbose() : void
++affiche() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>20</x>
+      <y>30</y>
+      <w>350</w>
+      <h>155</h>
+    </coordinates>
+    <panel_attributes>Scribe
+--
+#_verbose : bool
+#_topic_name : std::string 
+#_scribe : ros::Subscriber 
+#_cmd : geometry_msgs::Twist
+--
++Scribe(ao_nh : NodeHandle, topic : std::string, p : Robot&amp;) : void
++callBackFunc(const geometry_msgs::Twist::ConstPtr&amp; msg, p : Robot*) : void
++bombCallBack(const ros::TimerEvent&amp;, p : Robot*) : void
++getCmd() : geometry_msgs::Twist cmd;
++setCmd(geometry_msgs::Twist newer) : void
++setVerbose() : void
++affiche() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>285</x>
+      <y>260</y>
+      <w>320</w>
+      <h>255</h>
+    </coordinates>
+    <panel_attributes>Robot
+--
+#_speed : int
+#_angularSpeed : int
+#_radius : int
+#_wheelRadius : int
+#_motorControl1 : SerialPortControl
+#_odomRead : nav_msgs::Odometry
+#_verbose : bool
+--
++Robot(motor_port1 : int, baud_rate  int, ao_nh : ros::NodeHandle)
+ 
++getSpeed() : int
++getAngularSpeed() : int
++getRadius() :int
++getWheelRadius() : int
++getControl() : SerialPortControl&amp;
++getOdom() : nav_msgs::Odometry&amp;
+ 
++setRadius(d:int : void
++setWheelRadius(wd : int) : void
++setSpeed(s : int) : void
++setAngularSpeed(s_ang : int) : void
++setVerbose() : void
+ 
++rpm2ms(rpm : float) : float
++ms2rpm(speed : int) :int
++robot2wheels (_twistDemand : Twist&amp;) : void
++robot2wheels();
++odometry() : void
+ 
++affiche() : void
+ </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>635</x>
+      <y>265</y>
+      <w>235</w>
+      <h>410</h>
+    </coordinates>
+    <panel_attributes>SerialPortControl
+--
+#_motor : LibSerial::SerialStream
+#_lEnco : int
+#_rEnco : int
+#_speedRwheel : int
+#_speedLwheel : int
+#_measuredSRW : int
+#_measuredSLW : int
+--
++SeriaPortControl()
+ 
++getLencoder() : int
++getRencoder() : int
++getSpeedRwheel() : int
++getSpeedLwheel() : int
++getmeasuredSLW() : int
++getmeasuredSRW() : int
+ 
++readLencoder() : void
++readRencoder() : void
++readTargetSRW() : int
++readTargetSLW() : int
++readRealSRW() : int
++readRealSLW() : int
+ 
++setTargetSLW(s : float) : void
++setTargetSLW(s : float) : void
++setVerbose() : void
+ 
++writeEnable() : void
++writeDisable() : void
++writeEncoderIndex() : void
++writeHome() : void
++writeAcc(acc : int) : void
++writeDec(dec : int) : void
++writeMaxSpeed(s : float) : void
++writeMinSpeed(s : float) : void
++writeSpeed(ms : int) : void
++writeTargetSRW(ms : int) : void
++writeTargetSLW(ms : int) : void
++writePoseRelativeR(ms : int) : void
++writePoseRelativeL(ms : int) : void
++writeMove() : void
+ 
++writePort(str : std::string&amp;) : void
++readPort() : std::string
+ 
++update(speedRwheel : int, speedLwheel : int) : void
++updateMeasurement() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>515</x>
+      <y>275</y>
+      <w>25</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>120;15;120;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>590</x>
+      <y>310</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>15;15;45;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.UseCase</type>
+    <coordinates>
+      <x>410</x>
+      <y>40</y>
+      <w>60</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>DriveNode
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>355</x>
+      <y>35</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>55;15;15;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>430</x>
+      <y>45</y>
+      <w>24</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>15;15;15;215</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>430</x>
+      <y>0</y>
+      <w>199</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>15;40;15;15;190;15;190;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>625</x>
+      <y>195</y>
+      <w>300</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Commands for generating and executing sequence programs:
+
+Calibration (to do if I got the time later)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>770</x>
+      <y>220</y>
+      <w>24</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>15;45;15;15</additional_attributes>
+  </element>
+</diagram>
