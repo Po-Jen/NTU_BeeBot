@@ -27,4 +27,27 @@ Execute teleop for testing if the driver works by:
 
 	rosrun teleop_twist_keyboard teleop_twist_keyboard.py
 
+## 2.2 use Beebot to run gmapping node
+Launch the tf and laser on Beebot:
 
+	roslaunch mobile_safeguard_primitive start_tf.launch
+
+Run gmapping
+	
+	roslaunch mobile_safeguard_primitive gmapping.launch
+
+Run Driver:
+
+	roslaunch tobotdrivers TobotDriver.launch
+
+Run Odometry:
+
+	rosrun odom_base_pubisher odom_base_pubisher_node 
+
+Use teleop to control robot fot building map:
+
+	rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+
+Save the map if you're satisfied:
+
+	rosrun map_server map_saver -f map
