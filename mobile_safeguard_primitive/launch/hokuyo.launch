@@ -1,0 +1,15 @@
+<launch>
+  <param name="/use_sim_time" value="false" />
+
+  <!-- Run the Hokuyo laser scanner node -->
+  <node name="base_laser" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">    
+    <!-- 設定laser是連接到哪一個port，預設是/dev/ttyACM0 -->
+    <param name="port" type="string" value="/dev/ttyACM0"/> 
+    <!-- 設定laser的reference frame -->
+    <param name="frame_id" type="string" value="/base_laser"/>
+    <param name="min_ang" value="-1.7" />
+    <param name="max_ang" value="1.7" />
+    <param name="hokuyo_node/calibrate_time" value="true" />
+  </node>
+</launch>
+
