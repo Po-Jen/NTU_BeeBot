@@ -1,0 +1,4 @@
+bool gotObject
+geometry_msgs/PoseStamped pose
+---
+bool keepsearching

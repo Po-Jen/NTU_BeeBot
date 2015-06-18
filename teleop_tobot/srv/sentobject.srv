@@ -1,0 +1,5 @@
+bool gotObject
+geometry_msgs/PoseStamped pose
+int8 robot_id
+---
+bool keepsearching

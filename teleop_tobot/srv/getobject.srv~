@@ -1,0 +1,5 @@
+bool ask
+---
+bool gotObject
+geometry_msg/PoseStamped pose
+string who
