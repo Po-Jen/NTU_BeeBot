@@ -70,7 +70,9 @@ Send the goal via Rviz:
 
 	rosrun rviz rviz
 
-## 2.4 Run rgbdslam (only on Hydro)
+## 2.4 Run RGBDSLAMv2 (only on Hydro)
+For more details of this package, visit http://felixendres.github.io/rgbdslam_v2/ .
+
 Install rgbdslam_v2:
 
 	git clone https://github.com/felixendres/rgbdslam_v2.git
