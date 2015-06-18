@@ -16,4 +16,15 @@ Compile the package by typing:
 
 	catkin_make
 
+# 2. Usage
+
+## 2.1 Test if the drvier works by teleop	
+Launch the driver to control the robot by ROS topic:
+
+	roslaunch tobotdrivers TobotDriver.launch
+	
+Execute teleop for testing if the driver works by:
+
+	rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+
 
