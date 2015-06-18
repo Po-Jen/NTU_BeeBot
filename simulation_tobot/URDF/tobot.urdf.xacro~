@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="tobot">
+
+  <!-- Constant for the xacro model -->
+
+  <xacro:property name="GROUND_CLEARANCE" value="0.2" />
+  <xacro:property name="width" value="0.285" />
+  <xacro:property name="bodylen" value="0.355" />
+  <xacro:property name="wheel_w" value="0.039" />
+  <xacro:property name="wheel_rad" value="0.075" />
+  <xacro:property name="plat_rad" value="0.285" />
+  <xacro:property name="plat_len" value="0.005" />
+  <xacro:property name="HIGH_PLATFORM" value="0.15" />
+  <xacro:property name="posz_laser" value="0.285" />
+  <xacro:property name="posz_camera" value="0.5" />
+  <xacro:property name="fwheel_rad" value="0.0325" />
+  <xacro:property name="PI" value="3.1415" />
+   
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  
+  <material name="red">
+    <color rgba="1 0 0 1"/> 
+  </material>
+
+
+  <!-- Actual frame and materials -->
+
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+         <cylinder length="${bodylen}" radius="${width}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${GROUND_CLEARANCE}"/>
+      <material name="blue">
+        <color rgba="0 0.2 0.4 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+         <cylinder length="${bodylen}" radius="${width}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${bodylen/2}"/>
+    </collision>
+  </link>
+  
+  <link name="lwheel">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_w}" radius="${wheel_rad}"/>
+      </geometry>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collsion>
+      <geometry>
+        <cylinder length="${wheel_w}" radius="${wheel_rad}"/>
+      </geometry>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+    </collsion>
+  </link>
+  
+  <joint name="base_to_lwheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="lwheel"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 ${width} ${GROUND_CLEARANCE-(bodylen/2)}" rpy="0 0 0"/>
+  </joint>
+  
+
+  <link name="rwheel">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_w}" radius="${wheel_rad}"/>
+      </geometry>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collsion>
+      <geometry>
+        <cylinder length="${wheel_w}" radius="${wheel_rad}"/>
+      </geometry>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+    </collsion>
+  </link>
+  
+  <joint name="base_to_rwheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="rwheel"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 ${-width} ${GROUND_CLEARANCE-(bodylen/2)}" rpy="0 0 0"/>
+  </joint>
+  
+  <!--LASER-->
+  <link name="laser">
+    <visual>
+      <geometry>
+        <box size="0.05 .05 .05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="red"/>
+    </visual>
+  </link>
+  
+  <joint name="base_laser" type="fixed">
+    <parent link="base_link"/>
+    <child link="laser"/>
+    <origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_laser} " rpy="0 0 0"/>
+  </joint>
+  
+  
+  <!--FRONT WHEEL-->
+  <link name="fwheel">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_w}" radius="${fwheel_rad}"/>
+      </geometry>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collsion>
+      <geometry>
+        <cylinder length="${wheel_w}" radius="${fwheel_rad}"/>
+      </geometry>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+    </collsion>
+  </link>
+  
+  <joint name="base_to_fwheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="fwheel"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="${width} 0 ${GROUND_CLEARANCE-(bodylen/2)-(fwheel_rad)}" rpy="0 0 0"/>
+  </joint>
+  
+  <!--BACK WHEEL-->
+  <link name="bwheel">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_w}" radius="${fwheel_rad}"/>
+      </geometry>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collsion>
+      <geometry>
+        <cylinder length="${wheel_w}" radius="${fwheel_rad}"/>
+      </geometry>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+    </collsion>
+  </link>
+  
+  <joint name="base_to_bwheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="bwheel"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="${-width} 0 ${GROUND_CLEARANCE-(bodylen/2)-(fwheel_rad)}" rpy="0 0 0"/>
+  </joint>
+  
+  
+  <!-- PLatform qui se leve-->
+  <link name="platform">
+    <visual>
+      <geometry>
+         <cylinder length="${plat_len}" radius="${plat_rad}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${plat_len/2}"/>
+      <material name="black"/>
+    </visual>
+  </link>
+  
+  <joint name="base_platform" type="prismatic">
+    <parent link="base_link"/>
+    <child link="platform"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="0" upper="${HIGH_PLATFORM}" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz="0 0 ${(bodylen/2)+GROUND_CLEARANCE}"/>
+  </joint>
+
+
+  <!--CAMERA-->
+  <link name="camera">
+    <visual>
+      <geometry>
+        <box size="0.05 .05 .05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+  </link>
+  
+  <joint name="camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera"/>
+    <origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_camera} " rpy="${-PI/2} 0 ${-PI/2}"/>
+  </joint>
+  
+</robot>

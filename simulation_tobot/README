@@ -1,0 +1,102 @@
+
+___________   ___.           __    ___________.__                 __   
+\__    ___/___\_ |__   _____/  |_  \_   _____/|__|______  _______/  |_ 
+  |    | /  _ \| __ \ /  _ \   __\  |    __)  |  \_  __ \/  ___/\   __\
+  |    |(  <_> ) \_\ (  <_> )  |    |     \   |  ||  | \/\___ \  |  |  
+  |____| \____/|___  /\____/|__|    \___  /   |__||__|  /____  > |__|  
+                   \/                   \/                   \/        
+  _________.__              .__          __  .__               
+ /   _____/|__| _____  __ __|  | _____ _/  |_|__| ____   ____  
+ \_____  \ |  |/     \|  |  \  | \__  \\   __\  |/  _ \ /    \ 
+ /        \|  |  Y Y  \  |  /  |__/ __ \|  | |  (  <_> )   |  \
+/_______  /|__|__|_|  /____/|____(____  /__| |__|\____/|___|  /
+        \/          \/                \/                    \/ 
+        
+        
+        
+So here comes Tobot the first ! =D
+I'm pleased to announce his there.
+
+--------------------------------------------------
+
+Config => Yaml config of tobot
+Launch => Launch file of the nodes for the simulation
+rviz_files => sim.rviz the configuration file for rviz
+URDF => URDF of Tobot
+
+--------------------------------------------------
+
+FIRST SIMPLE SIMULATION
+
+Running in ROS using the arbotix simulator by Michael Ferguson and Rviz this code is a lot inspired by "ROS by examples" written by Patrick Goebel.
+
+To launch the simulation, start a 
+
+	roscore
+	
+in a terminal, 
+
+Then use 
+
+	launch simulation_tobot tobot.launch
+
+This will start the necesseary nodes for the arbotix and rviz to calculate the frame. It use the tf package and the robot_state_publisher node to do the job of publishing the frame using the URDF of the robot. This is way the URDF is passed as a robot_description param in the launch file
+
+The second command is :
+
+	rosrun rviz rviz -d `rospack find simulation_tobot`/rviz/sim.rviz
+
+This command launch rviz with some setup. I directly used the file provided in the ROS by examples. Thus I don't really know how it's working ^^...
+It should launch the simulation properly and we just have to send a Twist to make the robot move.
+
+I absoluetly don't understand the yaml file needed by Arbotix in the argument so I reused the one provided with the pi-robot. But I removed all the joints because it launch a controller node for each of the joint and I don't need that for now. I still got to read about the yaml page on the ROS website to fully understand what happen but for what I know it's seems to be a command file that launch nodes. I just checked what was happening using rostopic list.
+
+If you have problem with the /map not existing, use /odom as a fixed frame, it should help ;).
+
+Have fun playing with that minimalistic robot =D
+
+----------------------------------------------------
+
+SECOND SIMULATION USE OF MOVE_BASE
+
+Use the exact same step as for the first simulation.
+
+Then use this command : 
+
+	roslaunch simulation_tobot fake_move_base_blank_map.launch
+	
+Don't forget that here the fixed frame have to /map for the simulation to work. Then use fixe 2D goal on Rviz to make the robot move. You could as well just send a Goal message to the move_base node.
+
+How does this work : 
+First we load the map to the server.
+Second we launch move_base and it's configuration files. It use the yaml file sin the config/nav folder to load the parameters for move_base to work. If you want to tweak it, then, those yaml are a good place to start.
+Second the launch fil create a tranform from /map to /odom that basically state that they don't move on compare to the other. It's just needed to do the odometry. Same for the transform from /base_link to /base_footprint used in the first launch file of the other example in case we use a base_footprint base as in the turtlebot.
+
+To see the comportment with obstacles, just load fake_move_base_obstacles.launch instead ;).
+
+Have fun :D
+
+
+--------------------------------------------------
+
+SPEECH RECOGNITION
+
+Speech recognition use the pocket_sphix package.
+
+For now I'm using the vocabulary made in Ros By Example. To launch the speech recognition launch a 
+
+	roscore
+	
+And fire rviz and tobot launcher.
+
+Then juste use those two commands : 
+
+	roslaunch simulation_tobot voice_nav_commands.launch
+	
+Which launch the pocket_sphinx node that is going to listen to yor voice, followed by
+
+	roslaunch simulation_tobot tobot_voice_nav.launch
+	
+Which launch a python script that take the recognized words of the topic created by the pocket_sphinx recognizer (which is /recognizer/output) and depend on which command it receive is going to move tobot accordingly.
+
+Have fun ;).
