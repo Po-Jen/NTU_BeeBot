@@ -82,3 +82,15 @@ Install rgbdslam_v2:
 Run rgbdslam_v2 with Xtion(with GUI):
 
 	roslaunch mobile_safeguard_primitive xtion+rgbdslam.launch
+
+# 3. Troubleshoot / FAQ
+
+**Cannot open /dev/ttyUSB0**
+
+If you can see your controller by 
+
+	ls -l /dev/ttyUSB*
+	
+Then you probably don't have the access because your user is not in the dialout group, type:
+
+	sudo adduser <username> dialout
