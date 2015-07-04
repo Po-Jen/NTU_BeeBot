@@ -94,3 +94,6 @@ If you can see your controller by
 Then you probably don't have the access because your user is not in the dialout group, type:
 
 	sudo adduser <username> dialout
+
+**The original repo**
+Most of the driver code is from https://github.com/MalcolmMielle/Tobot
