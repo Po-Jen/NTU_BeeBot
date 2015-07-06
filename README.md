@@ -95,5 +95,11 @@ Then you probably don't have the access because your user is not in the dialout 
 
 	sudo adduser <username> dialout
 
-**The original repo**
+**Modify the node num of motors**
+
+You can set the node number bt Faulhaber's Motion Manager. 
+After setting the number, you should modify the NTU_BeeBot/Tobotdriver/config/robot.yaml to let driver correctly talk to motors.
+
+**The original repo*
+
 Most of the driver code is from https://github.com/MalcolmMielle/Tobot
