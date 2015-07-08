@@ -139,9 +139,11 @@ Then go under ~/TobotDriver/include/moyot_drivers/SerialPortControl_port.hpp, lo
 
 change the "BAUD_112500" to "BAUD_9600" because 9600 is the default Baud Rate to which the motor can be synchronized.
 
-Then, go to ~/TobotDriver/include/moyot_drivers/SerialPortControl_stream.hpp, look for the _pnode.param>std::string>("NodeleftWheel", _LWHEEL, "1");
-_pnode.param>std::string>("NoderightWheel", _LWHEEL, "2");
-_pnode.param>std::string>("Nodelifer", _LWHEEL, "3");
+Then, go to ~/TobotDriver/include/moyot_drivers/SerialPortControl_stream.hpp, look for the 
+
+    _pnode.param>std::string>("NodeleftWheel", _LWHEEL, "1");
+    _pnode.param>std::string>("NoderightWheel", _LWHEEL, "2");
+    _pnode.param>std::string>("Nodelifer", _LWHEEL, "3");
 
 Change to the corresponding node number for each motor. A faster way to determine the node number is to detect the motors on Windows using the Faulhaber Motion Manager.
 
