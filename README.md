@@ -100,7 +100,7 @@ Then you probably don't have the access because your user is not in the dialout 
 You can set the node number bt Faulhaber's Motion Manager on Windows platform. 
 If you could only use Linux, an alternative to detect the motors' corresponding node number is to use "minicom" to get the job done.Let's break down the debugging steps first on Windows and then on Linux.
 
-### Windows
+### 3.2.1 Windows
 
 Once you have the Faulhaber Motion Manager installed and if you have many motor controllers at hand, make sure to check each controller one by one before moving on debugging for multiple motors at once. Have the motor connected to the controller and input appropriate voltage of 25V and 5A. Make sure that the logical output voltage is 5V. Check whether all the cables from the motor are correctly connected to the controller. Failure to do so may cause overheating to the motor.
 
@@ -111,7 +111,7 @@ Now input at the same bar
     xv1000
 the x represents the node number of the motor. If you don't know the number, right click the detected device status at the column and click "node info". A small window would pop up and you can look up the node number. the command sent to the controller should look somewhat like this: 1v1000. the last digits behind "v" indicates the rpm of the motor. Test different velocities with different mtor node number if you still have some trouble getting the motor to run, thpough such problem is rare, you should double check if the cables from the motor to the controller are correctly connected.
 
-### Linux
+### 3.2.2 Linux
 
 By using minicom and by trial-and-error, we can get an educated guess about the node number. Although minicom is used to send directly th estrings to the connected devices, we can directly send out the same commands as we do in Fulhaber Motion Manager.
 Make sure that the Baud rate setting is correct. For example, our controller has 9600 as the default Baud Rate. And then in minicom, send out the command
@@ -123,7 +123,7 @@ minicom's usage is actually quite straight forward, press Ctrl+A, then release a
 
 Once you have the corresponding node number, and make sure that all the motors can run, let's proceed with modifying the node number in NTU Beebot.
 
-### NTU Beebot
+### 3.2.3 NTU_Beebot package
 
 There are two aspects that need to keep an eye on. First is that the TobotDriver is running at the correct Baud Rate, and second, each wheel is assigned with the correct node number.
  
