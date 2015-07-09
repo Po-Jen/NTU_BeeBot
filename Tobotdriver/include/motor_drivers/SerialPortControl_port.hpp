@@ -38,7 +38,7 @@ class SerialPortControl{
 	public:
 	SerialPortControl(int Baud) : _motor(PORT), _verbose(false){
 		std::cout<<"GOOOOOO"<<std::endl;
-		_motor.Open(SerialPort::BAUD_115200, SerialPort::CHAR_SIZE_8, SerialPort::PARITY_NONE,SerialPort::STOP_BITS_1,SerialPort::FLOW_CONTROL_HARD );
+		_motor.Open(SerialPort::BAUD_9600, SerialPort::CHAR_SIZE_8, SerialPort::PARITY_NONE,SerialPort::STOP_BITS_1,SerialPort::FLOW_CONTROL_HARD );
 		
 		//8 data bits
 		//1 stop bit

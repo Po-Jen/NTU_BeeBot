@@ -1,9 +1,9 @@
 
 Radius: 0.26
 WheelRadius: 0.075
-NodeLeftWheel: '1'
+NodeLeftWheel: '3'
 NodeRightWheel: '2'
-NodeLifter: '3'
+NodeLifter: '1'
 TICKNUM: 600000
 Port: "/dev/ttyUSB0"
 BaudRate: 9600

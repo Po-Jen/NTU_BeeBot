@@ -26,7 +26,7 @@
         -->
         
         <!--Turn on Xtion-->
-        <include file="$(find openni_launch)/launch/openni.launch"/>
+        <include file="$(find openni2_launch)/launch/openni2.launch"/>
 
 	<!--Fire up Rviz-->
         <!--
