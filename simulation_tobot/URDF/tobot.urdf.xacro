@@ -194,7 +194,7 @@
   <joint name="camera" type="fixed">
     <parent link="base_link"/>
     <child link="camera_link"/>
-    <origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_camera} " rpy="${-PI/2} 0 ${-PI/2}"/>
+    <origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_camera} " rpy="0 0 0"/>
   </joint>
   
 </robot>
