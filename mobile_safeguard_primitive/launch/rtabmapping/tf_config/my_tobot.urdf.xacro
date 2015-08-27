@@ -195,7 +195,7 @@
     <parent link="base_link"/>
     <child link="camera_link"/>
     <!--<origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_camera} " rpy="0 0 0"/>-->
-    <origin xyz="${width} 0 1.55 " rpy="0 0 0"/>
+    <origin xyz="${width} 0 1.30 " rpy="0 0 0"/>
   </joint>
   
 </robot>
