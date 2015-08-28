@@ -5,9 +5,16 @@ project(mobile_safeguard_primitive)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
+  cv_bridge
+  pcl_conversions
+  pcl_ros
   roscpp
+  rospy
+  sensor_msgs
   std_msgs
+  image_transport
+  OpenCV
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -95,6 +102,8 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS} 
+  ${Boost_INCLUDE_DIRS}
 )
 
 ## Declare a cpp library
@@ -161,3 +170,9 @@ target_link_libraries(mobile_safeguard_primitive_node
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(slammot_y_shaped_tube src/slammot_y_shaped_tube.cpp)
+target_link_libraries (slammot_y_shaped_tube ${catkin_LIBRARIES})
+
+add_executable (pre-processing src/pre-processing.cpp)
+target_link_libraries (pre-processing ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
