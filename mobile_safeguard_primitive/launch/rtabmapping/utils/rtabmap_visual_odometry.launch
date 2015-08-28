@@ -1,0 +1,34 @@
+<launch>
+  <arg name="rgb_topic"               default="/camera/rgb/image_rect_color" />
+  <arg name="depth_registered_topic"  default="/camera/depth_registered/image_raw" />
+  <arg name="camera_info_topic"       default="/camera/rgb/camera_info" />
+  <arg name="frame_id"                default="camera_link"/>   <!-- Fixed frame id, you may set "base_link" or "base_footprint" if they are published -->
+  <arg name="wait_for_transform"      default="true"/>
+  <arg name="strategy"            default="0" />       <!-- Strategy: 0=BOW (bag-of-words) 1=Optical Flow -->
+  <arg name="feature"             default="6" />       <!-- Feature type: 0=SURF 1=SIFT 2=ORB 3=FAST/FREAK 4=FAST/BRIEF 5=GFTT/FREAK 6=GFTT/BRIEF 7=BRISK -->
+  <arg name="nn"                  default="3" />       <!-- Nearest neighbor strategy : 0=Linear, 1=FLANN_KDTREE (SIFT, SURF), 2=FLANN_LSH, 3=BRUTEFORCE (ORB/FREAK/BRIEF/BRISK) -->
+  <arg name="max_depth"           default="4.0" />     <!-- Maximum features depth (m) -->
+  <arg name="min_inliers"         default="20" />      <!-- Minimum visual correspondences to accept a transformation (m) -->
+  <arg name="inlier_distance"     default="0.02" />    <!-- RANSAC maximum inliers distance (m) -->
+  <arg name="local_map"           default="1000" />    <!-- Local map size: number of unique features to keep track -->
+  <arg name="odom_info_data"      default="true" />    <!-- Fill odometry info messages with inliers/outliers data. -->
+
+    <!-- Odometry -->
+    <node pkg="rtabmap_ros" type="rgbd_odometry" name="rgbd_odometry" output="screen">
+      <remap from="rgb/image"       to="$(arg rgb_topic)"/>
+      <remap from="depth/image"     to="$(arg depth_registered_topic)"/>
+      <remap from="rgb/camera_info" to="$(arg camera_info_topic)"/>
+	  
+	  <param name="frame_id"                 type="string" value="$(arg frame_id)"/>
+	  <param name="wait_for_transform"       type="bool"   value="$(arg wait_for_transform)"/>
+	  
+	  <param name="Odom/Strategy"            type="string" value="$(arg strategy)"/> 
+	  <param name="Odom/FeatureType"         type="string" value="$(arg feature)"/>  
+	  <param name="OdomBow/NNType"           type="string" value="$(arg nn)"/>
+	  <param name="Odom/MaxDepth"            type="string" value="$(arg max_depth)"/>  
+	  <param name="Odom/MinInliers"          type="string" value="$(arg min_inliers)"/> 
+	  <param name="Odom/InlierDistance"      type="string" value="$(arg inlier_distance)"/>       
+      <param name="OdomBow/LocalHistorySize" type="string" value="$(arg local_map)"/> 
+      <param name="Odom/FillInfoData"        type="string" value="$(arg odom_info_data)"/>   
+    </node>
+</launch>
