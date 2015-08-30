@@ -174,5 +174,5 @@ target_link_libraries(mobile_safeguard_primitive_node
 add_executable(slammot_y_shaped_tube src/slammot_y_shaped_tube.cpp)
 target_link_libraries (slammot_y_shaped_tube ${catkin_LIBRARIES})
 
-add_executable (pre-processing src/pre-processing.cpp)
-target_link_libraries (pre-processing ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
+add_executable (preProcessing src/preProcessing.cpp)
+target_link_libraries (preProcessing ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
