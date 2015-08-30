@@ -11,13 +11,13 @@ msg = """
 Reading from the keyboard  and Publishing to Twist!
 ---------------------------
 Moving around:
-   u    i    o
-   j    k    l
-   m    ,    .
+   Q    W    E
+   A    S    D
+   Z    X    C
 
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
+T/B : increase/decrease max speeds by 10%
+Y/N : increase/decrease only linear speed by 10%
+U/M : increase/decrease only angular speed by 10%
 anything else : stop
 
 CTRL-C to quit
@@ -101,24 +101,24 @@ class Lift(object):
 
 
 moveBindings = {
-		'i':(1,0),
-		'o':(1,-1),
-		'j':(0,1),
-		'l':(0,-1),
-		'u':(1,1),
-		',':(-1,0),
-		'.':(-1,1),
-		'm':(-1,-1),
+		'w':(1,0),
+		'e':(1,-1),
+		'a':(0,1),
+		'd':(0,-1),
+		'q':(1,1),
+		'x':(-1,0),
+		'c':(-1,1),
+		'z':(-1,-1),
 		'v':(1000,4),
 	       }
 
 speedBindings={
-		'q':(1.1,1.1),
-		'z':(.9,.9),
-		'w':(1.1,1),
-		'x':(.9,1),
-		'e':(1,1.1),
-		'c':(1,.9),
+		't':(1.1,1.1),
+		'b':(.9,.9),
+		'y':(1.1,1),
+		'n':(.9,1),
+		'u':(1,1.1),
+		'n':(1,.9),
 	      }
 
 def getKey():
@@ -128,8 +128,11 @@ def getKey():
 	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 	return key
 
-speed = .5
-turn = 1
+# Set the speed here. Default: Linear speed = 0.5 Angular speed = 1.0
+#speed = .5
+#turn = 1
+speed = .02
+turn = .1
 
 def vels(speed,turn):
 	return "currently:\tspeed %s\tturn %s " % (speed,turn)
