@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>13</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>208</x>
+      <y>117</y>
+      <w>442</w>
+      <h>286</h>
+    </coordinates>
+    <panel_attributes>rtabmap
+--
+odom (nav_msgs/Odometry)
+
+rgb/image (sensor_msgs/Image)
+
+rgb/camera_info (sensor_msgs/CameraInfo)
+
+depth/image (sensor_msgs/Image)
+
+scan (sensor_msgs/LaserScan)
+
+left/image_rect (sensor_msgs/Image)
+
+left/camera_info (sensor_msgs/CameraInfo)
+
+right/image_rect (sensor_msgs/Image)
+
+right/camera_info (sensor_msgs/CameraInfo)
+
+goal (geometry_msgs/PoseStamped) </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>208</x>
+      <y>455</y>
+      <w>455</w>
+      <h>312</h>
+    </coordinates>
+    <panel_attributes>rtabmapviz
+--
+odom (nav_msgs/Odometry)
+
+rgb/image (sensor_msgs/Image)
+
+rgb/camera_info (sensor_msgs/CameraInfo)
+
+depth/image (sensor_msgs/Image)
+
+scan (sensor_msgs/LaserScan)
+
+left/image_rect (sensor_msgs/Image)
+
+left/camera_info (sensor_msgs/CameraInfo)
+
+right/image_rect (sensor_msgs/Image)
+
+right/camera_info (sensor_msgs/CameraInfo)
+
+odom_info (rtabmap_ros/OdomInfo)
+
+info (rtabmap_ros/Info)
+
+mapData (rtabmap_ros/MapData) </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>715</x>
+      <y>117</y>
+      <w>429</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>rgbd_odometry
+--
+rgb/image (sensor_msgs/Image)
+
+rgb/camera_info (sensor_msgs/CameraInfo)
+
+depth/image (sensor_msgs/Image) </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Systemborder</type>
+    <coordinates>
+      <x>182</x>
+      <y>26</y>
+      <w>1079</w>
+      <h>767</h>
+    </coordinates>
+    <panel_attributes>topcenter:RTABMap
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>260</x>
+      <y>910</y>
+      <w>273</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>rwth_ground_plane
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>728</x>
+      <y>286</y>
+      <w>416</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>point_cloud_xyzrgb
+--
+rgb/image (sensor_msgs/Image)
+
+depth/image (sensor_msgs/Image)
+
+rgb/camera_info (sensor_msgs/CameraInfo) </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>728</x>
+      <y>468</y>
+      <w>416</w>
+      <h>273</h>
+    </coordinates>
+    <panel_attributes>obstacles_detection
+--
+cloud (sensor_msgs/PointCloud2) </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>585</x>
+      <y>910</y>
+      <w>624</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>upper_body_detector
+--
+/spencer/sensor/front_top/depth/image_rect (sensor_msgs/Image)
+/spencer/sensor/front_top/rgb/image_raw
+/spencer/sensor/rgb/camera_info</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>260</x>
+      <y>1066</y>
+      <w>845</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>groundHOG
+--
+/spencer/sensor/front_top/rgb/image_rect_color (sensor_msgs/Image)
+/spencer/sensor/front_top/rgb/camera_info (senosr_msgs/CameraInfo)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Systemborder</type>
+    <coordinates>
+      <x>195</x>
+      <y>832</y>
+      <w>1053</w>
+      <h>364</h>
+    </coordinates>
+    <panel_attributes>topcenter:Soencer_people_tracking
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
