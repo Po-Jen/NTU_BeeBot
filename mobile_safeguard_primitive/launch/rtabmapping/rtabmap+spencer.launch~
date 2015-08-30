@@ -1,0 +1,24 @@
+<launch>
+   <!--
+      This launch file launches spencer_people_tracking tracking_single_rgbd.launch and 
+      mobile_safeguard_primitive rtabmap_client.launch and slammot_y_shaped_tube node.
+      The prerequisite of launching this launch file is to launch at the robot side
+      $ roslaunch mobile_safeguard_primitive rtabmap_robot_side.launch
+   -->
+   <arg name="rtamapviz_on" default="false"/>
+
+    <!--Launching y_shaped_tube-->
+    <node pkg="mobile_safeguard_primitive" type="slammot_y_shaped_tube" name="slammot_y_shaped_tube"/> 
+
+   <!--Launching spencer people tracking-->
+   <include file="$(find spencer_people_tracking_launch)/launch/tracking_single_rgbd_sensor.launch"/>
+
+    <!--Launching people filtering-->
+    <!--<node pkg="mobile_safeguard_primitive" type="pre-processing" name="pre-processing"/>-->
+         <!--TODO people filtering node-->
+
+   <!--Launching rtabmap client side-->
+   <include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/rtabmap_client_side.launch"/>
+
+      <include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/rtabmap_client_rtabmapviz.launch" if="$(arg rtamapviz_on)" />
+</launch>
