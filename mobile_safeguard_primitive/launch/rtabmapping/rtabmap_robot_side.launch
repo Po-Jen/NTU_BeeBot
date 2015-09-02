@@ -1,18 +1,20 @@
 <launch>
   <!--This launch file is used on the robot side, and only activates the data_throttle node to receive raw data to pass over through the bandwidth-->
-  <!--Launch file arguments-->
+  <!--Launch file arguments.
+        One thing to be considered is to turn on the laser apart with rosrun and then launching this launch file so as to avoid "unknown error" with hokuyo.
+  -->
   <arg name="rtabmapviz" default="false"/>
   <arg name="rviz" default="false"/>
   <arg name="sensors_on" default="true"/>
 
   <!--Launch sensors for unitary test-->
   <group if="$(arg sensors_on)">
+	<!--turn on laser range finder-->
+        <!--<node pkg="urg_node" type="urg_node" name="urg_node" if="(arg urg_on)"/>-->
 	<!--launch tf-->
 	<include file="$(find mobile_safeguard_primitive)/launch/start_tf.launch"/>
 	<!--launch motor driver-->
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
-	<!--turn on laser range finder-->
-        <node pkg="urg_node" type="urg_node" name="urg_node"/>
 	<!--turn on odometer-->
 	<node pkg="odom_base_pubisher" type="odom_base_pubisher_node" name="odom_base_pubisher_node"/>
         <!--Turn on Xtion-->
