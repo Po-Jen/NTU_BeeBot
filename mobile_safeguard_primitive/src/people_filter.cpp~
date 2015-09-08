@@ -1,0 +1,272 @@
+/*
+*  people_filter.cpp
+*
+*  Charly Huang 
+*  Sept 3. 2015, 16:16
+*
+*  This node receives each person's pose and PointCloud2  .
+* Next, the node segment the floor and filter out people.
+*/
+
+#include <ros/ros.h>
+#include <iostream>
+
+// PCL general includes
+#include <sensor_msgs/PointCloud2.h>
+#include <pcl_conversions/pcl_conversions.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+
+// PCL Segmentation
+#include <pcl/ModelCoefficients.h>
+#include <pcl/sample_consensus/method_types.h>
+#include <pcl/sample_consensus/model_types.h>
+#include <pcl/segmentation/sac_segmentation.h>
+
+// PCL extract indices
+#include <pcl/filters/extract_indices.h>
+
+// PCL Passthrough filter
+#include <pcl/filters/passthrough.h>
+
+// Spencer Project exclusive includes
+#include <spencer_tracking_msgs/DetectedPersons.h>
+#include <spencer_tracking_msgs/TrackedPersons.h>
+
+ros::Publisher cloud_pub ;
+ros::Publisher no_people_pub ;
+
+typedef pcl::PointXYZRGB PointT;
+typedef pcl::PointCloud<PointT> PointCloudT;
+
+// Global Variables
+// ****************
+geometry_msgs::Pose single_detectedPersonPose ;   // Current detected person pose
+// Each column of the vector represents a detected person in one single instance. The rows represent the x, y, z, w coordinates.
+std::vector<geometry_msgs::Pose> vect_detectedPersonPoses ;  // Vector of object poses
+
+// When any subject is detected, the flag helps filter the cloud
+bool targetAcquired_flag = 0 ; 
+
+// Publisher objects (RGB and Depth)
+ros::Publisher rtabmap_rgbImage_pub ;
+ros::Publisher rtabmap_rgbCamInfo_pub ;
+ros::Publisher rtabmapDepthImage_pub ;
+
+geometry_msgs::Pose single_trackedPersonPose ;  // Current tracked person pose
+std::vector<geometry_msgs::Pose> trackedPersonPoses ;  // Vector of object poses
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// =====================================================
+// Do ground Plane segmentation
+// =====================================================
+void
+groundPlane_removal (PointCloudT::Ptr input_cloud, 
+                                     PointCloudT::Ptr segmented_cloud,
+                                     PointCloudT::Ptr cluster_filtered){
+
+  // Container for plane cloud
+  PointCloudT::Ptr cloud_plane (new PointCloudT) ;
+
+  // Object for storing theplane model coefficient
+  pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients) ;  
+
+  // Create the segmentation object
+  pcl::SACSegmentation<PointT> seg ;
+  seg.setInputCloud(input_cloud) ;
+  // Configure the object to look for a plane
+  seg.setModelType (pcl::SACMODEL_PLANE) ;
+  // Use RANSAC method
+  seg.setMethodType (pcl::SAC_RANSAC) ;
+  // Set the maximum allowed distance to the model
+  seg.setDistanceThreshold (0.03) ;
+  // OPTIONAL: Enable model coefficient refinement
+  seg.setOptimizeCoefficients (true) ;
+
+  pcl::PointIndices::Ptr inlierIndices (new pcl::PointIndices);
+
+  seg.segment (*inlierIndices, *coefficients) ;  // inlierIndices is the actual segmented cloud
+
+  if (inlierIndices -> indices.size() == 0)
+	ROS_ERROR("Could not find any points that fitted the plane model.") ;
+  else
+    { /*
+	std::cerr << "Model coefficients: " << coefficients->values[0] << " "
+			  << coefficients->values[1] << " "
+			  << coefficients->values[2] << " "
+			  << coefficients->values[3] << std::endl;
+ */
+	// Copy all inliers of the model to another cloud.
+	pcl::copyPointCloud<PointT>(*input_cloud, *inlierIndices, *segmented_cloud);
+  }
+ 
+  // Extract the planar inliers from the input cloud
+  pcl::ExtractIndices<PointT> extract ;
+  extract.setInputCloud (input_cloud) ;
+  extract.setIndices (inlierIndices) ;
+  extract.setNegative (false) ;
+
+  // Get the points associated with the planar surface
+  extract.filter (*cloud_plane) ;
+  // std::cout << "PointCloud representing the planar component: " << cloud_plane->points.size () << " data points." << std::endl;
+
+  // Remove the planar inliers, extract the rest
+  extract.setNegative (true) ;
+  extract.filter (*cluster_filtered) ; 
+}
+
+  // ===============================================
+  // People filtering
+  // ===============================================
+void
+people_filter (PointCloudT::Ptr input_cloud, PointCloudT::Ptr filtered_cloud) {
+
+  pcl::PassThrough<PointT> filter ;
+  // Load the input cloud
+   filter.setInputCloud (input_cloud) ;
+  // Filter out cluster within the designated region
+  filter.setFilterLimitsNegative (true) ;
+  
+  // For each input person's coordinate, filter out the cloud.
+  // unit: meter
+   float xHalfEdge = 0.30 ;
+   float yHalfEdge = 1.80 ;
+   float zHalfEdge = 0.30 ;
+
+    if ( targetAcquired_flag )  
+    {
+      for (int i = 0 ; i < vect_detectedPersonPoses.size() ; i++ ) {
+         // z-axis (Direction pointing into the screen)
+          filter.setFilterFieldName ("z") ;
+          filter.setFilterLimits (vect_detectedPersonPoses.at( i ).position.z - zHalfEdge, vect_detectedPersonPoses.at( i ).position.z + zHalfEdge) ;
+
+          // x-axis (Direction from center to right side)
+         filter.setFilterFieldName ("x") ;
+         filter.setFilterLimits (vect_detectedPersonPoses.at( i ).position.x - xHalfEdge, vect_detectedPersonPoses.at( i ).position.x + xHalfEdge) ;
+
+         // z-axis (Direction from center to the bottom of the screen)
+         filter.setFilterFieldName ("y") ;
+         filter.setFilterLimits (vect_detectedPersonPoses.at( i ).position.y - yHalfEdge, vect_detectedPersonPoses.at( i ).position.y + yHalfEdge) ;
+
+         filter.filter (*filtered_cloud) ; 
+      }
+   }
+   else  // If there is nobody, outputs all point clouds as usual
+   {   
+       *filtered_cloud = *input_cloud ;
+   }
+
+}
+
+// =====================================================
+// SAVE DETECTED PERSONS' POSES (CALLBACK)
+// =====================================================
+void
+detectPerson_cb (const spencer_tracking_msgs::DetectedPersons::ConstPtr detectedPersonPose_msg) {
+
+    vect_detectedPersonPoses.clear () ;  // Clear the people storing cache
+    targetAcquired_flag = 0 ;
+
+    for (int i =0; i < detectedPersonPose_msg->detections.size(); i++)  // for each instance of the detection, do
+   {
+     single_detectedPersonPose.position.x = detectedPersonPose_msg -> detections[i].pose.pose.position.x ;
+     single_detectedPersonPose.position.y = detectedPersonPose_msg ->  detections[i].pose.pose.position.y ;
+     single_detectedPersonPose.position.z = detectedPersonPose_msg->  detections[i].pose.pose.position.z ;
+     single_detectedPersonPose.orientation.w = detectedPersonPose_msg->  detections[i].pose.pose.orientation.w ;
+
+     vect_detectedPersonPoses.push_back (single_detectedPersonPose) ;   // Dynamically alocating to a number of people
+     targetAcquired_flag = !vect_detectedPersonPoses.empty() ;                   // Set the flag to true, for people_filter () to take action
+
+     std::cout << vect_detectedPersonPoses.at(i) << std::endl ;
+     }
+
+}
+
+// ================================================
+// CLOUD CALLBACK (CALLBACK)
+// ================================================
+void
+cloud_callback (const sensor_msgs::PointCloud2ConstPtr& cloud_msg){
+  // ===============================================
+  // Convert ROS --> PCL
+  // ===============================================
+  PointCloudT::Ptr cloud_in (new PointCloudT) ;
+  pcl::fromROSMsg (*cloud_msg,  *cloud_in) ;
+  
+  // ================================================
+  // All processing goes here
+  // ================================================
+    // Remove ground plane
+    PointCloudT::Ptr ground_plane (new PointCloudT);
+    PointCloudT::Ptr cluster_filtered (new PointCloudT) ;
+    groundPlane_removal (cloud_in, ground_plane, cluster_filtered) ;
+  
+    // Render remaining point clouds after people filtering 
+    PointCloudT::Ptr no_man_cloud (new PointCloudT) ;
+    people_filter (cluster_filtered, no_man_cloud) ;
+
+  // =================================================
+  // Convert PCL --> ROS
+  // =================================================
+  sensor_msgs::PointCloud2 processed_cloud ;
+  sensor_msgs::PointCloud2 people_filtered_cloud ;
+ 
+  pcl::toROSMsg (*cluster_filtered, processed_cloud) ;
+  pcl::toROSMsg (*no_man_cloud, people_filtered_cloud) ;
+
+  // ===============================================
+  // Convert Point Cloud to sensor_msgs/Image (rgb & depth)
+  // ===============================================
+   sensor_msgs::Image rgbImage ;
+   sensor_msgs::Image depthImage ;
+
+   // RGB Topic
+   pcl::toROSMsg ( *no_man_cloud, rgbImage ) ;
+
+   // Depth Topic
+   pcl::PointCloud<pcl::PointXYZ> cloud_xyz ;
+   PointCloudT cloud_xyzrgb ;
+   pcl::copyPointCloud (*no_man_cloud, cloud_xyz) ;
+   pcl::copyPointCloud (cloud_xyz, cloud_xyzrgb) ;
+   
+   pcl::toROSMsg ( cloud_xyzrgb, depthImage ) ;
+
+  // ===============================================
+  // Publish the Data
+  // ===============================================
+  cloud_pub.publish (processed_cloud) ;
+  no_people_pub.publish (people_filtered_cloud) ;
+
+  rtabmap_rgbImage_pub.publish (rgbImage) ;
+  rtabmapDepthImage_pub.publish (depthImage) ;
+}
+
+int 
+main (int argc, char** argv){
+
+  // Initialize ROS
+  ros::init (argc, argv, "people_filter") ;
+  ros::NodeHandle nh ;
+
+// *******************************************************************
+  // Modifiable string variable for launch file uses, etc
+  std::string GP_filtered_topic = "GP_filtered_cloud" ;
+  std::string neat_cluster_topic = "no_man_cloud" ;
+// *********************************************************************
+
+  // Create ROS subscribers
+  ros::Subscriber cloud_sub = nh.subscribe ("raw_cloud", 1, cloud_callback) ;
+  ros::Subscriber detectPerson_sub = nh.subscribe ("/spencer/perception/detected_persons", 1, detectPerson_cb) ;
+
+  // Create ROS publishers
+  cloud_pub = nh.advertise<sensor_msgs::PointCloud2> (GP_filtered_topic, 1) ; 
+  no_people_pub = nh.advertise <sensor_msgs::PointCloud2> (neat_cluster_topic, 1) ;
+
+  // In case that the next node does not accept depth_registered/points
+  rtabmap_rgbImage_pub = nh.advertise<sensor_msgs::Image> ("rgb/Image", 1) ;
+  rtabmapDepthImage_pub = nh.advertise<sensor_msgs::Image> ("depth/image", 1) ;
+
+  // Spin
+  ros::spin () ;
+}
