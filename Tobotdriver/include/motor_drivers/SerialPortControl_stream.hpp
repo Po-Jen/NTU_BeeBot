@@ -64,24 +64,28 @@ class SerialPortControl{
 		std::string PORT;
 		//_pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
 
-                // This part is added and modified by Charly on Sept 9, 2015
-                try {
-                  _pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
-                }
-                catch (const std::exception& e ) {
-                  std::cerr << "Unhandled situation: " << e.what() << std::endl ;
-                  std::cerr << "Cannot connect to the designated port /dev/ttyUSB0, so let's try others" << std::endl ;
-                  
-                  PORT = "/dev/ttyUSB1" ;
-                  _pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
-                  std::cout << "Now motor serial port connection is switched to " << PORT << " ." << std::endl ;
-                }
-
 		double Baud;
 		//ros::param::get("/TobotDriver/BaudRate", Baud);
 		_pnode.param<double>("BaudRate", Baud, 9600);
 		std::cout << "The motor is=> Baud "<< Baud<<" Port "<< PORT<<std::endl;
-		_motor.Open(PORT);		
+
+                // This part is added and modified by Charly on Sept 9, 2015
+                std::string defaultPort = "/dev/ttyUSB0" ;
+                std::string altPort = "/dev/ttyUSB1";
+
+                  std::cout << "PORT is on " << PORT << "!!!!!!" << std::endl ;
+
+                if (PORT.compare(defaultPort) != 0 ) {
+                  PORT = altPort ;
+                  _pnode.param<std::string>("Port", PORT, "/dev/ttyUSB1");
+                  std::cout << "supposely PORT should now be: " << PORT << std::endl ;
+                }
+                else if (PORT.compare(defaultPort) != 0 && PORT.compare(altPort) != 0 ) {
+                  PORT = "/dev/ttyUSB2" ;
+                  _pnode.param<std::string>("Port", PORT, "/dev/ttyUSB2");
+                }
+
+		_motor.Open(PORT);	
 		//8 data bits
 		//1 stop bit
 		//No parity
