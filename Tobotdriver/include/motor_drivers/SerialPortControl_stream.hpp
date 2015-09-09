@@ -62,7 +62,21 @@ class SerialPortControl{
 		//_RWHEEL="1";
 		//std::string PORT ="/dev/ttyUSB0";
 		std::string PORT;
-		_pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
+		//_pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
+
+                // This part is added and modified by Charly on Sept 9, 2015
+                try {
+                  _pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
+                }
+                catch (const std::exception& e ) {
+                  std::cerr << "Unhandled situation: " << e.what() << std::endl ;
+                  std::cerr << "Cannot connect to the designated port /dev/ttyUSB0, so let's try others" << std::endl ;
+                  
+                  PORT = "/dev/ttyUSB1" ;
+                  _pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
+                  std::cout << "Now motor serial port connection is switched to " << PORT << " ." << std::endl ;
+                }
+
 		double Baud;
 		//ros::param::get("/TobotDriver/BaudRate", Baud);
 		_pnode.param<double>("BaudRate", Baud, 9600);
