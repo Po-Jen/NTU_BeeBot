@@ -20,6 +20,19 @@
 #include <boost/lexical_cast.hpp>
 #include "ros/ros.h"
 
+#include <sstream>
+
+// For converting number to string (What a mess !!)
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
+
 int testin;
 
 //That must be parameters !!!
@@ -61,37 +74,41 @@ class SerialPortControl{
 		//_LWHEEL="1";
 		//_RWHEEL="1";
 		//std::string PORT ="/dev/ttyUSB0";
-		std::string PORT;
-		//_pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
-
+		//std::string PORT;		
+		std::string PORT="/dev/ttyUSB1";
 		double Baud;
+		_pnode.setParam("Port", PORT);
+//		_pnode.param<std::string>("Port", PORT, "/dev/ttyUSB2");
+
+	
 		//ros::param::get("/TobotDriver/BaudRate", Baud);
 		_pnode.param<double>("BaudRate", Baud, 9600);
 		std::cout << "The motor is=> Baud "<< Baud<<" Port "<< PORT<<std::endl;
 
-                // This part is added and modified by Charly on Sept 9, 2015
-                std::string defaultPort = "/dev/ttyUSB0" ;
-                std::string altPort = "/dev/ttyUSB1";
+		_motor.Open(PORT);	
 
-                  std::cout << "PORT is on " << PORT << "!!!!!!" << std::endl ;
+                // **********************************************************************
+                // This part is added and modified by Charly on Sept 9, 2015
+                std::string defaultPort = "/dev/ttyUSB1" ;
+                std::string port_ns = "/dev/ttyUSB" ;
 
                 if (PORT.compare(defaultPort) != 0 ) {
-                  PORT = altPort ;
-                  _pnode.param<std::string>("Port", PORT, "/dev/ttyUSB1");
-                  std::cout << "supposely PORT should now be: " << PORT << std::endl ;
+                  for (int i = 0 ; i < 10 ; i++) {
+                    PORT = port_ns + patch::to_string( i ) ;
+                    if ( _motor.good() ) {
+         	      _pnode.setParam("Port", PORT);             
+                      break ;
+                    }
+                  }
                 }
-                else if (PORT.compare(defaultPort) != 0 && PORT.compare(altPort) != 0 ) {
-                  PORT = "/dev/ttyUSB2" ;
-                  _pnode.param<std::string>("Port", PORT, "/dev/ttyUSB2");
-                }
+                // ***********************************************************************
 
-		_motor.Open(PORT);	
 		//8 data bits
 		//1 stop bit
 		//No parity
 		 if ( ! _motor.good() ){
 			std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
-			<< "Error: Could not open serial port "<<PORT
+			<< "ABC:Error: Could not open serial port "<<PORT
 			<< std::endl ;
 			exit(1) ;
 		}
