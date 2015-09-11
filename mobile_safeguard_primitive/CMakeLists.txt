@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   OpenCV
   tf
+   message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -106,6 +107,9 @@ include_directories(
   ${Boost_INCLUDE_DIRS}
 )
 
+#include_directories(${PROJECT_SOURCE_DIR}/include/)
+#set (HEADERS ${PROJECT_SOURCE_DIR}/include/people_filtering.h)
+
 ## Declare a cpp library
 # add_library(mobile_safeguard_primitive
 #   src/${PROJECT_NAME}/mobile_safeguard_primitive.cpp
@@ -174,5 +178,8 @@ target_link_libraries(mobile_safeguard_primitive_node
 add_executable(slammot_y_shaped_tube src/slammot_y_shaped_tube.cpp)
 target_link_libraries (slammot_y_shaped_tube ${catkin_LIBRARIES})
 
-add_executable (preProcessing src/preProcessing.cpp)
-target_link_libraries (preProcessing ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
+#add_executable (preProcessing src/preProcessing.cpp)
+#target_link_libraries (preProcessing ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
+
+add_executable(people_filter src/people_filter.cpp )
+target_link_libraries (people_filter ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
