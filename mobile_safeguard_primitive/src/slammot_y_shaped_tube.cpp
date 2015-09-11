@@ -26,27 +26,32 @@ typedef pcl::PointXYZRGB PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
 ////////////////////////////////////////////////////////////////////////////////////////
 // camera/rgb/image_raw
+// ******************************
 ros::Publisher rtabmap_rgbRaw_pub ;
 ros::Publisher spencer_rgbRaw_pub ;
-ros::Publisher pplfilt_rgbRaw_pub ;
+//ros::Publisher pplfilt_rgbRaw_pub ;
 
 // camera/rgb/image_rect_color
-ros::Publisher rtabmap_rgbRect_pub ;
+// ******************************
+//ros::Publisher rtabmap_rgbRect_pub ;
 ros::Publisher spencer_rgbRect_pub ;
-ros::Publisher pplfilt_rgbRect_pub ;
+//ros::Publisher pplfilt_rgbRect_pub ;
 
 // camera/rgb/camera_info
+// ******************************
 ros::Publisher rtabmap_rgbCamInfo_pub ;
 ros::Publisher spencer_rgbCamInfo_pub ;
-ros::Publisher pplfilt_rgbCamInfo_pub ;
+//ros::Publisher pplfilt_rgbCamInfo_pub ;
 
 // camera/depth/image_rect
+// ******************************
 ros::Publisher rtabmap_depImg_pub ;
 ros::Publisher spencer_depImg_pub ;
-ros::Publisher pplfilt_depImg_pub ;
+//ros::Publisher pplfilt_depImg_pub ;
 
 // camera/depth_registered/points
-ros::Publisher rtabmap_pts_pub;
+// *******************************
+//ros::Publisher rtabmap_pts_pub;
 ros::Publisher spencer_pts_pub;
 ros::Publisher pplfilt_pts_pub;
 
@@ -57,14 +62,14 @@ rgbRaw_cb (const sensor_msgs::ImageConstPtr& rgbRaw)
 {
   rtabmap_rgbRaw_pub.publish(rgbRaw) ;
   spencer_rgbRaw_pub.publish(rgbRaw) ;
-  pplfilt_rgbRaw_pub.publish(rgbRaw) ;
+ // pplfilt_rgbRaw_pub.publish(rgbRaw) ;
 }
 
 void
 rgbRec_cb (const sensor_msgs::ImageConstPtr& rgbRec){
-  rtabmap_rgbRect_pub.publish(rgbRec) ;
+  //rtabmap_rgbRect_pub.publish(rgbRec) ;
   spencer_rgbRect_pub.publish(rgbRec) ;
-  pplfilt_rgbRect_pub.publish(rgbRec) ;
+  //pplfilt_rgbRect_pub.publish(rgbRec) ;
 }
 
 void
@@ -72,7 +77,7 @@ rgbCamInfo_cb (const sensor_msgs::CameraInfoConstPtr& rgbCamInfo)
 {
    rtabmap_rgbCamInfo_pub.publish (rgbCamInfo) ;
    spencer_rgbCamInfo_pub.publish (rgbCamInfo) ;
-   pplfilt_rgbCamInfo_pub.publish (rgbCamInfo) ;
+   //pplfilt_rgbCamInfo_pub.publish (rgbCamInfo) ;
 }
 
 void
@@ -80,7 +85,7 @@ depImg_cb (const sensor_msgs::ImageConstPtr& depImg)
 {
    rtabmap_depImg_pub.publish (depImg) ;
    spencer_depImg_pub.publish (depImg) ;
-   pplfilt_depImg_pub.publish (depImg) ;
+   //pplfilt_depImg_pub.publish (depImg) ;
 }
 
 void
@@ -111,10 +116,12 @@ pts_cb (const sensor_msgs::PointCloud2ConstPtr& cloud_msg){
     // ===================================
     // Publish Outputs
     // =================================== 
-   rtabmap_pts_pub.publish ( output ) ;
+   //rtabmap_pts_pub.publish ( output ) ;
    spencer_pts_pub.publish ( output ) ;
    pplfilt_pts_pub.publish ( output ) ;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
 main (int argc, char** argv)
@@ -152,7 +159,7 @@ main (int argc, char** argv)
    //rtabmap_rgbRect_pub = nh.advertise<sensor_msgs::Image> ("", 1) ;
    rtabmap_rgbCamInfo_pub = nh.advertise<sensor_msgs::CameraInfo> ("camera/data_throttled_camera_info", 1) ;
    rtabmap_depImg_pub = nh.advertise<sensor_msgs::Image> ("camera/data_throttled_image_depth_relay", 1) ;
-   //ros::Publisher rtabmap_pts_pub = nh.advertise<sensor_msgs::PointCloud2> ("", 1) ;
+   //rtabmap_pts_pub = nh.advertise<sensor_msgs::PointCloud2> ("", 1) ;
 
   // SPENCER PEOPLE TRACKING
   // *************************
