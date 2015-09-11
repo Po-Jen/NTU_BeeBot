@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   OpenCV
   tf
    message_generation
+  nodelet
 )
 
 ## System dependencies are found with CMake's conventions
@@ -92,8 +93,12 @@ catkin_package(
 #  LIBRARIES mobile_safeguard_primitive
 #  CATKIN_DEPENDS geometry_msgs roscpp std_msgs
 #  DEPENDS system_lib
-)
+# )
 
+catkin_package(
+INCLUDE_DIRS include
+CATKIN_DEPENDS geometry_msgs roscpp std_msgs nodelet image_transport tf tf_conversions tf2_ros eigen_conversions laser_geometry pcl_onversions 
+)
 ###########
 ## Build ##
 ###########
