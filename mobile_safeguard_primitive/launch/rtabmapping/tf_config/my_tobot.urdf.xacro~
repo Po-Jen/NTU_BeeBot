@@ -15,6 +15,7 @@
   <xacro:property name="posz_camera" value="0.5" />
   <xacro:property name="fwheel_rad" value="0.0325" />
   <xacro:property name="PI" value="3.1415" />
+  <property name="base_z_origin_to_wheel_origin" value="0.0" />
    
   <material name="black">
     <color rgba="0 0 0 1"/>
@@ -27,7 +28,24 @@
 
   <!-- Actual frame and materials -->
 
+  <!-- BASE-FOOTPRINT -->
+  <!-- base_footprint is a fictitious link(frame) that is on the ground right below base_link origin -->
+  <link name="base_footprint">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+            <box size="0.001 0.001 0.001" />
+        </geometry>
+    </visual>
+  </link>
+ 
+  <joint name="base_footprint_joint" type="fixed">
+  <origin xyz="0 0 ${wheel_rad - base_z_origin_to_wheel_origin}" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
 
+  <!-- BASE LINK -->
   <link name="base_link">
     <visual>
       <geometry>
@@ -194,7 +212,8 @@
   <joint name="camera" type="fixed">
     <parent link="base_link"/>
     <child link="camera_link"/>
-    <origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_camera} " rpy="0 0 0"/>
+    <!--<origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_camera} " rpy="0 0 0"/>-->
+    <origin xyz="${width} 0 1.30 " rpy="0 0 0"/>
   </joint>
-  
+
 </robot>

@@ -4,9 +4,12 @@
    <!--turn on all necessary sensors and load in URDF/xacro model, also initializing tf transformation-->
    <include file="$(find mobile_safeguard_primitive)/launch/navigation/nav_minimum_create.launch"/>
 
+   <!-- Run a static transform between /base_link and /base_footprint needed for SLAM -->
+  <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 0 0 0 /base_link /base_footprint 100" />
+
    <!--load in blank map into map_server-->
    <!--<node name="map_server" pkg="map_server" type="map_server" 
-         args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>  -->
+         args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>-->
   
    <!--fire up move_base and load in corresponding parameters-->
    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
@@ -16,9 +19,6 @@
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/base_local_planner_params.yaml" command="load" />
    </node>
-
-   <!--Run a static transform between /odom and /map-->
-   <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
 
    <!--fire up Rviz with corresponding graphical config-->
    <group if="$(arg show_rviz)">
