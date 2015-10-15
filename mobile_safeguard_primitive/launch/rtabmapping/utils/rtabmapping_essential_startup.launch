@@ -10,10 +10,8 @@
 
 
 	<!--turn on laser range finder-->
-        <!--
-	<include file="$(find mobile_safeguard_primitive)/launch/hokuyo.launch"/>
-        -->
-        <node pkg="urg_node" type="urg_node" name="urg_node"/>
+        <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node"/>
+        <!--<node pkg="urg_node" type="urg_node" name="urg_node"/>-->
 
 	<!--turn on odometer-->
 	<node pkg="odom_base_pubisher" type="odom_base_pubisher_node" name="odom_base_pubisher_node"/>
