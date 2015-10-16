@@ -4,6 +4,9 @@
    <!--turn on all necessary sensors and load in URDF/xacro model, also initializing tf transformation-->
    <include file="$(find mobile_safeguard_primitive)/launch/navigation/nav_minimum_create.launch"/>
 
+   <!-- Run a static transform between /base_link and /base_footprint needed for SLAM -->
+  <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 0 0 0 /base_link /base_footprint 100" />
+
    <!--load in blank map into map_server-->
    <!--<node name="map_server" pkg="map_server" type="map_server" 
          args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>-->
