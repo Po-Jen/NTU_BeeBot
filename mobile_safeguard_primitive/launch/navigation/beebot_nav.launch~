@@ -8,10 +8,11 @@
   <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 0 0 0 /base_link /base_footprint 100" />
 
    <!--load in blank map into map_server-->
-   <!--<node name="map_server" pkg="map_server" type="map_server" 
-         args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>-->
+   <node name="map_server" pkg="map_server" type="map_server" 
+         args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
   
    <!--fire up move_base and load in corresponding parameters-->
+<!--
    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -19,10 +20,12 @@
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/base_local_planner_params.yaml" command="load" />
    </node>
-
+-->
    <!--fire up Rviz with corresponding graphical config-->
+<!--
    <group if="$(arg show_rviz)">
      <node pkg="rviz" type="rviz" name="rviz" 
            args="-d $(find mobile_safeguard_primitive)/launch/navigation/rviz/my_rbx1_nav_config.rviz"/>
    </group>
+-->
 </launch>

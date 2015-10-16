@@ -7,9 +7,12 @@
 	<!--launch gmapping-->
 	<!--<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>-->
 
+        <!--load in blank map into map_server-->
+        <node name="map_server" pkg="map_server" type="map_server" 
+              args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
+
 	<!--launch motor driver-->
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
-
 
 	<!--turn on laser range finder-->
         <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node"/>
