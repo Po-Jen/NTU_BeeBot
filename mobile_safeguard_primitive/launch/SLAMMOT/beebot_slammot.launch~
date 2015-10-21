@@ -42,6 +42,6 @@
   </node>
 
   <!-- launch AMCL for self localization-->
-  <include file="$(mobile_safeguard_primitive)/launch/SLAMMOT/beebot_amcl.launch"/>
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/beebot_amcl.launch"/>
 
 </launch>    
