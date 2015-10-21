@@ -51,6 +51,15 @@ git clone https://github.com/ros-planning/navigation.git --branch ${ros_version}
 catkin_make
 echo "ROS navigation ready to be used" 
 echo "===================================================================="
+echo "installing hector_slam"
+git clone https://github.com/tu-darmstadt-ros-pkg/hector_slam.git src/hector_slam
+catkin_make
+echo "Hector SLAM ready to be used"
+echo "===================================================================="
+echo "installing robot localization package"
+sudo apt-get install ros-${ros_version}-robot-localization
+echo "Robot localization ready to be used"
+echo "===================================================================="
 echo "Start installing RTABMap"
 cd ~
 echo "installing dependencies"
