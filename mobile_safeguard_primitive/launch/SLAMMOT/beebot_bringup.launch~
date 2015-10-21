@@ -1,16 +1,12 @@
 <launch>
-  <arg name="lower_platform" value="true"/>
-  <arg name="slammot_usage" default="false"/>
 
   <!-- Load the URDF/Xacro model of our robot -->
 <!--
-  <group if="$(arg slammot_usage)">
     <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find mobile_safeguard_primitive)/launch/SLAMMOT/URDF/my_tobot.urdf.xacro'"/>
-  </group>
 -->
-  <group if="$(arg lower_platform)">
+
     <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find mobile_safeguard_primitive)/launch/SLAMMOT/URDF/tobot.urdf.xacro'" />
-  </group>
+
 
   <param name="robot_description" command="$(arg urdf_file)" />
     
