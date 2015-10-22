@@ -1,0 +1,48 @@
+<launch>
+   <!--
+      This launch file launches spencer_people_tracking tracking_single_rgbd.launch and 
+      mobile_safeguard_primitive rtabmap_client.launch and slammot_y_shaped_tube node.
+      The prerequisite of launching this launch file is to launch at the robot side
+      $ roslaunch mobile_safeguard_primitive rtabmap_robot_side.launch
+   -->
+   <arg name="rtamapviz_on" default="false"/>
+   <arg name="load_driver" default="false"/>
+   <arg name="odom" default="/odometry/filtered"/>
+
+    <!--Launching customized OpenNI2 driver for unitary test-->
+        <!-- Output Topic namespace: /spencer/rgbd_front_top/  -->
+    <group ns="spencer/sensors" if="$(arg load_driver)">
+        <include file="$(find openni2_launch)/launch/openni2.launch">
+          <arg name="camera" value="rgbd_front_top"/>
+          <arg name="device_id" value="#1"/>
+          <arg name="depth_registration" default="true"/>
+        </include>
+    </group>
+
+  <!--RELAY-->
+  <!-- Visualization and SLAM nodes use same data, so just subscribe once and relay messages -->
+  <node name="odom_relay" type="relay" pkg="topic_tools" args="$(arg odom) /base_controller/odom_relay" />
+  <node name="scan_relay" type="relay" pkg="topic_tools" args="/scan /base_scan_relay" />
+  <node name="camera_info_relay" type="relay" pkg="topic_tools" args="/camera/data_throttled_camera_info /camera/data_throttled_camera_info_relay" />
+  <node name="republish_rgb" type="republish" pkg="image_transport" args="theora in:=/camera/data_throttled_image raw out:=/camera/data_throttled_image_relay" />
+  <node name="republish_depth" type="republish" pkg="image_transport" args="compressedDepth in:=/camera/data_throttled_image_depth raw out:=/camera/data_throttled_image_depth_relay" />
+
+    <!--Launching y_shaped_tube-->
+    <node pkg="mobile_safeguard_primitive" type="slammot_y_shaped_tube" name="slammot_y_shaped_tube"/> 
+
+   <!--Fire up  spencer people tracking-->
+   <include file="$(find spencer_people_tracking_launch)/launch/tracking_single_rgbd_sensor.launch">
+       <arg name="load_driver" value="false"/>
+       <arg name="visualization" value="false"/>
+       <arg name="dummy_transforms" value="false" />
+   </include>
+
+    <!--Fire up people filtering-->
+   <node pkg="mobile_safeguard_primitive" type="people_filter" name="people_filter"/>
+
+   <!--RTABMap-->
+   <include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/rtabmap_client_side.launch"/>
+
+   <!--Fire up rtabmapviz if necessary-->
+   <include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/rtabmap_client_rtabmapviz.launch" if="$(arg rtamapviz_on)" />
+</launch>

@@ -1,0 +1,7 @@
+<launch>
+  <!-- Activate the rtabmap_robot_side -->
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/rtabmap_robot_side.launch"/>
+
+  <!-- Activate rtabmap and spencer projects--> 
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/rtabmap+spencer.launch"/>
+</launch>
