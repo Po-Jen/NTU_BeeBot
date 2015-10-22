@@ -5,11 +5,17 @@
 	<include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/tf_config/my_start_tf.launch"/>
 
 	<!--launch gmapping-->
-	<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>
+	<!--<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>-->
+
+        <!--To switch to gmapping, comment out the following two nodes, the map_server and the odom_map_broadcaster-->
+        <!--load in blank map into map_server-->
+        <node name="map_server" pkg="map_server" type="map_server" 
+              args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
+        <!-- Run a static transform between /odom and /map-->
+        <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
 
 	<!--launch motor driver-->
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
-
 
 	<!--turn on laser range finder-->
         <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node"/>
