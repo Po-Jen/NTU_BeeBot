@@ -9,10 +9,9 @@
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
 
 	<!--turn on laser range finder-->
-        <!--
-	<include file="$(find mobile_safeguard_primitive)/launch/hokuyo.launch"/>
-        -->
-        <node pkg="urg_node" type="urg_node" name="urg_node"/>
+        <!--include file="$(find mobile_safeguard_primitive)/launch/hokuyo.launch"/-->
+        <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" />
+        <!--node pkg="urg_node" type="urg_node" name="urg_node"/-->
 
 	<!--turn on odometer-->
 	<node pkg="odom_base_pubisher" type="odom_base_pubisher_node" name="odom_base_pubisher_node"/>
@@ -21,12 +20,10 @@
 	<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
 
 	<!--Turn on webcam-->
-        <!--
-	<include file="$(find usb_cam)/usb_cam.launch"/>
-        -->
+        <!--include file="$(find usb_cam)/usb_cam.launch"/-->
         
         <!--Turn on Xtion-->
-        <include file="$(find openni2_launch)/launch/openni2.launch"/>
+        <!--include file="$(find openni2_launch)/launch/openni2.launch"/-->
 
 	<!--Fire up Rviz-->
         <!--

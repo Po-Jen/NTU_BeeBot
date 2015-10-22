@@ -73,9 +73,9 @@ class SerialPortControl{
 		_pnode.param<double>("TICKNUMLIFT", _nTickLift, 500000);
 		//_LWHEEL="1";
 		//_RWHEEL="1";
-		//std::string PORT ="/dev/ttyUSB0";
+		std::string PORT ="/dev/ttyUSB0";
 		//std::string PORT;		
-		std::string PORT="/dev/ttyUSB1";
+		//std::string PORT="/dev/ttyUSB1";
 		double Baud;
 		_pnode.setParam("Port", PORT);
 //		_pnode.param<std::string>("Port", PORT, "/dev/ttyUSB2");
@@ -89,7 +89,7 @@ class SerialPortControl{
 
                 // **********************************************************************
                 // This part is added and modified by Charly on Sept 9, 2015
-                std::string defaultPort = "/dev/ttyUSB1" ;
+                std::string defaultPort = "/dev/ttyUSB0" ;
                 std::string port_ns = "/dev/ttyUSB" ;
 
                 if (PORT.compare(defaultPort) != 0 ) {
