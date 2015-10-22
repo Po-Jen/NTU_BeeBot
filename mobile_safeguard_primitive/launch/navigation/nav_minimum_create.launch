@@ -1,13 +1,21 @@
 <launch>
+        <arg name="teleop" default="false"/>
+
 	<!--launch tf-->
 	<include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/tf_config/my_start_tf.launch"/>
 
 	<!--launch gmapping-->
-	<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>
+	<!--<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>-->
+
+        <!--To switch to gmapping, comment out the following two nodes, the map_server and the odom_map_broadcaster-->
+        <!--load in blank map into map_server-->
+        <node name="map_server" pkg="map_server" type="map_server" 
+              args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
+        <!-- Run a static transform between /odom and /map-->
+        <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
 
 	<!--launch motor driver-->
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
-
 
 	<!--turn on laser range finder-->
         <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node"/>
@@ -17,7 +25,9 @@
 	<node pkg="odom_base_pubisher" type="odom_base_pubisher_node" name="odom_base_pubisher_node"/>
 
 	<!--Turn on teleoperation on keyboard-->
-	<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
+        <group if="$(arg teleop)">
+        	<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
+        </group>
 
 	<!--Turn on webcam-->
         <!--
@@ -26,9 +36,4 @@
         
         <!--Turn on Xtion-->
         <include file="$(find openni2_launch)/launch/openni2.launch"/>
-
-	<!--Fire up Rviz-->
-        <!--
-        <node pkg="rviz" type="rviz" name="rviz"/>
-        -->
 </launch>

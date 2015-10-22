@@ -1,0 +1,21 @@
+<launch>
+   <arg name="show_rviz" default="true"/>
+
+   <!--Turn on teleoperation on keyboard-->
+   <!--<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>-->
+
+   <!--fire up move_base and load in corresponding parameters-->
+   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
+    <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/base_local_planner_params.yaml" command="load" />
+   </node>
+
+   <!--fire up Rviz with corresponding graphical config-->
+   <group if="$(arg show_rviz)">
+     <node pkg="rviz" type="rviz" name="rviz" 
+           args="-d $(find mobile_safeguard_primitive)/launch/navigation/rviz/my_rbx1_nav_config.rviz"/>
+   </group>
+</launch>
