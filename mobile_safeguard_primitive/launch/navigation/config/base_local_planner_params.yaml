@@ -3,8 +3,8 @@ recovery_behavior_enabled: false
 clearing_rotation_allowed: false
 
 TrajectoryPlannerROS:
-   max_vel_x: 0.5
-   min_vel_x: 0.1
+   max_vel_x: 0.08
+   min_vel_x: 0.02
    max_vel_y: 0.0  # zero for a differential drive robot
    min_vel_y: 0.0
    max_vel_theta: 1.0
