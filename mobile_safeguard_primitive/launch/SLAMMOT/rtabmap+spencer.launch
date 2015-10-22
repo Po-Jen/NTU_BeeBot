@@ -8,6 +8,7 @@
    <arg name="rtamapviz_on" default="false"/>
    <arg name="load_driver" default="false"/>
    <arg name="odom" default="/odometry/filtered"/>
+   <arg name="cam_height_above_ground" default="1.6"/>
 
     <!--Launching customized OpenNI2 driver for unitary test-->
         <!-- Output Topic namespace: /spencer/rgbd_front_top/  -->
@@ -34,7 +35,8 @@
    <include file="$(find spencer_people_tracking_launch)/launch/tracking_single_rgbd_sensor.launch">
        <arg name="load_driver" value="false"/>
        <arg name="visualization" value="false"/>
-       <arg name="dummy_transforms" value="false" />
+       <arg name="dummy_transforms" value="true" />
+       <arg name="height_above_ground" value="$(arg cam_height_above_ground)"/>
    </include>
 
     <!--Fire up people filtering-->
