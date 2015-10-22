@@ -35,12 +35,9 @@
   <!-- Fire up laser odometry with hector_slam-->
   <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/laser_odometry.launch" />
   <!-- Fire up visual odometry-->
-  <node pkg="rtabmap_ros" type="rgbd_odometry" name="rgbd_odometry" output="screen">
-      <remap from="rgb/image"       to="$(arg cam_ns)/camera/rgb/image_rect_color"/>
-      <remap from="depth/image"     to="$(arg cam_ns)/camera/depth_registered/image_raw"/>
-      <remap from="rgb/camera_info" to="$(arg cam_ns)/camera/depth_registered/camera_info"/>
-      <param name="frame_id" type="string" value="base_link"/>
-  </node>
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/visual_odometry.launch">
+    <arg name="cam_ns" value="$(arg cam_ns)"/>
+  </include>
   <!--Fire up robot localization -->
   <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/ekf_filtered_odom.launch"/>
 
