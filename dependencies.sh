@@ -21,6 +21,7 @@ sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
 sudo ldconfig
 sudo sh -c 'echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig" > /etc/bash.bashrc'
 sudo sh -c 'echo "export PKG_CONFIG_PATH" > /etc/bash.bashrc'
+sudo sh -c 'echo "export OpenCV_DIR=$HOME/opencv-2.4.9" > /etc/bash.bashrc'
 echo "OpenCV 2.4.9 ready to be used"
 echo "==================================================================="
 cd ~
