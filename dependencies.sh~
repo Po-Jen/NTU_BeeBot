@@ -56,6 +56,10 @@ git clone https://github.com/tu-darmstadt-ros-pkg/hector_slam.git src/hector_sla
 catkin_make
 echo "Hector SLAM ready to be used"
 echo "===================================================================="
+echo "installing robot localization package"
+sudo apt-get install ros-${ros_version}-robot-localization
+echo "Robot localization ready to be used"
+echo "===================================================================="
 echo "Start installing RTABMap"
 cd ~
 echo "installing dependencies"
