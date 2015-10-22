@@ -1,0 +1,12 @@
+<launch>
+  <arg name="reconfigure" default="true"/>
+
+  <!--activate move_base and Rviz with its customized settings-->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/client_nav.launch"/>
+
+  <!--Fire up teleoperation-->
+  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
+
+  <!--(Optional) Fire up rqt_reconfigure-->
+  <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure"/>
+</launch>
