@@ -40,6 +40,8 @@
       <remap from="rgb/camera_info" to="/camera/depth_registered/camera_info"/>
       <param name="frame_id" type="string" value="base_link"/>
   </node>
+  <!--Fire up robot localization -->
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/ekf_filtered_odom.launch"/>
 
   <!-- launch AMCL for self localization-->
   <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/beebot_amcl.launch"/>

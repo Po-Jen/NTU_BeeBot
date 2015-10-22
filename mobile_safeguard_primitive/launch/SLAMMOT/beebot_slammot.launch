@@ -1,6 +1,7 @@
 <launch>
   <arg name="gmapping" default="true"/>
   <arg name="blank_map" default="false"/>
+  <arg name="cam_ns" default="/lower_camera"/>
 
   <!-- launch tf-->
   <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/beebot_bringup.launch"/>
@@ -26,7 +27,7 @@
   <!--<node pkg="urg_node" type="urg_node" name="urg_node"/>-->
 
   <!--Turn on Xtion (the lower camera)-->
-  <include file="$(find openni2_launch)/launch/openni2.launch" ns="lower_camera"/>
+  <include file="$(find openni2_launch)/launch/openni2.launch" ns="$(arg cam_ns)"/>
 
   <!-- ODOMETRY-->
   <!--Fire up wheel odom publisher-->
@@ -35,13 +36,13 @@
   <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/laser_odometry.launch" />
   <!-- Fire up visual odometry-->
   <node pkg="rtabmap_ros" type="rgbd_odometry" name="rgbd_odometry" output="screen">
-      <remap from="rgb/image"       to="/camera/rgb/image_rect_color"/>
-      <remap from="depth/image"     to="/camera/depth_registered/image_raw"/>
-      <remap from="rgb/camera_info" to="/camera/depth_registered/camera_info"/>
+      <remap from="rgb/image"       to="$(arg cam_ns)/camera/rgb/image_rect_color"/>
+      <remap from="depth/image"     to="$(arg cam_ns)/camera/depth_registered/image_raw"/>
+      <remap from="rgb/camera_info" to="$(arg cam_ns)/camera/depth_registered/camera_info"/>
       <param name="frame_id" type="string" value="base_link"/>
   </node>
   <!--Fire up robot localization -->
-  
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/ekf_filtered_odom.launch"/>
 
   <!-- launch AMCL for self localization-->
   <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/beebot_amcl.launch"/>
