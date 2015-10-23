@@ -180,8 +180,8 @@
   </joint>
 
 
-  <!--CAMERA-->
-  <link name="camera_link">
+  <!--LOWER CAMERA-->
+  <link name="lower_camera_link">
     <visual>
       <geometry>
         <box size="0.15 .05 .1865"/>
@@ -191,10 +191,26 @@
     </visual>
   </link>
   
-  <joint name="camera" type="fixed">
+  <joint name="lower_camera" type="fixed">
     <parent link="base_link"/>
-    <child link="camera_link"/>
-    <!--<origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_camera} " rpy="0 0 0"/>-->
+    <child link="lower_camera_link"/>
+    <origin xyz="${width} 0 ${GROUND_CLEARANCE-bodylen+posz_camera} " rpy="0 0 0"/>
+  </joint>
+
+  <!--UPPER CAMERA-->
+  <link name="upper_camera_link">
+    <visual>
+      <geometry>
+        <box size="0.15 .05 .1865"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+  </link>
+  
+  <joint name="upper_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="upper_camera_link"/>
     <origin xyz="${width} 0 1.30 " rpy="0 0 0"/>
   </joint>
   
