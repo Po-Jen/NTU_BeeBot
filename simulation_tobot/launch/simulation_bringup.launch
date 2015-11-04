@@ -1,0 +1,7 @@
+<launch>
+<!--These will fire up two necessary components for the simulation.-->
+
+  <include file="$(find simulation_tobot)/launch/nav/simulation_tobot.launch"/>
+
+  <node pkg="rviz" type="rviz" name="rviz"/>
+</launch>
