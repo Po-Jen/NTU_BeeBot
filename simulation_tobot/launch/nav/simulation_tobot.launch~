@@ -1,0 +1,27 @@
+<launch>
+  <param name="/use_sim_time" value="false" />
+  <!-- Use the gui for the state publisher. So you can check the it's continuous-->
+  <param name="/use_gui" value="true" />
+
+  <!-- Load the URDF/Xacro model of our robot -->
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find simulation_tobot)/URDF/tobot.urdf.xacro'" />
+   
+  <param name="robot_description" command="$(arg urdf_file)" />
+    
+  <node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen">
+      <rosparam file="$(find simulation_tobot)/config/fake_tobot_arbotix.yaml" command="load" />
+      <param name="sim" value="true"/>
+  </node>
+ 
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+      <param name="publish_frequency" type="double" value="20.0" />
+  </node>
+
+  <!-- NEEDED FOR THE CONTINUOUS JOINT -->    
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node>
+  
+   <!-- Run a static transform between /base_link and /base_footprint needed for SLAM -->
+  <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 0 0 0 /base_link /base_footprint 100" />
+
+
+</launch>
