@@ -1,6 +1,6 @@
 <launch>
 
-  <include file="$(find simulation_tobot)/launch/fake_move_base.launch" />
+  <include file="$(find simulation_tobot)/launch/nav/fake_move_base.launch" />
   
   <!-- Run the map server with a blank map + obstacle -->
   <node name="map_server" pkg="map_server" type="map_server" args="$(find simulation_tobot)/maps/blank_map_with_obstacle.yaml"/>
