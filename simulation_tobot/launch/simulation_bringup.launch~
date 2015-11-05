@@ -1,7 +1,10 @@
 <launch>
 <!--These will fire up two necessary components for the simulation.-->
 
-  <include file="$(find simulation_tobot)/launch/nav/simulation_tobot.launch"/>
-
+  <include file="$(find simulation_tobot)/launch/nav/simulation_tobot.launch">
+    <arg name="robot_model" value="$(find simulation_tobot)/URDF/tobot.urdf.xacro"/>
+  </include>
+  
+  <!--Launch Rviz-->
   <node pkg="rviz" type="rviz" name="rviz"/>
 </launch>

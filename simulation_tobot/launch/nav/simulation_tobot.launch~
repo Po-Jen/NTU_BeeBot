@@ -1,11 +1,12 @@
 <launch>
+  <arg name="robot_model" default=""/>
+  <!--$(find simulation_tobot)/URDF/tobot.urdf.xacro-->
   <param name="/use_sim_time" value="false" />
   <!-- Use the gui for the state publisher. So you can check the it's continuous-->
   <param name="/use_gui" value="true" />
 
   <!-- Load the URDF/Xacro model of our robot -->
-  <!--CHANGE HERE TO YOUR OWN ROBOT CONFIGURATION-->
-  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find simulation_tobot)/URDF/tobot.urdf.xacro'" />
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(arg robot_model)'" />
    
   <param name="robot_description" command="$(arg urdf_file)" />
     
