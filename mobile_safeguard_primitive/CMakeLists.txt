@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   image_transport
-  OpenCV
   tf
    message_generation
   nodelet
@@ -104,7 +103,7 @@ find_package(catkin REQUIRED COMPONENTS
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS} 
+  #${OpenCV_INCLUDE_DIRS} 
   ${Boost_INCLUDE_DIRS}
 )
 
