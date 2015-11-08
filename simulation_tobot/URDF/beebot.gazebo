@@ -149,23 +149,3 @@
     </sensor>
   </gazebo>  
 
-  <!--Transmissions for active wheels-->
-    <!-- Transmission is important to link the joints and the controller -->
-    <transmission name="base_to_lwheel_joint_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="base_to_lwheel" />
-      <actuator name="base_to_lwheel_joint_motor">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-
-    <transmission name="base_to_rwheel_joint_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="base_to_rwheel" />
-      <actuator name="base_to_rwheel_joint_motor">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-</robot>
