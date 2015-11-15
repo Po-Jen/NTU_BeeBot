@@ -2,21 +2,12 @@
 <!--These will fire up all necessary components for the simulation both in Rviz and Gazebo.-->
   <!--insert the robot model as urdf xacro-->
   <include file="$(find simulation_tobot)/launch/nav/simulation_tobot.launch">
-    <!--<arg name="robot_model" value="$(find simulation_tobot)/URDF/beebot.urdf.xacro"/>-->
-    <arg name="robot_model" value="$(find simulation_tobot)/URDF/my_simple_test.urdf.xacro"/>
+    <arg name="robot_model" value="$(find simulation_tobot)/URDF/beebot.xacro"/>
   </include>
   
   <!--Fire up Gazebo-->
   <!--Here we are launch an empty world, but CHANGE TO CORRESPONDING LAUNCH FILES IF YOU WANT TO INSERT A DIFFERENT MAP-->
-  <include file="$(find simulation_tobot)/launch/Gazebo_world_launch/gazebo_empty_world.launch"/>
-
-  <!-- Spawn a robot into Gazebo -->
-  <!--CHANGE YOUR ROBOT HERE !!-->
-  <node name="spawn_urdf" 
-        pkg="gazebo_ros" 
-        type="spawn_model" 
-        args="-file $(find simulation_tobot)/URDF/my_simple_test.urdf -urdf -model beebot"
-        output="screen" />
+  <include file="$(find simulation_tobot)/launch/gazebo/beebot_world.launch" />
 
   <!--Launch Rviz-->
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find simulation_tobot)/rviz/myconf.rviz"/>
