@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   image_transport
-  OpenCV
   tf
    message_generation
   nodelet
@@ -95,10 +94,6 @@ find_package(catkin REQUIRED COMPONENTS
 #  DEPENDS system_lib
 # )
 
-catkin_package(
-INCLUDE_DIRS include
-CATKIN_DEPENDS roscpp std_msgs nodelet image_transport tf tf_conversions tf2_ros eigen_conversions laser_geometry pcl_onversions 
-)
 ###########
 ## Build ##
 ###########
@@ -108,7 +103,6 @@ CATKIN_DEPENDS roscpp std_msgs nodelet image_transport tf tf_conversions tf2_ros
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS} 
   ${Boost_INCLUDE_DIRS}
 )
 

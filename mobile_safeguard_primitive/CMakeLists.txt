@@ -103,6 +103,10 @@ find_package(catkin REQUIRED COMPONENTS
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+<<<<<<< HEAD
+=======
+  #${OpenCV_INCLUDE_DIRS} 
+>>>>>>> origin/SLAMMOT
   ${Boost_INCLUDE_DIRS}
 )
 
