@@ -25,11 +25,10 @@
   <xacro:property name="psvwheel_mass" value="1" />
 
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find simulation_tobot)/URDF/materials.xacro" />
+  <xacro:include filename="$(find beebot_description)/urdf/materials.xacro" />
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find simulation_tobot)/URDF/beebot.gazebo" />
-
+  <xacro:include filename="$(find beebot_description)/urdf/beebot.gazebo" />
 
   <!--Base_link-->
   <link name="base_link">
@@ -37,7 +36,8 @@
       <geometry>
          <cylinder length="${bodylen}" radius="${width}"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 ${GROUND_CLEARANCE}"/>
+	  <origin rpy="0 0 0" xyz="0 0 ${GROUND_CLEARANCE}"/>
+      <!--origin rpy="0 0 0" xyz="0 0 0"/-->
       <material name="yellow"/>
     </visual>
 
@@ -194,7 +194,7 @@
     <parent link="base_link"/>
     <child link="fwheel"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="${xpsvwhloffset} 0 ${ -(bodylen/2) + 0.02}" rpy="0 0 0"/>
+    <origin xyz="${xpsvwhloffset} 0 ${ -(bodylen/2) + 0.02786}" rpy="0 0 0"/>
   </joint>
   
   <!--BACK WHEEL-->
@@ -228,7 +228,7 @@
     <parent link="base_link"/>
     <child link="bwheel"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="${-xpsvwhloffset} 0 ${ -(bodylen/2) + 0.02}" rpy="0 0 0"/>
+    <origin xyz="${-xpsvwhloffset} 0 ${ -(bodylen/2) + 0.02786}" rpy="0 0 0"/>
   </joint>
   
   
@@ -304,22 +304,67 @@
 
 
   <!--Transmissions for active wheels-->
-    <!-- Transmission is important to link the joints and the controller -->
-    <transmission name="base_to_lwheel_joint_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="base_to_lwheel" />
-      <actuator name="base_to_lwheel_joint_motor">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
+  <!-- Transmission is important to link the joints and the controller -->
+  <transmission name="base_to_lwheel_joint_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_lwheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="base_to_lwheel_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+ 
+  <transmission name="base_to_rwheel_joint_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_rwheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="base_to_rwheel_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <!-- without this transmission, rviz cannot show tf of fwheel unless the joint is "fixed" -->
+  <transmission name="base_to_fwheel_joint_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_fwheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <!-- actually, this actuator just acts as an encoder, without driving the wheel -->
+    <actuator name="base_to_fwheel_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+   <!-- without this transmission, rviz cannot show tf of fwheel unless the joint is "fixed" -->
+  <transmission name="base_to_bwheel_joint_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_bwheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <!-- actually, this actuator just acts as an encoder, instead of driving the wheel -->
+    <actuator name="base_to_bwheel_joint_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="base_platform_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_platform">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="base_platform_motor">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 
-    <transmission name="base_to_rwheel_joint_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="base_to_rwheel" />
-      <actuator name="base_to_rwheel_joint_motor">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
+  
 </robot>
+
+
