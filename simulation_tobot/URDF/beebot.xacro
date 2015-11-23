@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
-<robot name="tobot">
+<robot name="tobot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Constant for the xacro model -->
 
   <xacro:property name="GROUND_CLEARANCE" value="0.0335" />
-  <xacro:property name="width" value="0.35" />
-  <xacro:property name="bodylen" value="0.3465" />
+  <xacro:property name="width" value="0.40" />
+  <xacro:property name="xpsvwhloffset" value="0.3374" />
+  <xacro:property name="yactwhloffset" value="0.4238" />
+  <xacro:property name="bodylen" value="0.355" />
   <xacro:property name="wheel_w" value="0.039" />
   <xacro:property name="wheel_rad" value="0.1194" />
   <xacro:property name="plat_rad" value="0.3" />
@@ -22,17 +24,11 @@
   <xacro:property name="actvwheel_mass" value="10" />
   <xacro:property name="psvwheel_mass" value="1" />
 
-  <material name="black">
-    <color rgba="0 0 0 1"/>
-  </material>
-  <material name="red">
-    <color rgba="1 0 0 1"/> 
-  </material>
-  <material name="blue">
-    <color rgba="0 0.2 0.4 1"/>
-  </material>
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find simulation_tobot)/URDF/materials.xacro" />
 
-  <!-- Actual frame and materials -->
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find simulation_tobot)/URDF/beebot.gazebo" />
 
 
   <!--Base_link-->
@@ -42,14 +38,16 @@
          <cylinder length="${bodylen}" radius="${width}"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 ${GROUND_CLEARANCE}"/>
-      <material name="blue"/>
+      <material name="yellow"/>
     </visual>
+
     <collision>
       <geometry>
          <cylinder length="${bodylen}" radius="${width}"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 ${bodylen/2}"/>
     </collision>
+
     <!--Actually, I will calculate it as a thick wall cylinder-->
     <!--with inner radius=0.1 and outer radius= width -->
     <inertial>
@@ -68,19 +66,20 @@
       <geometry>
         <cylinder length="${wheel_w}" radius="${wheel_rad}"/>
       </geometry>
-      <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.05}"/>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
 
-    <collsion>
+    <collision>
       <geometry>
         <cylinder length="${wheel_w}" radius="${wheel_rad}"/>
       </geometry>
-      <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.05}"/>
-    </collsion>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+    </collision>
+
     <inertial>
         <mass value="0.010" />
-        <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.05}" />
+        <origin rpy="-1.57075 0 0" xyz="0 0 0" />
         <inertia 
           ixx="${(1/12) * actvwheel_mass * (3 * wheel_rad * wheel_rad + wheel_w * wheel_w)}" ixy="0.0" ixz="0.0"
           iyy="${(1/12) * actvwheel_mass * (3 * wheel_rad * wheel_rad + wheel_w * wheel_w)}" iyz="0.0"
@@ -92,7 +91,7 @@
     <parent link="base_link"/>
     <child link="lwheel"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="0 ${width} ${GROUND_CLEARANCE-(bodylen/2)}" rpy="0 0 0"/>
+    <origin xyz="0 ${yactwhloffset} ${ -(bodylen / 2) + GROUND_CLEARANCE + 0.031 }" rpy="0 0 0"/>
   </joint>
   
   <!--Right wheel-->
@@ -101,19 +100,20 @@
       <geometry>
         <cylinder length="${wheel_w}" radius="${wheel_rad}"/>
       </geometry>
-      <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.05}"/>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
 
-    <collsion>
+    <collision>
       <geometry>
         <cylinder length="${wheel_w}" radius="${wheel_rad}"/>
       </geometry>
-      <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.05}"/>
-    </collsion>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+    </collision>
+
     <inertial>
         <mass value="0.010" />
-        <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.05}" />
+        <origin rpy="-1.57075 0 0" xyz="0 0 0" />
         <inertia 
           ixx="${(1/12) * actvwheel_mass * (3 * wheel_rad * wheel_rad + wheel_w * wheel_w)}" ixy="0.0" ixz="0.0"
           iyy="${(1/12) * actvwheel_mass * (3 * wheel_rad * wheel_rad + wheel_w * wheel_w)}" iyz="0.0"
@@ -125,7 +125,7 @@
     <parent link="base_link"/>
     <child link="rwheel"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="0 ${-width} ${GROUND_CLEARANCE-(bodylen/2)}" rpy="0 0 0"/>
+    <origin xyz="0 ${-yactwhloffset} ${ -(bodylen / 2) + GROUND_CLEARANCE + 0.031 }" rpy="0 0 0"/>
   </joint>
   
   <!--LASER-->
@@ -135,8 +135,9 @@
         <box size="0.06 0.06 0.087"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <material name="red"/>
+      <material name="orange"/>
     </visual>
+
     <inertial>
         <mass value="0.270" />
         <origin xyz="0 0 0" />
@@ -145,6 +146,14 @@
           iyy="2.632e-4" iyz="0" 
           izz="1.62e-4" />
     </inertial>
+
+    <collision>
+        <origin xyz="0 0 -0.0115" rpy="0 0 0" />
+        <geometry>
+          <box size="0.058 0.058 0.087" />
+          <!--<mesh filename="package://hector_sensors_description/meshes/hokuyo_utm30lx/hokuyo_utm_30lx.stl"/>-->
+        </geometry>
+     </collision>
   </link>
   
   <joint name="base_laser" type="fixed">
@@ -160,19 +169,20 @@
       <geometry>
         <cylinder length="${wheel_w}" radius="${fwheel_rad}"/>
       </geometry>
-      <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.1}"/>
-      <material name="black"/>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+      <material name="blue"/>
     </visual>
 
-    <collsion>
+    <collision>
       <geometry>
         <cylinder length="${wheel_w}" radius="${fwheel_rad}"/>
       </geometry>
-      <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.1}"/>
-    </collsion>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+    </collision>
+
     <inertial>
         <mass value="0.010" />
-        <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.1}" />
+        <origin rpy="-1.57075 0 0" xyz="0 0 0" />
         <inertia 
           ixx="${(1/12) * psvwheel_mass * (3 * fwheel_rad * fwheel_rad + wheel_w * wheel_w)}" ixy="0.0" ixz="0.0"
           iyy="${(1/12) * psvwheel_mass * (3 * fwheel_rad * fwheel_rad + wheel_w * wheel_w)}" iyz="0.0"
@@ -184,7 +194,7 @@
     <parent link="base_link"/>
     <child link="fwheel"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="${width} 0 ${GROUND_CLEARANCE-(bodylen/2)-(fwheel_rad)}" rpy="0 0 0"/>
+    <origin xyz="${xpsvwhloffset} 0 ${ -(bodylen/2) + 0.02}" rpy="0 0 0"/>
   </joint>
   
   <!--BACK WHEEL-->
@@ -193,19 +203,20 @@
       <geometry>
         <cylinder length="${wheel_w}" radius="${fwheel_rad}"/>
       </geometry>
-      <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.1}"/>
-      <material name="black"/>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+      <material name="blue"/>
     </visual>
 
-    <collsion>
+    <collision>
       <geometry>
         <cylinder length="${wheel_w}" radius="${fwheel_rad}"/>
       </geometry>
-      <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.1}"/>
-    </collsion>
+      <origin rpy="-1.57075 0 0" xyz="0 0 0"/>
+    </collision>
+
     <inertial>
         <mass value="0.010" />
-        <origin rpy="-1.57075 0 0" xyz="0 0 ${GROUND_CLEARANCE + 0.1}" />
+        <origin rpy="-1.57075 0 0" xyz="0 0 0" />
         <inertia 
           ixx="${(1/12) * psvwheel_mass * (3 * fwheel_rad * fwheel_rad + wheel_w * wheel_w)}" ixy="0.0" ixz="0.0"
           iyy="${(1/12) * psvwheel_mass * (3 * fwheel_rad * fwheel_rad + wheel_w * wheel_w)}" iyz="0.0"
@@ -217,7 +228,7 @@
     <parent link="base_link"/>
     <child link="bwheel"/>
     <axis xyz="0 1 0"/>
-    <origin xyz="${-width} 0 ${GROUND_CLEARANCE-(bodylen/2)-(fwheel_rad)}" rpy="0 0 0"/>
+    <origin xyz="${-xpsvwhloffset} 0 ${ -(bodylen/2) + 0.02}" rpy="0 0 0"/>
   </joint>
   
   
@@ -228,8 +239,16 @@
          <cylinder length="${plat_len}" radius="${plat_rad}"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 ${plat_len/2}"/>
-      <material name="black"/>
+      <material name="grey"/>
     </visual>
+
+     <collision>
+      <geometry>
+         <cylinder length="${plat_len}" radius="${plat_rad}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${plat_len/2}"/>
+     </collision>
+
     <inertial>
         <mass value="0.001" />
         <origin xyz="${-width} 0 ${GROUND_CLEARANCE-(bodylen/2)-(fwheel_rad)}" rpy="0 0 0" />
@@ -245,7 +264,7 @@
     <child link="platform"/>
     <axis xyz="0 0 1"/>
     <limit effort="1000.0" lower="0" upper="${HIGH_PLATFORM}" velocity="0.5"/>
-    <origin rpy="0 0 0" xyz="0 0 ${(bodylen/2)+GROUND_CLEARANCE}"/>
+    <origin rpy="0 0 0" xyz="0 0 ${(bodylen/2)+GROUND_CLEARANCE + 0.031}"/>
   </joint>
 
 
@@ -258,6 +277,14 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+          <box size="0.035 0.185 0.025"/>
+      </geometry>
+    </collision>
+
     <inertial>
         <mass value="0.200" />
         <origin xyz="0 0 0" />
@@ -274,4 +301,25 @@
     <origin xyz="${width + 0.07} 0 0.05 " rpy="0 0 0"/>
   </joint>
   
+
+
+  <!--Transmissions for active wheels-->
+    <!-- Transmission is important to link the joints and the controller -->
+    <transmission name="base_to_lwheel_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="base_to_lwheel" />
+      <actuator name="base_to_lwheel_joint_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="base_to_rwheel_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="base_to_rwheel" />
+      <actuator name="base_to_rwheel_joint_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
 </robot>
