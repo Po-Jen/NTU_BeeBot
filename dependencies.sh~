@@ -58,6 +58,7 @@ echo "Hector SLAM ready to be used"
 echo "===================================================================="
 echo "installing robot localization package"
 sudo apt-get install ros-${ros_version}-robot-localization
+catkin_make
 echo "Robot localization ready to be used"
 echo "===================================================================="
 echo "Start installing RTABMap"
