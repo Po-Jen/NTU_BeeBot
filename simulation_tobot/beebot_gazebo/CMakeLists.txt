@@ -96,10 +96,10 @@ find_package(catkin REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES beebot_gazebo
-#  CATKIN_DEPENDS other_catkin_pkg
-#  DEPENDS system_lib
+  INCLUDE_DIRS include
+  LIBRARIES beebot_gazebo
+  CATKIN_DEPENDS other_catkin_pkg
+  DEPENDS system_lib
 )
 
 ###########
@@ -121,16 +121,16 @@ catkin_package(
 # add_dependencies(beebot_gazebo ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(beebot_gazebo_node src/beebot_gazebo_node.cpp)
+ add_executable(beebot_gazebo_node src/beebot_gazebo_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(beebot_gazebo_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(beebot_gazebo_node
-#   ${catkin_LIBRARIES}
-# )
+ target_link_libraries(beebot_gazebo_node
+   ${catkin_LIBRARIES}
+ )
 
 #############
 ## Install ##
