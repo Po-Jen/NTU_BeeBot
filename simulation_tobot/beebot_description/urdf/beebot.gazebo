@@ -1,151 +1,51 @@
 <?xml version="1.0"?>
 <robot>
 
-  <!-- ros_control plugin -->
+  <!-- Gazebo plugin for ROS Control -->
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotNamespace>/beebot</robotNamespace>
-      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <robotNamespace>/</robotNamespace>
     </plugin>
   </gazebo>
 
-  <!--BASE_LINK-->
   <gazebo reference="base_link">
-     <material>Gazebo/Yellow</material>
-     <turnGravityOff>false</turnGravityOff>
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+  
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Black</material>
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 falue="1 0 0"/>
+  </gazebo>
+  
+  <gazebo reference="left_wheel">
+    <material>Gazebo/Black</material>
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <fdir1 falue="1 0 0"/>
+  </gazebo>
+  
+  <gazebo reference="front_wheel">
+    <material>Gazebo/Blue</material>
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <fdir1 falue="1 0 0"/>
   </gazebo>
 
-  <!--LEFT WHEEL-->
-  <gazebo reference="lwheel">
-     <material>Gazebo/Black</material>
-     <mu1 value="1.0"/>
-     <mu2 value="1.0"/>
-     <kp value="10000000.0"/>
-     <kd value="1.0"/>
-     <fdir1 value="1 0 0"/>
-     <turnGravityOff>false</turnGravityOff>
-  </gazebo>
-
-  <!--RIGHT WHEEL-->
-  <gazebo reference="rwheel">
-     <material>Gazebo/Black</material>
-     <mu1 value="1.0"/>
-     <mu2 value="1.0"/>
-     <kp value="10000000.0"/>
-     <kd value="1.0"/>
-     <fdir1 value="1 0 0"/>
-     <turnGravityOff>false</turnGravityOff>
-  </gazebo>
-
-  <!--FRONT WHEEL-->
-  <gazebo reference="fwheel">
-     <material>Gazebo/Blue</material>
-     <mu1 value="1.0"/>
-     <mu2 value="1.0"/>
-     <kp value="10000000.0"/>
-     <kd value="1.0"/>
-     <fdir1 value="1 0 0"/>
-     <turnGravityOff>false</turnGravityOff>
-  </gazebo>
-
-  <!--REAR WHEEL-->
-  <gazebo reference="bwheel">
-     <material>Gazebo/Blue</material>
-     <mu1 value="1.0"/>
-     <mu2 value="1.0"/>
-     <kp value="10000000.0"/>
-     <kd value="1.0"/>
-     <fdir1 value="1 0 0"/>
-     <turnGravityOff>false</turnGravityOff>
-  </gazebo>
-
-  <!--PLATFORM QUI SE LEVE-->
-  <gazebo reference="platform">
-     <material>Gazebo/Grey</material>
-     <turnGravityOff>false</turnGravityOff>
-  </gazebo>
-
-  <!--CAMERA-->
-  <gazebo reference="camera_link">
-     <material>Gazebo/Black</material>
-  </gazebo>
-
-  <!-- hokuyo LASER -->
-  <gazebo reference="laser">
-    <material>Gazebo/Orange</material>
-    <sensor type="gpu_ray" name="head_hokuyo_sensor">
-      <pose>0 0 0 0 0 0</pose>
-      <visualize>false</visualize>
-      <update_rate>40</update_rate>
-      <ray>
-        <scan>
-          <horizontal>
-            <samples>720</samples>
-            <resolution>1</resolution>
-            <min_angle>-1.570796</min_angle>
-            <max_angle>1.570796</max_angle>
-          </horizontal>
-        </scan>
-        <range>
-          <min>0.10</min>
-          <max>30.0</max>
-          <resolution>0.01</resolution>
-        </range>
-        <noise>
-          <type>gaussian</type>
-          <!-- Noise parameters based on published spec for Hokuyo laser
-               achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
-               stddev of 0.01m will put 99.7% of samples within 0.03m of the true
-               reading. -->
-          <mean>0.0</mean>
-          <stddev>0.01</stddev>
-        </noise>
-      </ray>
-      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_gpu_laser.so">
-        <topicName>/rrbot/laser/scan</topicName>
-        <frameName>hokuyo_link</frameName>
-      </plugin>
-    </sensor>
-  </gazebo>
-
-  <!-- camera XTION -->
-  <gazebo reference="camera_link">
-    <sensor type="camera" name="camera1">
-      <update_rate>30.0</update_rate>
-      <camera name="head">
-        <horizontal_fov>1.3962634</horizontal_fov>
-        <image>
-          <width>640</width>
-          <height>480</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.02</near>
-          <far>300</far>
-        </clip>
-        <noise>
-          <type>gaussian</type>
-          <!-- Noise is sampled independently per pixel on each frame.  
-               That pixel's noise value is added to each of its color
-               channels, which at that point lie in the range [0,1]. -->
-          <mean>0.0</mean>
-          <stddev>0.007</stddev>
-        </noise>
-      </camera>
-      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <cameraName>rrbot/camera1</cameraName>
-        <imageTopicName>image_raw</imageTopicName>
-        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>camera_link</frameName>
-        <hackBaseline>0.07</hackBaseline>
-        <distortionK1>0.0</distortionK1>
-        <distortionK2>0.0</distortionK2>
-        <distortionK3>0.0</distortionK3>
-        <distortionT1>0.0</distortionT1>
-        <distortionT2>0.0</distortionT2>
-      </plugin>
-    </sensor>
+  <gazebo reference="back_wheel">
+    <material>Gazebo/Blue</material>
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <fdir1 falue="1 0 0"/>
   </gazebo>  
+
 </robot>

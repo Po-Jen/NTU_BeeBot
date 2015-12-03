@@ -1,19 +1,28 @@
 <launch>
 
-  <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find beebot_control)/config/beebot_control.yaml" command="load"/>
+  <arg name="model" default="$(find beebot_description)/urdf/beebot.xacro"/>
+  <arg name="rvizconfig" default="$(find beebot_description)/rviz/urdf.rviz" />
 
-  <!-- load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-	output="screen" ns="/beebot" args="joint_state_controller
-					  base_to_platform_position_controller
-					  base_to_lwheel_position_controller
-					  base_to_rwheel_position_controller"/>
+  <include file="$(find beebot_gazebo)/launch/beebot_gazebo.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
 
-  <!-- convert joint states to TF transforms for rviz, etc -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-	respawn="false" output="screen">
-    <remap from="/joint_states" to="/beebot/joint_states" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+
+  <!-- This param file is where any environment-agnostic (live or simulation)
+  configuration should be loaded, including controllers -->
+  <rosparam command="load" file="$(find beebot_control)/config/beebot_control.yaml" />
+
+  <!-- This node loads the two controllers into a controller manager (real or simulated). The
+  controllers are defined in config/control.yaml -->
+  <node name="beebot_controller_spawner" pkg="controller_manager" type="spawner"
+    args="beebot_joint_state_controller
+          beebot_diff_drive_controller
+          --shutdown-timeout 3"/>
+
+  <!--remap from="beebot_diff_drive_controller/cmd_vel" to="cmd_vel"/-->
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/beebot_diff_drive_controller/cmd_vel"/>
   </node>
 
 </launch>
