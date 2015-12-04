@@ -1,9 +1,6 @@
 <launch>
 
   <!-- Load the URDF/Xacro model of our robot -->
-<!--
-    <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find mobile_safeguard_primitive)/launch/SLAMMOT/URDF/my_tobot.urdf.xacro'"/>
--->
     <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find mobile_safeguard_primitive)/launch/SLAMMOT/URDF/tobot.urdf.xacro'" />
 
   <!-- Run a static transform between /base_link and /base_footprint-->
