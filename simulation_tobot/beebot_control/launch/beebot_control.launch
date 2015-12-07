@@ -26,8 +26,4 @@
     <param name="default_topic" value="/beebot_diff_drive_controller/cmd_vel"/>
   </node> 
 
-  <!--Fire up teleoperation-->
-  <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel"/>
-  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
-
 </launch>

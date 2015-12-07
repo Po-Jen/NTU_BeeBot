@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="r2d2" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="beebot" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find simulation_tobot)/beebot_description/urdf/beebot.gazebo" />
   <xacro:include filename="$(find simulation_tobot)/beebot_description/urdf/materials.xacro" />
