@@ -9,6 +9,9 @@
    <!--<node name="map_server" pkg="map_server" type="map_server" 
              args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>-->
 
+   <!-- fire up AMCL for pose estimation using particle filter-->
+   <include file="$(find mobile_safeguard_primitive)/launch/start_amcl.launch"/>
+
    <!--Turn on teleoperation on keyboard-->
    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
 
@@ -20,6 +23,11 @@
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/base_local_planner_params.yaml" command="load" />
    </node>
+
+  <!-- launch robot_localization with EKF filter-->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/ekf_filtered_odom.launch"/>
+
+  <!-- TODO: fire up riskrrt planner-->
 
    <!--fire up Rviz with corresponding graphical config-->
    <group if="$(arg show_rviz)">

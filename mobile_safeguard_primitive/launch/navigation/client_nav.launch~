@@ -1,8 +1,16 @@
 <launch>
    <arg name="show_rviz" default="true"/>
 
+   <!--launch gmapping-->
+   <include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>
+
+   <!--To switch to gmapping, comment out the following two nodes, the map_server and the odom_map_broadcaster-->
+   <!--load in blank map into map_server-->
+   <!--<node name="map_server" pkg="map_server" type="map_server" 
+             args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>-->
+
    <!--Turn on teleoperation on keyboard-->
-   <!--<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>-->
+   <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
 
    <!--fire up move_base and load in corresponding parameters-->
    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
@@ -12,6 +20,9 @@
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/base_local_planner_params.yaml" command="load" />
    </node>
+
+  <!-- launch robot_localization with EKF filter-->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/ekf_filtered_odom.launch"/>
 
    <!--fire up Rviz with corresponding graphical config-->
    <group if="$(arg show_rviz)">
