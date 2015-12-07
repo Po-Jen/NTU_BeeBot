@@ -6,10 +6,6 @@
 
    <!-- Run a static transform between /base_link and /base_footprint needed for SLAM -->
   <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 0 0 0 /base_link /base_footprint 100" />
-
-   <!--load in blank map into map_server-->
-   <node name="map_server" pkg="map_server" type="map_server" 
-         args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
   
    <!--fire up move_base and load in corresponding parameters-->
 <!--

@@ -2,7 +2,7 @@
    <arg name="show_rviz" default="true"/>
 
    <!--Turn on teleoperation on keyboard-->
-   <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
+   <!--<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>-->
 
    <!--fire up move_base and load in corresponding parameters-->
    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
