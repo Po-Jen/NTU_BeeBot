@@ -9,7 +9,7 @@
   </gazebo>
 
   <!--Gazebo plugin for differential drive control-->
-  <gazebo>
+  <!--gazebo>
     <plugin name="differential_drive_controller" filename="libDiffDrivePlugin.so">
       <robotparam>beebot</robotparam>
       <alwaysOn>true</alwaysOn>
@@ -25,7 +25,7 @@
       <odometryFrame>/beebot_diff_drive_controller/odom</odometryFrame>
       <robotBaseFrame>base_link</robotBaseFrame>
     </plugin>
-  </gazebo>
+  </gazebo-->
 
   <!--Gazebo frames setup-->
   <gazebo reference="base_link">
