@@ -10,12 +10,12 @@
 
   <!--Gazebo plugin for differential drive control-->
   <gazebo>
-    <plugin name="differential_drive_controller" filename="libdiffdrive_plugin.so">
+    <plugin name="differential_drive_controller" filename="libDiffDrivePlugin.so">
       <robotparam>beebot</robotparam>
       <alwaysOn>true</alwaysOn>
       <updateRate>100.0</updateRate>
-      <leftJoint>left_wheel_joint</leftJoint>
-      <rightJoint>right_wheel_joint</rightJoint>
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
       <wheelSeparation>0.4238</wheelSeparation>
       <wheelDiameter>0.2388</wheelDiameter>
       <torque>5</torque>
