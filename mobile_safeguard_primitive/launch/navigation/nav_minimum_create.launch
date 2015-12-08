@@ -2,7 +2,8 @@
         <arg name="teleop" default="false"/>
 
 	<!--launch tf-->
-	<include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/tf_config/my_start_tf.launch"/>
+	<include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/tf_config/my_start_tf.launch">
+        </include>
 
 	<!--launch motor driver-->
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>

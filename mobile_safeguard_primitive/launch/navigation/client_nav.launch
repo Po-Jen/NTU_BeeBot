@@ -1,4 +1,9 @@
 <launch>
+<!--
+This launch file works in conjunction with beebot_nav.launch 
+and runs on the client side. However, if the project is run 
+on a single robot, then activates both files on the robot side.
+-->
    <arg name="show_rviz" default="true"/>
 
    <!--launch gmapping-->
@@ -8,6 +13,9 @@
    <!--load in blank map into map_server-->
    <!--<node name="map_server" pkg="map_server" type="map_server" 
              args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>-->
+  <!-- Map builder -->
+<!--  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find riskrrt)/worlds/corridor/map.world" respawn="false" output="screen"/>
+  <node name="og_builder_stage" pkg="riskrrt" type="og_builder_stage" output="screen" args="4 0.5"/>-->
 
    <!-- fire up AMCL for pose estimation using particle filter-->
    <include file="$(find mobile_safeguard_primitive)/launch/start_amcl.launch"/>
@@ -16,6 +24,7 @@
    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
 
    <!--fire up move_base and load in corresponding parameters-->
+   <!--
    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -23,11 +32,21 @@
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/config/base_local_planner_params.yaml" command="load" />
    </node>
-
+-->
   <!-- launch robot_localization with EKF filter-->
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/ekf_filtered_odom.launch"/>
 
-  <!-- TODO: fire up riskrrt planner-->
+  <!-- fire up RiskRRT planner-->
+  <!-- RiskRRT Node -->
+  <node pkg="riskrrt" type="riskrrt_planner" name="riskrrt_planner" output="screen">
+     <remap from="/odom" to="/odometry/filtered" />
+  </node>
+
+  <!-- RiskRRT controller-->
+  <node pkg="riskrrt" type="controller" name="controller" output="screen"/>
+
+  <!-- Goal pub -->
+  <!--<node pkg="riskrrt" type="goal_pub" name="goal_pub" output="screen" args="0.0 10.0"/>-->
 
    <!--fire up Rviz with corresponding graphical config-->
    <group if="$(arg show_rviz)">
