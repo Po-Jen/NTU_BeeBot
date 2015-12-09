@@ -1,0 +1,11 @@
+<launch>
+  <arg name="cam_ns" default=""/>
+  <!-- Fire up visual odometry-->
+  <node pkg="rtabmap_ros" type="rgbd_odometry" name="rgbd_odometry" output="screen">
+      <remap from="rgb/image"       to="$(arg cam_ns)/camera/rgb/image_rect_color"/>
+      <remap from="depth/image"     to="$(arg cam_ns)/camera/depth_registered/image_raw"/>
+      <remap from="rgb/camera_info" to="$(arg cam_ns)/camera/depth_registered/camera_info"/>
+      <remap from="/odom" to="/visual_odom"/>
+      <param name="frame_id" type="string" value="base_link"/>
+  </node>
+</launch>

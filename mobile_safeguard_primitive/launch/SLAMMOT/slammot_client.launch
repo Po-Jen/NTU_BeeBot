@@ -1,0 +1,9 @@
+<launch>
+  <!-- Activate the rtabmap_robot_side -->
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/rtabmap_robot_side.launch"/>
+
+  <!-- Activate rtabmap and spencer projects--> 
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/rtabmap+spencer.launch">
+    <arg name="cam_height_above_ground" default="1.3"/>  <!--height in meters-->
+  </include>
+</launch>

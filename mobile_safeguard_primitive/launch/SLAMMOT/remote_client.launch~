@@ -1,0 +1,9 @@
+<launch>
+  <!--activate move_base-->
+
+  <!--Fire up teleoperation-->
+
+  <!--Fire up Rviz with customized configuraion-->
+
+  <!--(Optional) Fire up rqt_reconfigure-->
+</launch>

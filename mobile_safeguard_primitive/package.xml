@@ -2,7 +2,10 @@
 <package>
   <name>mobile_safeguard_primitive</name>
   <version>0.0.0</version>
-  <description>The mobile_safeguard_primitive package</description>
+  <description>
+    mobile_safeguard_primitive package provides all related functionalities for 
+    autonomous navigation in dynamic environment for our beebots.
+  </description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
@@ -41,7 +44,7 @@
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>tf</build_depend>
-  <build_depend>cv_breidge</build_depend>
+  <build_depend>cv_bridge</build_depend>
   <build_depend>pcl_conversions</build_depend>
   <build_depend>pcl_ros</build_depend>
   <build_depend>roscpp</build_depend>
@@ -53,6 +56,9 @@
   <build_depend>cmake_modules</build_depend>
   <build_depend>spencer_tracking_msgs</build_depend>
   <build_depend>cv_bridge</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>gridmap_2d</build_depend>
+  <build_depend>sbpl</build_depend>
 
   <run_depend>tf</run_depend>
   <run_depend>spencer_tracking_msgs</run_depend>
@@ -68,6 +74,11 @@
   <run_depend>cmake_modules</run_depend>
   <run_depend>message_runtime</run_depend>
   <run_depend>cv_bridge</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>gridmap_2d</run_depend>
+  <run_depend>sbpl</run_depend>  
+
+  <buildtool_depend>catkin</buildtool_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

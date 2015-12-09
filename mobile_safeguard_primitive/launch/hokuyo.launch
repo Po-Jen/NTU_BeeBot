@@ -2,7 +2,7 @@
   <param name="/use_sim_time" value="false" />
 
   <!-- Run the Hokuyo laser scanner node -->
-  <node name="base_laser" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">    
+  <node name="laser" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">  
     <!-- 設定laser是連接到哪一個port，預設是/dev/ttyACM0 -->
     <param name="port" type="string" value="/dev/ttyACM0"/> 
     <!-- 設定laser的reference frame -->

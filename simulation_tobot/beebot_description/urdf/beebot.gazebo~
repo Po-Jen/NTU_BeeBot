@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="beebot">
+
+  <!-- Gazebo plugin for ROS Control -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+
+  <!--Gazebo plugin for differential drive control-->
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libdiffdrive_plugin.so">
+      <!--<robotparam>beebot</robotparam>-->
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100.0</updateRate>
+      <leftJoint>left_wheel_joint</leftJoint>
+      <rightJoint>right_wheel_joint</rightJoint>
+      <wheelSeparation>0.4238</wheelSeparation>
+      <wheelDiameter>0.2388</wheelDiameter>
+      <torque>5</torque>
+      <topicName>/beebot_diff_drive_controller/cmd_vel</topicName>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>/beebot_diff_drive_controller/odom</odometryTopic>
+      <odometryFrame>/beebot_diff_drive_controller/odom</odometryFrame>
+      <robotBaseFrame>base_link</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+  <!--Gazebo frames setup-->
+  <gazebo reference="base_link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+  
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Black</material>
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 falue="1 0 0"/>
+  </gazebo>
+  
+  <gazebo reference="left_wheel">
+    <material>Gazebo/Black</material>
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <fdir1 falue="1 0 0"/>
+  </gazebo>
+  
+  <gazebo reference="front_wheel">
+    <material>Gazebo/Blue</material>
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <fdir1 falue="1 0 0"/>
+  </gazebo>
+
+  <gazebo reference="back_wheel">
+    <material>Gazebo/Blue</material>
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <fdir1 falue="1 0 0"/>
+  </gazebo>  
+  
+  <gazebo reference="hokuyo_link">
+     <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="camera_link">
+     <material>Gazebo/Black</material>
+  </gazebo>
+
+  <!-- camera XTION -->
+  <gazebo reference="camera_link">
+    <sensor type="camera" name="camera1">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.  
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>beebot/camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>  
+
+  <!-- Hokuyo LIDAR for simulation -->
+    <gazebo reference="hokuyo_link">
+      <sensor type="ray" name="laser">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>720</samples>
+              <resolution>1</resolution>
+              <min_angle>-1.570796</min_angle>
+              <max_angle>1.570796</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.10</min>
+            <max>30.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>Gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="hokuyo_node" filename="libgazebo_ros_laser.so">
+          <topicName>beebot/laser/scan</topicName>
+          <frameName>hokuyo_link</frameName>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+</robot>

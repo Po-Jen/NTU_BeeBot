@@ -89,7 +89,7 @@ class SerialPortControl{
 
                 // **********************************************************************
                 // This part is added and modified by Charly on Sept 9, 2015
-                std::string defaultPort = "/dev/ttyUSB0" ;
+                std::string defaultPort = "/dev/ttyUSB1" ;
                 std::string port_ns = "/dev/ttyUSB" ;
 
                 if (PORT.compare(defaultPort) != 0 ) {

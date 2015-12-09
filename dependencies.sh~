@@ -43,10 +43,27 @@ echo "g2o ready to be used"
 echo "===================================================================="
 echo "Start installing necessary ROS packages from remote repositories"
 echo "===================================================================="
+echo "installing ROS navigation stack"
+sudo apt-get install ros-${ros_version}-navigation
+cd ~
+cd ${ros_workspace}
+git clone https://github.com/ros-planning/navigation.git --branch ${ros_version}-devel src/navigation
+catkin_make
+echo "ROS navigation ready to be used" 
+echo "===================================================================="
+echo "installing hector_slam"
+git clone https://github.com/tu-darmstadt-ros-pkg/hector_slam.git src/hector_slam
+catkin_make
+echo "Hector SLAM ready to be used"
+echo "===================================================================="
+echo "installing robot localization package"
+sudo apt-get install ros-${ros_version}-robot-localization
+catkin_make
+echo "Robot localization ready to be used"
+echo "===================================================================="
 echo "Start installing RTABMap"
 cd ~
 echo "installing dependencies"
-sudo apt-get install ros-${ros_version}-navigation
 sudo apt-get install build-essential
 sudo apt-get install libeigen3-dev libsvm-dev python-numpy python-scipy ros-${ros_version}-openni-launch ros-${ros_version}-openni2-launch ros-${ros_version}-cmake-modules ros-${ros_version}-eigen-conversions
 echo "installing the package"
