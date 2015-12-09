@@ -33,7 +33,7 @@ protected:
 };
 
 int main(int argc, char** argv){
-  ros::init(argc, argv, "humanoid_planner_2d");
+  ros::init(argc, argv, "beebot_planner_2d");
 
   SBPLPlanner2DNode planner;
 

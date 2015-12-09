@@ -19,7 +19,7 @@
   
   // private NodeHandle for parameters:
   ros::NodeHandle nh_private("~");
-  nh_private.param("planner_type", planner_type_, std::string("ARAPlanner"));
+  nh_private.param("planner_type", planner_type_, std::string("ADPlanner"));
   nh_private.param("search_until_first_solution", search_until_first_solution_, false);
   nh_private.param("allocated_time", allocated_time_, 7.0);
   nh_private.param("forward_search", forward_search_, false);
