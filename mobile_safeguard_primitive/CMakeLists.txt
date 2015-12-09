@@ -14,13 +14,16 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   image_transport
   tf
-   message_generation
+  message_generation
   nodelet
+  geometry_msgs
+  gridmap_2d
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SBPL REQUIRED sbpl)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -103,15 +106,28 @@ find_package(catkin REQUIRED COMPONENTS
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
-<<<<<<< HEAD
-=======
+  ${SBPL_INCLUDE_DIRS}
   #${OpenCV_INCLUDE_DIRS} 
->>>>>>> origin/SLAMMOT
   ${Boost_INCLUDE_DIRS}
 )
 
 #include_directories(${PROJECT_SOURCE_DIR}/include/)
 #set (HEADERS ${PROJECT_SOURCE_DIR}/include/people_filtering.h)
+
+# not needed for SBPL with CMake config
+link_directories(${SBPL_LIBRARY_DIRS})
+
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
+  DEPENDS sbpl  
+)
+
+include_directories(include)
+include_directories(${catkin_INCLUDE_DIRS})
+
+add_library(${PROJECT_NAME} src/SBPLPlanner2D.cpp)
+target_link_libraries(${PROJECT_NAME} ${SBPL_LIBRARIES} ${catkin_LIBRARIES})
 
 ## Declare a cpp library
 # add_library(mobile_safeguard_primitive
@@ -119,16 +135,25 @@ include_directories(
 # )
 
 ## Declare a cpp executable
-add_executable(mobile_safeguard_primitive_node src/mobile_safeguard_primitive.cpp)
+add_executable(mobile_safeguard_primitive_node  src/mobile_safeguard_primitive.cpp)
+add_executable(slammot_y_shaped_tube            src/slammot_y_shaped_tube.cpp)
+#add_executable(preProcessing                    src/preProcessing.cpp)
+add_executable(people_filter                    src/people_filter.cpp)
+add_executable(beebot_2d_planner_node           src/beebot_DStarLite_planner.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(mobile_safeguard_primitive_node mobile_safeguard_primitive_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(mobile_safeguard_primitive_node
-  ${catkin_LIBRARIES}
-)
+target_link_libraries(mobile_safeguard_primitive_node   ${catkin_LIBRARIES})
+target_link_libraries(slammot_y_shaped_tube             ${catkin_LIBRARIES})
+#target_link_libraries(preProcessing                     ${catkin_LIBRARIES} 
+#                                                        ${PCL_LIBRARIES})
+target_link_libraries(people_filter                     ${catkin_LIBRARIES}
+                                                        ${PCL_LIBRARIES})
+target_link_libraries(beebot_2d_planner_node            ${PROJECT_NAME}
+                                                        ${catkin_LIBRARIES})
 
 #############
 ## Install ##
@@ -164,7 +189,12 @@ target_link_libraries(mobile_safeguard_primitive_node
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
-
+install(TARGETS ${PROJECT_NAME}
+        DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+install(TARGETS beebot_2d_planner_node
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 #############
 ## Testing ##
 #############
@@ -178,11 +208,4 @@ target_link_libraries(mobile_safeguard_primitive_node
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(slammot_y_shaped_tube src/slammot_y_shaped_tube.cpp)
-target_link_libraries (slammot_y_shaped_tube ${catkin_LIBRARIES})
 
-#add_executable (preProcessing src/preProcessing.cpp)
-#target_link_libraries (preProcessing ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
-
-add_executable(people_filter src/people_filter.cpp )
-target_link_libraries (people_filter ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
