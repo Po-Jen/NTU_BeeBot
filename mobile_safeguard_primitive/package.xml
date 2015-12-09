@@ -41,7 +41,7 @@
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>tf</build_depend>
-  <build_depend>cv_breidge</build_depend>
+  <build_depend>cv_bridge</build_depend>
   <build_depend>pcl_conversions</build_depend>
   <build_depend>pcl_ros</build_depend>
   <build_depend>roscpp</build_depend>
