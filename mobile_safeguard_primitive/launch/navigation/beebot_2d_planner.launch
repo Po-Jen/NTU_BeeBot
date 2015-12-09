@@ -1,0 +1,32 @@
+<launch>
+<!--
+this launch file is used for testing the SBPL's AD* planner.
+Usage:
+
+1. Launch beebot_2d_planner_node. It runs on ADStar and RSTAR
+   algorithm. By default it runs on ADStar. If you need switch 
+   to one of both planners, add
+   <param name="planner_type" value="[desired_planner]"/> within
+   the node tag.
+
+2. Change the map_loaded_yaml and map_loaded to the desired map,
+   they come in pairs.
+-->
+  <arg name="map_loaded_yaml" default="$(find riskrrt)/worlds/inria_hall/map.yaml"/>
+  <arg name="map_loaded" default="$(find riskrrt)/worlds/inria_hall/map.world"/>
+
+  <param name="/use_sim_time" value="true" />
+  <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(arg map_loaded_yaml)" respawn="false">
+    <param name="frame_id" value="/map" />
+  </node>
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(arg map_loaded)" respawn="false" output="screen"/>
+  <!-- amcl -->
+  <include file="$(find riskrrt)/launch/amcl_sim.launch"/>
+  
+  <!-- MY PLANNER !! -->
+  <node pkg="mobile_safeguard_primitive" type="beebot_2d_planner_node" name="beebot_2d_planner_node"/>
+
+  <!-- Rviz -->
+  <node pkg="rviz" type="rviz" name="rviz"/>
+
+</launch>
