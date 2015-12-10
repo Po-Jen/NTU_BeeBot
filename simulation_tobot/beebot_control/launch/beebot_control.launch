@@ -3,9 +3,11 @@
   <arg name="model" default="$(find simulation_tobot)/beebot_description/urdf/beebot.xacro"/>
   <arg name="rvizconfig" default="$(find simulation_tobot)/beebot_description/rviz/urdf.rviz" />
   <arg name="robot_cfg" default="$(find simulation_tobot)/beebot_control/config/beebot_control.yaml"/>
+  <arg name="world_file" default=""/>
 
   <include file="$(find simulation_tobot)/beebot_gazebo/launch/beebot_gazebo.launch">
     <arg name="model" value="$(arg model)" />
+    <arg name="world_file" value="$(arg world_file)" />
   </include>
 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
