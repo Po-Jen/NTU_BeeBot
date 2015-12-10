@@ -12,8 +12,8 @@ Usage:
 2. Change the map_loaded_yaml and map_loaded to the desired map,
    they come in pairs.
 -->
-  <arg name="map_loaded_yaml" default="$(find riskrrt)/worlds/inria_hall/map.yaml"/>
-  <arg name="map_loaded" default="$(find riskrrt)/worlds/inria_hall/map.world"/>
+  <arg name="map_loaded_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
+  <arg name="map_loaded" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.pgm"/>
 
   <param name="/use_sim_time" value="true" />
   <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(arg map_loaded_yaml)" respawn="false">
