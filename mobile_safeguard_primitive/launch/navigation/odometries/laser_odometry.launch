@@ -1,12 +1,13 @@
 <launch>
   <arg name="broadcast_tf" default="false"/>
+  <arg name="scan_topic" default="/scan" />
 
   <!-- make a transformation between /map and /odom-->
-  <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" 
-        args="0 0 0 0 0 0 /map /odom 100"/>
+  <!--<node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" 
+        args="0 0 0 0 0 0 /map /odom 100"/>-->
   <!-- make a transformation between odom and base_link-->
-  <node pkg="tf" type="static_transform_publisher" name="odom_base_link_broadcaster" 
-        args="0 0 0 0 0 0 /odom /base_link 100"/>
+  <!--<node pkg="tf" type="static_transform_publisher" name="odom_base_link_broadcaster" 
+        args="0 0 0 0 0 0 /odom /base_link 100"/>-->
 
     <!-- Odometry from laser scans -->
   <!-- We use Hector mapping to generate odometry for us -->
@@ -31,6 +32,6 @@
     <param name="map_update_angle_thresh" value="0.06" />
     
     <!-- Advertising config --> 
-    <param name="scan_topic" value="/scan"/>
+    <param name="scan_topic" value="$(arg scan_topic)"/>
   </node>
 </launch>

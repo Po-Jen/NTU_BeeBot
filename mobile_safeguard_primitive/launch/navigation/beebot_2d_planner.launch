@@ -1,6 +1,9 @@
 <launch>
 <!--
 this launch file is used for testing the SBPL's AD* planner.
+This file is dedicated to simulation with Gazebo. There will be
+its sister launch files coming up to run beebot in the actual world.
+
 Usage:
 
 1. Launch beebot_2d_planner_node. It runs on ADStar and RSTAR
@@ -9,24 +12,57 @@ Usage:
    <param name="planner_type" value="[desired_planner]"/> within
    the node tag.
 
-2. Change the map_loaded_yaml and map_loaded to the desired map,
-   they come in pairs.
+2. Change the map_file tag to the desired map directory. If you load
+   in the .world file with the wrong format, Gazebo won't launch neither
+   the robot nor the map.
 -->
   <arg name="map_loaded_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
   <arg name="map_loaded" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.pgm"/>
 
   <param name="/use_sim_time" value="true" />
-  <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(arg map_loaded_yaml)" respawn="false">
+  <!-- load in an existing map-->
+  <!--<node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(arg map_loaded_yaml)" respawn="false">
     <param name="frame_id" value="/map" />
-  </node>
-  <node pkg="stage_ros" type="stageros" name="stageros" args="$(arg map_loaded)" respawn="false" output="screen"/>
+  </node>-->
+  
+  <!-- fire up Gazebo and Rviz for simulation and visualization-->
+  <include file="$(find simulation_tobot)/beebot_control/launch/beebot_control.launch">
+	  <arg name="world_file" value="worlds/willowgarage.world"/>
+  </include>
+  
+   <!--launch gmapping-->
+   <include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch">
+	   <arg name="scan_topic" value="/beebot/laser/scan" />
+   </include>
+   
+  <!-- EKF filter for odometry -->
+  <!-- Launch laser odometry -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_base_footprint_broadcaster" 
+        args="0 0 -0.1685 0 0 0 /base_link /base_footprint 100"/>
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/laser_odometry.launch">
+	  <arg name="scan_topic" value="/beebot/laser/scan"/>
+  </include>  
+  
+  <!-- Launch visual odometry -->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/viso2_mono_odometry.launch">
+	  <arg name="image_in" value="/beebot/camera/image_raw" />
+	  <arg name="camera_info" value="/beebot/camera/camera_info" />
+	  
+	  <remap from="/map" to="/hector_map" />
+  </include>
+
+  <!-- Launch EKF filtered odometry. Published topic: /odometry/filtered -->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/ekf_filtered_odom.launch">
+	  <arg name="visual_odom" value="/mono_odometer/odometry" />
+  </include>
+  
   <!-- amcl -->
   <include file="$(find riskrrt)/launch/amcl_sim.launch"/>
   
   <!-- MY PLANNER !! -->
-  <node pkg="mobile_safeguard_primitive" type="beebot_2d_planner_node" name="beebot_2d_planner_node"/>
-
-  <!-- Rviz -->
-  <node pkg="rviz" type="rviz" name="rviz"/>
+  <node pkg="mobile_safeguard_primitive" type="beebot_2d_planner_node" name="beebot_2d_planner_node">
+	  <remap from="/initialpose" to="/amcl_pose" />
+	  <remap from="/goal" to="/move_base_simple/goal" />
+  </node>  
 
 </launch>
