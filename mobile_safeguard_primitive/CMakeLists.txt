@@ -20,6 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
   nodelet
   geometry_msgs
   gridmap_2d
+  riskrrt
 )
 
 ## System dependencies are found with CMake's conventions
@@ -103,34 +104,33 @@ pkg_check_modules(SBPL REQUIRED sbpl)
 ## Build ##
 ###########
 
+link_directories(${SBPL_LIBRARY_DIRS})
+
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
   ${SBPL_INCLUDE_DIRS}
   #${OpenCV_INCLUDE_DIRS} 
   ${Boost_INCLUDE_DIRS}
   ${mobile_safeguard_primitive_INCLUDE_DIRS}
+  ${SBPL_LIBRARY_DIRS}
+  ${riskrrt_INCLUDE_DIRS}
 )
 
 #include_directories(${PROJECT_SOURCE_DIR}/include/)
 #set (HEADERS ${PROJECT_SOURCE_DIR}/include/people_filtering.h)
 
 # not needed for SBPL with CMake config
-link_directories(${SBPL_LIBRARY_DIRS})
-
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
   DEPENDS sbpl  
 )
 
-include_directories(include)
-include_directories(${catkin_INCLUDE_DIRS})
-
 add_library(${PROJECT_NAME} src/beebot_DStarLite_planner.cpp)
-target_link_libraries(${PROJECT_NAME} ${SBPL_LIBRARIES} ${catkin_LIBRARIES})
 
 ## Declare a cpp library
 # add_library(mobile_safeguard_primitive
@@ -143,6 +143,7 @@ add_executable(slammot_y_shaped_tube            src/slammot_y_shaped_tube.cpp)
 #add_executable(preProcessing                    src/preProcessing.cpp)
 add_executable(people_filter                    src/people_filter.cpp)
 add_executable(beebot_2d_planner_node           src/beebot_planner_2d.cpp)
+add_executable(path2traj_converter              src/path2traj_conv.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -156,6 +157,9 @@ target_link_libraries(slammot_y_shaped_tube             ${catkin_LIBRARIES})
 target_link_libraries(people_filter                     ${catkin_LIBRARIES}
                                                         ${PCL_LIBRARIES})
 target_link_libraries(beebot_2d_planner_node            ${PROJECT_NAME}
+                                                        ${catkin_LIBRARIES})
+target_link_libraries(path2traj_converter               ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}                   ${SBPL_LIBRARIES} 
                                                         ${catkin_LIBRARIES})
 
 #############
