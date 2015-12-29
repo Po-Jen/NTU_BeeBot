@@ -77,12 +77,9 @@
   <run_depend>cv_bridge</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>gridmap_2d</run_depend>
-<<<<<<< HEAD
   <run_depend>sbpl</run_depend>
-=======
   <run_depend>sbpl</run_depend>  
   <run_depend>riskrrt</run_depend>  
->>>>>>> 28340b1c7502a3efe3065f3bdc833f80c498ec75
 
   <buildtool_depend>catkin</buildtool_depend>
 
