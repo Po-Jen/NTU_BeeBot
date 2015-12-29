@@ -36,6 +36,7 @@
 #include <visualization_msgs/Marker.h>
 #include <nav_msgs/Path.h>
 #include <gridmap_2d/GridMap2D.h>
+#include "riskrrt/riskrrt.hpp"
 
 
 class SBPLPlanner2D {

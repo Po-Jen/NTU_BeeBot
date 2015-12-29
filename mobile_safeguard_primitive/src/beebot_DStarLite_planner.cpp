@@ -167,6 +167,9 @@ bool SBPLPlanner2D::plan(){
   }
 
   path_pub_.publish(path_);
+  
+  /// Convert /path topic to /traj topic
+  
 
   return true;
 }
@@ -202,7 +205,6 @@ bool SBPLPlanner2D::updateMap(gridmap_2d::GridMap2DPtr map){
   return true;
 }
 
-// TODO: Set to D* Lite --> Anytime D* or ADPlanner
 void SBPLPlanner2D::setPlanner(){
   if (planner_type_ == "ADPlanner"){
     planner_.reset(new ADPlanner(planner_environment_.get(),forward_search_));

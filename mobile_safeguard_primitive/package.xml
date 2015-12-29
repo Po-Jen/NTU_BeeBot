@@ -76,7 +76,7 @@
   <run_depend>cv_bridge</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>gridmap_2d</run_depend>
-  <run_depend>sbpl</run_depend>  
+  <run_depend>sbpl</run_depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 

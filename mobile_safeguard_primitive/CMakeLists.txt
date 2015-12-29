@@ -109,7 +109,7 @@ pkg_check_modules(SBPL REQUIRED sbpl)
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${SBPL_INCLUDE_DIRS}
-  #${OpenCV_INCLUDE_DIRS} 
+  ${OpenCV_INCLUDE_DIRS} 
   ${Boost_INCLUDE_DIRS}
   ${mobile_safeguard_primitive_INCLUDE_DIRS}
 )
