@@ -16,8 +16,10 @@ Usage:
    in the .world file with the wrong format, Gazebo won't launch neither
    the robot nor the map.
 -->
+  <!--
   <arg name="map_loaded_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
   <arg name="map_loaded" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.pgm"/>
+  -->
 
   <param name="/use_sim_time" value="true" />
   <!-- load in an existing map-->
@@ -27,7 +29,7 @@ Usage:
   
   <!-- fire up Gazebo and Rviz for simulation and visualization-->
   <include file="$(find simulation_tobot)/beebot_control/launch/beebot_control.launch">
-	  <arg name="world_file" value="worlds/willowgarage.world"/>
+     <arg name="world_file" value="$(find simulation_tobot)/maps/my_test_map.world" />
   </include>
   
    <!--launch gmapping-->
@@ -54,15 +56,23 @@ Usage:
   <!-- Launch EKF filtered odometry. Published topic: /odometry/filtered -->
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/ekf_filtered_odom.launch">
 	  <arg name="visual_odom" value="/mono_odometer/odometry" />
+          <arg name="wheel_odom" value="/beebot_diff_drive_controller/odom" />
+          <arg name="odom_frame" value="/beebot_diff_drive_controller/odom" />
   </include>
   
   <!-- amcl -->
-  <include file="$(find riskrrt)/launch/amcl_sim.launch"/>
+  <include file="$(find riskrrt)/launch/amcl_sim.launch">
+    <remap from="/initialpose" to="/mono_odometer/pose" />  <!-- Use the pose published by mono-odometer as the initial pose-->
+  </include>
   
   <!-- MY PLANNER !! -->
   <node pkg="mobile_safeguard_primitive" type="beebot_2d_planner_node" name="beebot_2d_planner_node">
 	  <remap from="/initialpose" to="/amcl_pose" />
 	  <remap from="/goal" to="/move_base_simple/goal" />
   </node>  
-
+  <node pkg="mobile_safeguard_primitive" type="path2traj_converter" name="path2traj_converter"/>
+  <!-- Controller mode -->
+  <node pkg="riskrrt" type="controller" name="controller" output="screen">
+    <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" />
+  </node>
 </launch>

@@ -3,7 +3,7 @@
   <arg name="model" default="$(find simulation_tobot)/beebot_description/urdf/beebot.xacro"/>
   <arg name="rvizconfig" default="$(find simulation_tobot)/beebot_description/rviz/urdf.rviz" />
   <arg name="robot_cfg" default="$(find simulation_tobot)/beebot_control/config/beebot_control.yaml"/>
-  <arg name="world_file" default=""/>
+  <arg name="world_file" default="$(find simulation_tobot)/maps/my_second_world.world"/>    <!-- A map must be loaded in -->
 
   <include file="$(find simulation_tobot)/beebot_gazebo/launch/beebot_gazebo.launch">
     <arg name="model" value="$(arg model)" />
