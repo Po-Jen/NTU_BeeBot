@@ -1,0 +1,23 @@
+<launch>
+  <arg name="odom_in" default="/odometry/filtered"/>
+  <arg name="pose_est" default="/robot_pose_ekf/odom_combined"/>
+  <arg name="cmd_vel" default="/beebot_diff_drive_controller/cmd_vel" />
+
+  <!-- fire up RiskRRT planner-->
+  <!--fire up og builder. Subscribe: /map Publish: /ogarray-->
+  <node name="og_builder" pkg="riskrrt" type="og_builder" output="screen"/>
+
+  <!-- RiskRRT Node -->
+  <node pkg="riskrrt" type="riskrrt_planner" name="riskrrt_planner" output="screen">
+     <remap from="/odom" to="$(arg odom_in)" />
+     <remap from="/amcl_pose" to="$(arg pose_est)" />
+  </node>
+
+  <!-- RiskRRT controller-->
+  <!--<node pkg="riskrrt" type="controller" name="controller" output="screen">
+    <remap from="/cmd_vel" to="$(arg cmd_vel)" />
+  </node>-->
+
+  <!-- Goal pub -->
+  <!--<node pkg="riskrrt" type="goal_pub" name="goal_pub" output="screen" args="0.0 10.0"/>-->
+</launch>
