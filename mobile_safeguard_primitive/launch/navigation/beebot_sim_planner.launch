@@ -16,16 +16,10 @@ Usage:
    in the .world file with the wrong format, Gazebo won't launch neither
    the robot nor the map.
 -->
-  <!--
-  <arg name="map_loaded_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
-  <arg name="map_loaded" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.pgm"/>
-  -->
+
+  <arg name="odom_in" default="/odometry/filtered"/>
 
   <param name="/use_sim_time" value="true" />
-  <!-- load in an existing map-->
-  <!--<node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(arg map_loaded_yaml)" respawn="false">
-    <param name="frame_id" value="/map" />
-  </node>-->
   
   <!-- fire up Gazebo and Rviz for simulation and visualization-->
   <include file="$(find simulation_tobot)/beebot_control/launch/beebot_control.launch">
@@ -36,7 +30,7 @@ Usage:
    <include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch">
 	   <arg name="scan_topic" value="/beebot/laser/scan" />
    </include>
-   
+
   <!-- EKF filter for odometry -->
   <!-- Launch laser odometry -->
   <node pkg="tf" type="static_transform_publisher" name="base_link_base_footprint_broadcaster" 
@@ -49,30 +43,31 @@ Usage:
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/viso2_mono_odometry.launch">
 	  <arg name="image_in" value="/beebot/camera/image_raw" />
 	  <arg name="camera_info" value="/beebot/camera/camera_info" />
-	  
-	  <remap from="/map" to="/hector_map" />
   </include>
 
   <!-- Launch EKF filtered odometry. Published topic: /odometry/filtered -->
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/ekf_filtered_odom.launch">
 	  <arg name="visual_odom" value="/mono_odometer/odometry" />
           <arg name="wheel_odom" value="/beebot_diff_drive_controller/odom" />
-          <arg name="odom_frame" value="/beebot_diff_drive_controller/odom" />
+          <arg name="odom_frame" value="odom" />
   </include>
   
-  <!-- amcl -->
-  <include file="$(find riskrrt)/launch/amcl_sim.launch">
-    <remap from="/initialpose" to="/mono_odometer/pose" />  <!-- Use the pose published by mono-odometer as the initial pose-->
-  </include>
-  
-  <!-- MY PLANNER !! -->
-  <node pkg="mobile_safeguard_primitive" type="beebot_2d_planner_node" name="beebot_2d_planner_node">
-	  <remap from="/initialpose" to="/amcl_pose" />
-	  <remap from="/goal" to="/move_base_simple/goal" />
-  </node>  
-  <node pkg="mobile_safeguard_primitive" type="path2traj_converter" name="path2traj_converter"/>
-  <!-- Controller mode -->
-  <node pkg="riskrrt" type="controller" name="controller" output="screen">
-    <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" />
+  <!-- Publishing robot pose so that nav planner can use -->
+  <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+    <param name="output_frame" value="odom"/>
+    <param name="freq" value="10.0"/>
+    <param name="sensor_timeout" value="1.0"/>
+    <param name="odom_used" value="true"/>
+    <param name="imu_used" value="false"/>
+    <param name="vo_used" value="false"/>
+    <param name="debug" value="false"/>
+    <param name="self_diagnose" value="false"/>
+
+    <remap from="/odom" to="$(arg odom_in)" />
   </node>
+   
+  <!-- MY PLANNER !! -->
+  <!--<include file="$(find mobile_safeguard_primitive)/launch/navigation/improvedd-riskrrtplanner.launch">
+    <arg name="pose" value="/slam_out_pose"/>
+  </include>-->
 </launch>
