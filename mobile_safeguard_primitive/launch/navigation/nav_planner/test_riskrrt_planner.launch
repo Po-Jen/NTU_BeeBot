@@ -1,3 +1,93 @@
 <launch>
+<!--
+TODO: programly give an initial pose for amcl to properly function.
+-->
+  <arg name="model" default="$(find simulation_tobot)/beebot_description/urdf/beebot.xacro"/>
+  <arg name="gui" default="true" />
+
+  <param name="/use_sim_time" value="false" />
+
+  <!--Load in a blank map, and establish necessary tf frames-->
+  <!-- Run the map server with a blank map -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
+  <!-- Run a static transform between /odom and /map -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_base_footprint_broadcaster" args="0 0 -0.1685 0 0 0 /base_link /base_footprint 100" />
+
+  <!--Load in the robot tf frames-->
+  <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+  <param name="use_gui" value="$(arg gui)"/>
+
+  <!--Load in a simulation controller-->
+  <node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen">
+      <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/nav_planner/cfg/fake_beebot_arbotix.yaml" command="load" />
+      <param name="sim" value="true"/>
+  </node>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+  <!-- fire up laser sensor's driver -->
+  <!-- Run the Hokuyo laser scanner node -->
+  <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node">
+    <param name="min_ang" value="-1.7" />
+    <param name="max_ang" value="1.7" />
+    <param name="hokuyo_node/calibrate_time" value="true" />
+    <param name="frame_id" value="/hokuyo_link" />
+  </node>
+
+  <!--use a sim amcl for pose-->
+  <node pkg="amcl" type="amcl" name="amcl" respawn="false">
+    <remap from="scan" to="/scan" />
+    
+    <!-- Overall filter parameters -->
+    <param name="min_particles" value="100"/>
+    <param name="max_particles" value="5000"/>
+    <param name="kld_err" value="0.01"/>
+    <param name="kld_z" value="0.99"/>
+    <param name="update_min_d" value="0.1"/>
+    <param name="update_min_a" value="0.1"/>
+    <param name="resample_interval" value="1"/>
+    <param name="transform_tolerance" value="0.2"/>
+    <param name="recovery_alpha_slow" value="0.01"/>
+    <param name="recovery_alpha_fast" value="0.1"/>
+    <param name="gui_publish_rate" value="20.0"/>
+
+    <!-- Laser model parameters -->
+    <param name="laser_max_beams" value="60"/>
+    <param name="laser_z_hit" value="0.95"/>
+    <param name="laser_z_short" value="0.1"/>
+    <param name="laser_z_max" value="0.05"/>
+    <param name="laser_z_rand" value="0.05"/>
+    <param name="laser_sigma_hit" value="0.2"/>
+    <param name="laser_lambda_short" value="0.1"/>
+    <param name="laser_model_type" value="beam"/>
+    <param name="laser_likelihood_max_dist" value="2.0"/>
+
+    <!-- Odometery model parameters -->
+    <param name="odom_model_type" value="diff"/>
+    <param name="odom_alpha1" value="0.2"/>
+    <param name="odom_alpha2" value="0.2"/>
+    <param name="odom_alpha3" value="0.8"/>
+    <param name="odom_alpha4" value="0.2"/>
+    <param name="odom_frame_id" value="/odom"/> 
+    <param name="base_frame_id" value="/base_link"/> 
+    <param name="global_frame_id" value="/map"/> 
+
+    <param name="use_map_topic" value="true" />
+  </node>
+
+  <!-- RiskRRT planner -->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/nav_planner/riskrrt_planner.launch">
+      <arg name="odom_in" default="/odom"/>
+      <arg name="pose_est" default="/amcl_pose"/>
+      <arg name="cmd_vel" default="/cmd_vel" />
+  </include>
+ 
+  <!--Move base as comparation standard -->
+  <!--<include file="$(find mobile_safeguard_primitive)/launch/navigation/nav_planner/move_base.launch"/>-->
+
+  <!-- rviz -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find mobile_safeguard_primitive)/launch/navigation/nav_planner/rviz/test_planner.rviz"/> 
 
 </launch>

@@ -14,9 +14,9 @@
   </node>
 
   <!-- RiskRRT controller-->
-  <!--<node pkg="riskrrt" type="controller" name="controller" output="screen">
+  <node pkg="riskrrt" type="controller" name="controller" output="screen">
     <remap from="/cmd_vel" to="$(arg cmd_vel)" />
-  </node>-->
+  </node>
 
   <!-- Goal pub -->
   <!--<node pkg="riskrrt" type="goal_pub" name="goal_pub" output="screen" args="0.0 10.0"/>-->
