@@ -13,7 +13,7 @@ Usage:
    the node tag.
 
 2. Change the map_file tag to the desired map directory. If you load
-   in the .world file with the wrong format, Gazebo won't launch neither
+   in the .world file with the wrong format, Gazebo will launch neither
    the robot nor the map.
 -->
   <!--
@@ -29,7 +29,7 @@ Usage:
   
   <!-- fire up Gazebo and Rviz for simulation and visualization-->
   <include file="$(find simulation_tobot)/beebot_control/launch/beebot_control.launch">
-     <arg name="world_file" value="$(find simulation_tobot)/maps/my_test_map.world" />
+     <arg name="world_file" value="$(find simulation_tobot)/maps/my_test_room_1.world" />
   </include>
   
    <!--launch gmapping-->
@@ -37,42 +37,60 @@ Usage:
 	   <arg name="scan_topic" value="/beebot/laser/scan" />
    </include>
    
-  <!-- EKF filter for odometry -->
-  <!-- Launch laser odometry -->
   <node pkg="tf" type="static_transform_publisher" name="base_link_base_footprint_broadcaster" 
         args="0 0 -0.1685 0 0 0 /base_link /base_footprint 100"/>
+
+  <!--<node pkg="tf" type="static_transform_publisher" name="odom_base_link_broadcaster" 
+        args="0 0 0 0 0 0 /odom /base_link 100"/>--> 
+
+  <!--<node pkg="tf" type="static_transform_publisher" name="map_scanmatcher_frame_broadcaster" 
+        args="0 0 0 0 0 0 /map /scanmatcher_frame 100"/>-->
+  <!--<node pkg="tf" type="static_transform_publisher" name="scanmatcher_frame_base_link_broadcaster" 
+        args="0 0 0 0 0 0 /scanmatcher_frame /base_link 100"/>-->
+
+  <!-- EKF filter for odometry -->
+  <!-- Launch laser odometry -->
+<!--
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/laser_odometry.launch">
 	  <arg name="scan_topic" value="/beebot/laser/scan"/>
   </include>  
-  
+-->  
   <!-- Launch visual odometry -->
+<!--
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/viso2_mono_odometry.launch">
 	  <arg name="image_in" value="/beebot/camera/image_raw" />
 	  <arg name="camera_info" value="/beebot/camera/camera_info" />
 	  
 	  <remap from="/map" to="/hector_map" />
   </include>
-
+-->
   <!-- Launch EKF filtered odometry. Published topic: /odometry/filtered -->
+<!--
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/ekf_filtered_odom.launch">
 	  <arg name="visual_odom" value="/mono_odometer/odometry" />
-          <arg name="wheel_odom" value="/beebot_diff_drive_controller/odom" />
-          <arg name="odom_frame" value="/beebot_diff_drive_controller/odom" />
+          <arg name="wheel_odom"  value="/beebot_diff_drive_controller/odom" />
+          <arg name="odom_frame"  value="/odom" />
+          <arg name="slam_odom"   value="/odom" />
   </include>
-  
+-->  
   <!-- amcl -->
-  <include file="$(find riskrrt)/launch/amcl_sim.launch">
-    <remap from="/initialpose" to="/mono_odometer/pose" />  <!-- Use the pose published by mono-odometer as the initial pose-->
+<!--
+  <include file="$(find mobile_safeguard_primitive)/launch/start_amcl.launch">
+    <arg name="use_map_topic" value="true"/>
+    <arg name="scan_topic" value="/beebot/laser/scan" />
   </include>
-  
+-->  
   <!-- MY PLANNER !! -->
-  <node pkg="mobile_safeguard_primitive" type="beebot_2d_planner_node" name="beebot_2d_planner_node">
+  <!--<node pkg="mobile_safeguard_primitive" type="beebot_2d_planner_node" name="beebot_2d_planner_node">
 	  <remap from="/initialpose" to="/amcl_pose" />
 	  <remap from="/goal" to="/move_base_simple/goal" />
-  </node>  
-  <node pkg="mobile_safeguard_primitive" type="path2traj_converter" name="path2traj_converter"/>
+  </node>
+-->  
+  <!--<node pkg="mobile_safeguard_primitive" type="path2traj_converter" name="path2traj_converter"/>
+-->
   <!-- Controller mode -->
-  <node pkg="riskrrt" type="controller" name="controller" output="screen">
+  <!--<node pkg="riskrrt" type="controller" name="controller" output="screen">
     <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" />
   </node>
+-->
 </launch>

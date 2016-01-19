@@ -1,10 +1,11 @@
 <!-- Launch file for ekf_localization_node -->
 
 <launch>
-    <arg name="wheel_odom" default="/odom"/>
+    <arg name="wheel_odom"  default="/odom"/>
     <arg name="visual_odom" default="/visual_odom"/>
-    <arg name="laser_odom" default="/scanmatch_odom"/>
-    <arg name="odom_frame" default="/odom" />
+    <arg name="laser_odom"  default="/scanmatch_odom"/>
+    <arg name="odom_frame"  default="/odom" />
+    <arg name="slam_odom"   default="/odom" />
 
     <!-- This node will take in measurements from odometry, IMU, stamped pose, and stamped twist messages. It tracks
          the state of the robot, with the state vector being defined as X position, Y position, Z position,
@@ -71,6 +72,7 @@
       <param name="odom0" value="$(arg wheel_odom)"/>            <!-- wheel encoders -->
       <param name="odom1" value="$(arg visual_odom)"/>           <!-- visual odometry -->
       <param name="odom2" value="$(arg laser_odom)"/>            <!-- laser odometry -->
+      <param name="odom3" value="$(arg slam_odom)" />            <!-- slam_gmapping odometry -->
 
       <!-- Each sensor reading updates some or all of the filter's state. These options give you greater control over
            which values from each measurement are fed to the filter. For example, if you have an odometry message as input,
@@ -97,6 +99,11 @@
                                       true,  true,  false,
                                       true,  true,  false]</rosparam>
 
+      <rosparam param="odom3_config">[true,  true,  false,
+                                      true,  true,  false,
+                                      true,  true,  false,
+                                      true,  true,  false,
+                                      true,  true,  false]</rosparam>
 
       <!-- The best practice for including new sensors in robot_localization's state estimation nodes is to pass in velocity
            measurements and let the nodes integrate them. However, this isn't always feasible, and so the state estimation
@@ -116,7 +123,8 @@
            variables have at least one source of absolute measurement. -->
       <param name="odom0_differential" value="true"/>
       <param name="odom1_differential" value="false"/>
-      <param name="odom2_differential" value="false"/>
+      <param name="odom2_differential" value="true"/>
+      <param name="odom3_differential" value="false"/>
 
       <!-- When the node starts, if this parameter is true, then the first measurement is treated as a "zero point" for all
            future measurements. While you can achieve the same effect with the differential paremeter, the key difference is
@@ -125,6 +133,7 @@
       <param name="odom0_relative" value="true"/>
       <param name="odom1_relative" value="true"/>
       <param name="odom2_relative" value="true"/>
+      <param name="odom3_relative" value="true"/>
 
       <!-- If we're including accelerations in our state estimate, then we'll probably want to remove any acceleration that
            is due to gravity for each IMU. If you don't want to, then set this to false. Defaults to false if unspecified. -->
@@ -142,19 +151,22 @@
 
       <!-- By default, the subscription queue size for each message type is 1. If you wish to increase that so as not
            miss any messages (even if your frequency is set to a relatively small value), increase these. -->
-      <param name="odom0_queue_size" value="2"/>
-      <param name="odom1_queue_size" value="1"/>
+      <param name="odom0_queue_size" value="10"/>
+      <param name="odom1_queue_size" value="20"/>
       <param name="odom2_queue_size" value="1"/>
+      <param name="odom3_queue_size" value="50"/>
 
       <!-- If your data is subject to outliers, use these threshold settings, expressed as Mahalanobis distances, to control
            how far away from the current vehicle state a sensor measurement is permitted to be. Each defaults to
            numeric_limits<double>::max() if unspecified. -->
-      <param name="odom0_pose_rejection_threshold" value="5"/>
+      <param name="odom0_pose_rejection_threshold" value="10"/>
       <param name="odom0_twist_rejection_threshold" value="1"/>
-      <param name="odom1_pose_rejection_threshold" value="5"/>
-      <param name="odom1_twist_rejection_threshold" value="1"/>
+      <param name="odom1_pose_rejection_threshold" value="20"/>
+      <param name="odom1_twist_rejection_threshold" value="10"/>
       <param name="odom2_pose_rejection_threshold" value="5"/>
       <param name="odom2_twist_rejection_threshold" value="1"/>
+      <param name="odom3_pose_rejection_threshold" value="3"/>
+      <param name="odom3_twist_rejection_threshold" value="1"/>
 
       <!-- Debug settings. Not for the faint of heart. Outputs a ludicrous amount of information to the file
            specified by debug_out_file. I hope you like matrices! Defaults to false if unspecified. -->
