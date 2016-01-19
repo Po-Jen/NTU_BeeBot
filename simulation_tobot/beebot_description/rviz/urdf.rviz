@@ -3,7 +3,8 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 486
   - Class: rviz/Selection
@@ -101,27 +102,29 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
         back_wheel:
-          Value: true
+          Value: false
         base_footprint:
-          Value: true
+          Value: false
         base_link:
           Value: true
+        beebot_diff_drive_controller/odom:
+          Value: false
         camera_link:
-          Value: true
+          Value: false
         front_wheel:
-          Value: true
+          Value: false
         hokuyo_link:
-          Value: true
+          Value: false
         left_wheel:
-          Value: true
+          Value: false
         map:
           Value: true
         odom:
           Value: true
         right_wheel:
-          Value: true
+          Value: false
         scanmatcher_frame:
           Value: true
       Marker Scale: 0.5
@@ -131,6 +134,8 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
+          beebot_diff_drive_controller/odom:
+            {}
           odom:
             base_link:
               back_wheel:
@@ -179,7 +184,7 @@ Visualization Manager:
       Max Color: 255; 255; 255
       Max Intensity: 999999
       Min Color: 0; 0; 0
-      Min Intensity: 3.08277e-38
+      Min Intensity: 0
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -223,6 +228,34 @@ Visualization Manager:
         Z: 0
       Topic: /path
       Value: true
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.1
+      Class: rviz/Pose
+      Color: 0; 85; 255
+      Enabled: true
+      Head Length: 0.3
+      Head Radius: 0.1
+      Name: Pose
+      Shaft Length: 1
+      Shaft Radius: 0.05
+      Shape: Arrow
+      Topic: /slam_out_pose
+      Value: true
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.1
+      Class: rviz/Pose
+      Color: 255; 0; 127
+      Enabled: true
+      Head Length: 0.3
+      Head Radius: 0.1
+      Name: Pose
+      Shaft Length: 1
+      Shaft Radius: 0.05
+      Shape: Arrow
+      Topic: /mono_odometer/pose
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -247,7 +280,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 7.15682
+      Distance: 5.66221
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
