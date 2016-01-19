@@ -1,4 +1,13 @@
 /*
+ * Copyright 2016 Charly Huang, National Taiwan University
+ * 
+ * adstar_planner.h
+ * 
+ * This software is developed using SBPL to implement Anytime Dynamic A*
+ * algorithm. 
+ */
+
+/*
  * Copyright 2013 Armin Hornung, University of Freiburg
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,23 +34,58 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+ 
+/** include the libraries you need in your planner here */
+/** for global path planner interface */
 
-#ifndef HUMANOID_PLANNER_2D_SBPL_2D_PLANNER_
-#define HUMANOID_PLANNER_2D_SBPL_2D_PLANNER_
-
+// ROS and the big guys (why are they called the big guys? Can they be called the beasts?)
 #include <ros/ros.h>
+#include <costmap_2d/costmap_2d_ros.h>
+#include <costmap_2d/costmap_2d.h> 
+#include <nav_core/base_global_planner.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <angles/angles.h>
+#include <base_local_planner/world_model.h>
+#include <base_local_planner/costmap_model.h>
+
+// Motion planning specific includes
 #include <sbpl/headers.h>
 #include <visualization_msgs/Marker.h>
 #include <nav_msgs/Path.h>
 #include <gridmap_2d/GridMap2D.h>
 
+// messages
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
 
-class SBPLPlanner2D {
+using std::string ;
+
+#ifndef _ADSTAR_PLANNER_H_
+#define _ADSTAR_PLANNER_H_
+
+namespace ADStarPlanner  {
+
+class ADStarPlanner : public nav_core::BaseGlobalPlanner {
 public:
-  SBPLPlanner2D();
-  virtual ~SBPLPlanner2D();
+   ADStarPlanner () ;
+   ADStarPlanner(std::string name, costmap_2d::Costmap2DROS* costmap_ros) ;
+
+   // Here I make a slight modification to suit into Global Planner Plugin convention   
+   /** overriden classes from interface nav_core::BaseGlbalPlanner **/
+   void initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros) ;
+   
+   /**
+   * @brief Plans from start to goal, assuming that the map was set with updateMap().
+   * When successful, you can retrieve the path with getPath().
+   *
+   * @return success of planning
+   */              
+   bool makePlan(const geometry_msgs::Pose& start, 
+	        	const geometry_msgs::Pose& goal) ;        	
+
+   //bool makePlan(double startX, double startY, double goalX, double goalY);
+
+  // Add my stuff in !!
   /// Set goal and plan when start was already set
   void goalCallback(const geometry_msgs::PoseStampedConstPtr& goal);
   /// Set start and plan when goal was already set
@@ -51,8 +95,10 @@ public:
   /// Setup the internal map representation and initialize the SBPL planning environment
   bool updateMap(gridmap_2d::GridMap2DPtr map);
 
-  gridmap_2d::GridMap2DPtr getMap() const { return map_;};
-
+namespace gridmap_2d{ 
+    gridmap_2d::GridMap2DPtr getMap() { return map_;};
+  } ;
+  
   /**
    * @brief Plans from start to goal, assuming that the map was set with updateMap().
    * When successful, you can retrieve the path with getPath().
@@ -61,15 +107,6 @@ public:
    * @param goal
    * @return success of planning
    */
-  bool plan(const geometry_msgs::Pose& start, const geometry_msgs::Pose& goal);
-
-  /**
-   * @brief Plans from start to goal, assuming that the map was set with updateMap().
-   * When successful, you can retrieve the path with getPath().
-   *
-   * @return success of planning
-   */
-  bool plan(double startX, double startY, double goalX, double goalY);
 
   /// @return costs of the path (=length in m), if planning was successful
   inline double getPathCosts() const{return path_costs_;};
@@ -78,7 +115,8 @@ public:
   inline double getRobotRadius() const{return robot_radius_;};
 
 protected:
-  bool plan();
+  //bool plan();
+  bool makePlan() ;
   void setPlanner(); ///< (re)sets the planner
   ros::NodeHandle nh_;
   ros::Subscriber goal_sub_, start_sub_, map_sub_;
@@ -99,8 +137,12 @@ protected:
   nav_msgs::Path path_;
   double path_costs_;
   
-  static const unsigned char OBSTACLE_COST = 20;
-
-};
+  static const unsigned char OBSTACLE_COST = 20;  
+  
+  bool initialized_ ;
+  costmap_2d::Costmap2DROS* costmap_ros_ ;
+   
+  } ;		
+} ;
 
 #endif

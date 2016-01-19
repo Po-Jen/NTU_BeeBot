@@ -16,16 +16,11 @@ Usage:
    in the .world file with the wrong format, Gazebo will launch neither
    the robot nor the map.
 -->
-  <!--
-  <arg name="map_loaded_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>
-  <arg name="map_loaded" default="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.pgm"/>
-  -->
+
+  <arg name="odom_in" default="/odometry/filtered"/>
+  <arg name="pose_in" default="/robot_pose_ekf/odom_combined" />
 
   <param name="/use_sim_time" value="true" />
-  <!-- load in an existing map-->
-  <!--<node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(arg map_loaded_yaml)" respawn="false">
-    <param name="frame_id" value="/map" />
-  </node>-->
   
   <!-- fire up Gazebo and Rviz for simulation and visualization-->
   <include file="$(find simulation_tobot)/beebot_control/launch/beebot_control.launch">
@@ -36,7 +31,13 @@ Usage:
    <include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch">
 	   <arg name="scan_topic" value="/beebot/laser/scan" />
    </include>
+<<<<<<< HEAD:mobile_safeguard_primitive/launch/navigation/beebot_2d_planner.launch
    
+=======
+
+  <!-- EKF filter for odometry -->
+  <!-- Launch laser odometry -->
+>>>>>>> 81562f9249cd6db5e9b7f1882a30ef4322c52abe:mobile_safeguard_primitive/launch/navigation/beebot_sim_planner.launch
   <node pkg="tf" type="static_transform_publisher" name="base_link_base_footprint_broadcaster" 
         args="0 0 -0.1685 0 0 0 /base_link /base_footprint 100"/>
 
@@ -60,14 +61,13 @@ Usage:
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/viso2_mono_odometry.launch">
 	  <arg name="image_in" value="/beebot/camera/image_raw" />
 	  <arg name="camera_info" value="/beebot/camera/camera_info" />
-	  
-	  <remap from="/map" to="/hector_map" />
   </include>
 -->
   <!-- Launch EKF filtered odometry. Published topic: /odometry/filtered -->
 <!--
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/odometries/ekf_filtered_odom.launch">
 	  <arg name="visual_odom" value="/mono_odometer/odometry" />
+<<<<<<< HEAD:mobile_safeguard_primitive/launch/navigation/beebot_2d_planner.launch
           <arg name="wheel_odom"  value="/beebot_diff_drive_controller/odom" />
           <arg name="odom_frame"  value="/odom" />
           <arg name="slam_odom"   value="/odom" />
@@ -93,4 +93,27 @@ Usage:
     <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" />
   </node>
 -->
+=======
+          <arg name="wheel_odom" value="/beebot_diff_drive_controller/odom" />
+          <arg name="odom_frame" value="odom" />
+  </include>
+  
+  <!-- Publishing robot pose so that nav planner can use -->
+  <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+    <param name="output_frame" value="odom"/>
+    <param name="freq" value="10.0"/>
+    <param name="sensor_timeout" value="1.0"/>
+    <param name="odom_used" value="true"/>
+    <param name="imu_used" value="false"/>
+    <param name="vo_used" value="false"/>
+    <param name="debug" value="false"/>
+    <param name="self_diagnose" value="false"/>
+
+    <remap from="/odom" to="$(arg odom_in)" />
+  </node>
+   
+  <!-- MY PLANNER !! -->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/nav_planner/riskrrt_planner.launch">
+  </include>
+>>>>>>> 81562f9249cd6db5e9b7f1882a30ef4322c52abe:mobile_safeguard_primitive/launch/navigation/beebot_sim_planner.launch
 </launch>

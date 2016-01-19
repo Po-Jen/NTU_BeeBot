@@ -48,6 +48,10 @@ echo "g2o ready to be used"
 echo "===================================================================="
 echo "Start installing necessary ROS packages from remote repositories"
 echo "===================================================================="
+echo "Start installing gmapping"
+sudo apt-get install ros-${ros_version}-gmapping ros-${ros_version}-openslam-gmapping ros-${ros_version}-slam-gmapping
+echo "gmapping is ready to be used"
+echo "===================================================================="
 echo "installing ROS navigation stack"
 sudo apt-get install ros-${ros_version}-navigation
 cd ~
@@ -90,7 +94,11 @@ echo "updating again"
 sudo apt-get update
 echo "Finish system update. Reboot to finish configuration."
 echo "===================================================================="
-
-
-
+echo "Installing Gazebo and gazebo_ros"
+echo "===================================================================="
+echo "Installing necessary control kits for Gazebo and Rviz"
+sudo apt-get update
+sudo apt-get install ros-${ros_version}-ros-control ros-${ros_version}-ros-controllers ros-${ros_version}-joint-state-controller
+echo "Finish installing control kits"
+echo "===================================================================="
 

@@ -1,0 +1,13 @@
+<launch>
+  <!-- fire up RiskRRT planner-->
+  <!-- RiskRRT Node -->
+  <node pkg="riskrrt" type="riskrrt_planner" name="riskrrt_planner" output="screen">
+     <remap from="/odom" to="/odometry/filtered" />
+  </node>
+
+  <!-- RiskRRT controller-->
+  <node pkg="riskrrt" type="controller" name="controller" output="screen"/>
+
+  <!-- Goal pub -->
+  <!--<node pkg="riskrrt" type="goal_pub" name="goal_pub" output="screen" args="0.0 10.0"/>-->
+</launch>
