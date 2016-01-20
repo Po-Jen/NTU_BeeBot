@@ -130,7 +130,11 @@ include_directories(
 # add_library(beebot_planner
 #   src/${PROJECT_NAME}/beebot_planner.cpp
 # )
+# Relaxed A*
 add_library(relaxed_astar_lib src/RAstar.cpp)
+
+# AD* planner
+add_library(adstar_lib src/adstar_planner.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

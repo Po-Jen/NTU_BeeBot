@@ -1,8 +1,3 @@
-/*
- * This file is solely for practice purpose
- * Adapted by Charly Huang National Taiwan University Jan 19, 2016
- */ 
-
 /* iPath: A C++ Library of Intelligent Global Path Planners for Mobile Robots with ROS Integration. 
  * Website: http://www.iroboapp.org/index.php?title=IPath
  * Contact: 
@@ -42,10 +37,6 @@
 #include "beebot_planner/RAstar.h"
 
 #include <pluginlib/class_list_macros.h>
-
-#ifndef _RASTAR_CPP_
-#define _RASTAR_CPP_
-
 //register this planner as a BaseGlobalPlanner plugin
 PLUGINLIB_EXPORT_CLASS(RAstar_planner::RAstarPlannerROS, nav_core::BaseGlobalPlanner)
 
@@ -618,5 +609,3 @@ bool RAstarPlannerROS::isStartAndGoalCellsValid(int startCell,int goalCell)
 ;
 
 bool operator<(cells const &c1, cells const &c2) { return c1.fCost < c2.fCost; }
-
-#endif

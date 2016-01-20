@@ -1,9 +1,3 @@
-/*
- * This is for practice purpose
- * 
- * Adapted by Charly Huang Naional Taiwan University Jan 19, 2016
- */
- 
 /* iPath: A C++ Library of Intelligent Global Path Planners for Mobile Robots with ROS Integration. 
  * Website: http://www.iroboapp.org/index.php?title=IPath
  * Contact: 
@@ -26,7 +20,6 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,7 +54,6 @@
 #include <tf/tf.h>
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
-
 /** ********************************************/ 
 
 #include <boost/foreach.hpp>
@@ -83,8 +75,8 @@
 using namespace std;
 using std::string;
 
-#ifndef _RSTAR_H_
-#define _RSTAR_H_
+#ifndef RASTAR_ROS_CPP
+#define RASTAR_ROS_CPP
 
 /**
  * @struct cells
@@ -165,9 +157,4 @@ public:
 };
 
 };
-
 #endif
-
-
-
-
