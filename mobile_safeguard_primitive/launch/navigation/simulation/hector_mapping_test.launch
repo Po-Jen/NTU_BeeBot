@@ -1,0 +1,26 @@
+<launch>
+
+  <param name="/use_sim_time" value="true" />
+  
+  <!-- fire up Gazebo and Rviz for simulation and visualization-->
+  <include file="$(find simulation_tobot)/beebot_control/launch/beebot_control.launch">
+     <arg name="world_file" value="$(find simulation_tobot)/maps/my_test_room_1.world" />
+  </include>
+
+  <!-- add tf frames -->
+  <!--<node pkg="tf" type="static_transform_publisher" name="base_link_base_footprint_broadcaster" 
+        args="0 0 -0.1685 0 0 0 /base_link /base_footprint 100"/>-->
+
+  <!-- try hector slam -->
+  <include file="$(find hector_mapping)/launch/mapping_default.launch">
+    <arg name="tf_map_scanmatch_transform_frame_name" value="/scanmatcher_frame"/>
+    <arg name="base_frame" value="/base_link"/>
+    <arg name="odom_frame" default="/odom"/>
+    <arg name="scan_subscriber_queue_size" default="5"/>
+    <arg name="scan_topic" default="beebot/laser/scan"/>
+  </include>
+ 
+  <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch">
+    <arg name="trajectory_source_frame_name" value="scanmatcher_frame"/> 
+  </include>
+</launch>

@@ -1,0 +1,12 @@
+<launch>
+  <arg name="image_in" default="/camera/image_raw" />
+  <arg name="camera_info" default="/camera/camera_info" />
+  <arg name="cam_height" default="0.26"/>
+  
+  <node pkg="viso2_ros" type="mono_odometer" name="mono_odometer" >
+	  <remap from="/image" to="$(arg image_in)" />
+	  <remap from="/camera_info" to="$(arg camera_info)" />
+	  
+	  <param name="camera_height" value="$(arg cam_height)"/>
+  </node>	
+</launch>
