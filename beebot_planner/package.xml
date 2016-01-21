@@ -50,6 +50,8 @@
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>tf</build_depend>
+  <build_depend>gridmap_2d</build_depend>
+
   <build_depend>visualization_msgs</build_depend>
   <run_depend>cmake_modules</run_depend>
   <run_depend>costmap_2d</run_depend>
@@ -62,6 +64,7 @@
   <run_depend>std_msgs</run_depend>
   <run_depend>tf</run_depend>
   <run_depend>visualization_msgs</run_depend>
+  <run_depend>gridmap_2d</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

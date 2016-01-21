@@ -16,7 +16,11 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   visualization_msgs
+  gridmap_2d
 )
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SBPL REQUIRED sbpl)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -108,8 +112,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES beebot_planner
+  INCLUDE_DIRS include
+  LIBRARIES beebot_planner
+  DEPENDS sbpl
 #  CATKIN_DEPENDS cmake_modules costmap_2d geometry_msgs nav_core nav_msgs pluginlib roscpp rospy std_msgs tf visualization_msgs
 #  DEPENDS system_lib
 )
@@ -120,11 +125,15 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(include)
+
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${SBPL_INCLUDE_DIRS}
+  ${gridmap_2d_INCLUDE_DIRS}
 )
+
+link_directories(${SBPL_LIBRARY_DIRS})
 
 ## Declare a C++ library
 # add_library(beebot_planner
@@ -135,6 +144,7 @@ add_library(relaxed_astar_lib src/RAstar.cpp)
 
 # AD* planner
 add_library(adstar_lib src/adstar_planner.cpp)
+target_link_libraries(adstar_lib ${SBPL_Libraries} ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
