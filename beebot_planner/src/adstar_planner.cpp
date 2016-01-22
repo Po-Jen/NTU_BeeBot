@@ -7,9 +7,6 @@
  
 #include <beebot_planner/adstar_planner.h>
 #include <pluginlib/class_list_macros.h>
-
-// register this planner as a BaseGlobalPlanner plugin
-PLUGINLIB_EXPORT_CLASS(adstar_planner::ADStarPlanner, nav_core::BaseGlobalPlanner)
  
  namespace adstar_planner {
 	 ADStarPlanner::ADStarPlanner()
@@ -139,8 +136,11 @@ PLUGINLIB_EXPORT_CLASS(adstar_planner::ADStarPlanner, nav_core::BaseGlobalPlanne
 		  ROS_INFO("adstar_planner getting start point (%g, %g) goal point (%g, %g)",
 		           start.pose.position.x, start.pose.position.y, goal.pose.position.x, goal.pose.position.y) ;
           
-          // Do the verification for path planning
-          return plan() ;
+          // TOODO TODO TODO 
+          // well...maybe this is it! Every other stuff have been dealt with other member functions
+          
+          return true ;
+          
     }      
    
    bool ADStarPlanner::plan(const geometry_msgs::Pose& start, const geometry_msgs::Pose& goal){
@@ -212,7 +212,7 @@ PLUGINLIB_EXPORT_CLASS(adstar_planner::ADStarPlanner, nav_core::BaseGlobalPlanne
 		  std::vector<int> solution_stateIDs;
 		  int solution_cost;
 
-
+          // HERE IS THE ACTUAL PLANNING !!
 		  if(planner_->replan(allocated_time_, &solution_stateIDs, &solution_cost))
 			ROS_DEBUG("Solution found. Costs: %d;  final eps: %f", solution_cost, planner_->get_final_epsilon());
 		  else{
@@ -250,4 +250,7 @@ PLUGINLIB_EXPORT_CLASS(adstar_planner::ADStarPlanner, nav_core::BaseGlobalPlanne
    }
 	
  }
+ 
+ // register this planner as a BaseGlobalPlanner plugin
+PLUGINLIB_EXPORT_CLASS(adstar_planner::ADStarPlanner, nav_core::BaseGlobalPlanner)
  #endif
