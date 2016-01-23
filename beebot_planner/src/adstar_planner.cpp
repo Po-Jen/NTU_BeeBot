@@ -248,8 +248,7 @@
 
 		  return true;	   
    }
-	
- }
+	 }
  
  // register this planner as a BaseGlobalPlanner plugin
 PLUGINLIB_EXPORT_CLASS(adstar_planner::ADStarPlanner, nav_core::BaseGlobalPlanner)

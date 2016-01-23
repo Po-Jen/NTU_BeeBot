@@ -71,7 +71,7 @@
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
-   <!--<nav_core plugin="${prefix}/relaxed_astar_planner_plugin.xml" />-->
+   <nav_core plugin="${prefix}/relaxed_astar_planner_plugin.xml" />
    <nav_core plugin="${prefix}/adstar_planner_plugin.xml" />
     <!-- Other tools can request additional information be placed here -->
   </export>

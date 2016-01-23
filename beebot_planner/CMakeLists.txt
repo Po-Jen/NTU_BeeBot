@@ -140,11 +140,12 @@ link_directories(${SBPL_LIBRARY_DIRS})
 #   src/${PROJECT_NAME}/beebot_planner.cpp
 # )
 # Relaxed A*
-#add_library(relaxed_astar_lib src/RAstar.cpp)
+add_library(relaxed_astar_lib src/RAstar.cpp)
 
 # AD* planner
 add_library(adstar_lib src/adstar_planner.cpp)
-target_link_libraries(adstar_lib ${SBPL_LIBRARIES} ${catkin_LIBRARIES})
+target_link_libraries(adstar_lib ${SBPL_LIBRARIES} 
+                                 ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

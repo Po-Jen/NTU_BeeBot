@@ -4,7 +4,8 @@
     <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" />
     <remap from="/scan" to="/beebot/laser/scan" />
 
-    <!-- HERE THE PLUGINS CAN BE ADDED IN IN THE PARAMETER BASE_GLOBAL_PLANNER-->    
+    <!-- HERE THE PLUGINS CAN BE ADDED IN IN THE PARAMETER BASE_GLOBAL_PLANNER-->   
+    <!--<param name="base_global_planner" value="beebot_planner/RAstarPlannerROS" />--> 
     <param name="base_global_planner" value="beebot_planner/ADStarPlanner" />
 
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/utils/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
