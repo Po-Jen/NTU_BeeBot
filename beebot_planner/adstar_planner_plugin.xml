@@ -1,7 +1,0 @@
-<library path="lib/libadstar_lib">
-  <class name="beebot_planner/ADStarPlanner" type="adstar_planner::ADStarPlanner" base_class_type="nav_core::BaseGlobalPlanner">
-     <description>
-     This is an AD* global planner plugin.
-     </description>
-  </class>
-</library>
