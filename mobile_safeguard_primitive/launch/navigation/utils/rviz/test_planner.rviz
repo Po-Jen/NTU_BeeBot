@@ -190,7 +190,7 @@ Visualization Manager:
         X: 0
         Y: 0
         Z: 0
-      Topic: /move_base/NavfnROS/plan
+      Topic: /move_base_node/SBPLLatticePlanner/plan
       Value: true
     - Alpha: 1
       Buffer Length: 1
@@ -218,7 +218,7 @@ Visualization Manager:
         X: 0
         Y: 0
         Z: 0
-      Topic: /move_base/TrajectoryPlannerROS/local_plan
+      Topic: /move_base_node/PoseFollower/local_plan
       Value: true
     - Alpha: 1
       Buffer Length: 1
@@ -265,15 +265,15 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.270137
-        Y: 0.29421
-        Z: -0.334054
+        X: -1.66811
+        Y: -1.34185
+        Z: -0.0909518
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.990398
+      Pitch: 0.915398
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.690398
+      Yaw: 5.72358
     Saved: ~
 Window Geometry:
   Displays:
