@@ -18,6 +18,20 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
+find_package(cmake_modules REQUIRED)
+
+# add qt4 to the project
+FIND_PACKAGE(Eigen REQUIRED)
+FIND_PACKAGE(Boost REQUIRED)
+
+FIND_PACKAGE( OpenMP REQUIRED)
+if(OPENMP_FOUND)
+  message("OPENMP FOUND")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+
 # find_package(Boost REQUIRED COMPONENTS system)
 
 
@@ -107,9 +121,21 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES beebot_rrt_planner
-#  CATKIN_DEPENDS costmap_2d geometry_msgs nav_core nav_msgs pluginlib roscpp rospy std_msgs tf visualization_msgs
+  INCLUDE_DIRS 
+     include
+  LIBRARIES 
+     beebot_rrt_planner
+  CATKIN_DEPENDS 
+     costmap_2d 
+     geometry_msgs 
+     nav_core 
+     nav_msgs 
+     pluginlib 
+     roscpp 
+     rospy 
+     std_msgs 
+     tf 
+     visualization_msgs
 #  DEPENDS system_lib
 )
 
@@ -122,12 +148,46 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${Eigen_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 ## Declare a C++ library
 # add_library(beebot_rrt_planner
 #   src/${PROJECT_NAME}/beebot_rrt_planner.cpp
 # )
+
+# Declare kdTree lib
+add_library(BEEBOT_RRT_PLANNER_KDTREE_LIB ${CMAKE_CURRENT_SOURCE_DIR}/include/smp/external_libraries/kdtree/kdtree.c)
+
+# Setting SOURCES variable
+# TODO TODO TODO
+set (SOURCES_RRT 
+       src/beebot_smp_planner.cpp
+       include/beebot_rrt_planner/beebot_smp_planner.h)
+set(SOURCES 
+      src/costmap_layers_dyn_rec_handler
+      include/beebot_rrt_planner/costmap_layers_dyn_rec_handler.h
+      src/thetastar_leading_rrt.cpp
+      include/beebot_rrt_planner/thetastar_leading_rrt.h 
+      include/beebot_rrt_planner/costmap_model.cpp 
+      include/beebot_rrt_planner/trajectory.cpp 
+      include/beebot_rrt_planner/grid.cpp 
+      include/beebot_rrt_planner/cell.cpp
+      )
+
+# ==============================================================================
+# Plugin
+add_library(beebot_smp_planner  ${SOURCES_RRT} ${SOURCES})
+target_link_libraries(beebot_smp_planner ${catkin_LIBRARIES}
+                                         ${BOOST_LIBRARIES}
+                                         ${BEEBOT_RRT_PLANNER_KDTREE_LIB}
+                                         )
+add_dependencies(beebot_smp_planner beebot_smp_planner_gencfg ${catkin_EXPORTED_TARGETS})
+add_dependencies(beebot_smp_planner nav_msgs_gencpp)
+# ==============================================================================
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -161,25 +221,22 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS beebot_rrt_planner beebot_rrt_planner_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+ install(TARGETS beebot_smp_planner 
+   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+
+ )
 
 ## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+ install(DIRECTORY include/${PROJECT_NAME}/
+   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+   PATTERN ".svn" EXCLUDE
+ )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+ install(FILES
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+ )
 
 #############
 ## Testing ##
