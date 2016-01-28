@@ -399,11 +399,17 @@ bool beebotSMPPlanner::SetDrivingDirection(spencer_nav_msgs::SetDrivingDirection
 /// ==================================================================================
 /// callbackSetGoal(const geometry_msgs::PointStamped& msg)
 /// Method to set the new Goal
-/// TODO: Currently not used
+/// TODO: Currently not used  <-- fun P!
 /// ==================================================================================
 
 void beebotSMPPlanner::callbackSetGoal(const geometry_msgs::PoseStamped::ConstPtr& msg){
+    double toll = 3 ;
+    nh_.getParam("/move_base_node/GOAL_TOLL", toll);
+        ROS_INFO("Setting TOll %f", toll);
+        setGoal(msg->pose.position.x, msg->pose.position.y, tf::getYaw(msg->pose.orientation), toll, msg->header.frame_id);
 
+        goal_pose_.position=msg->pose.position;
+        goal_pose_.orientation=msg->pose.orientation;    
 
 }
 
@@ -411,12 +417,10 @@ void beebotSMPPlanner::callbackSetGoal(const geometry_msgs::PoseStamped::ConstPt
 /// ==================================================================================
 /// callbackSetRobotPose(const nav_msgs::Odometry::ConstPtr& msg)
 /// Method to set odom not needed
-/// TODO: Currently not used
+/// TODO: Currently not used  <-- fun P!
 /// ==================================================================================
 
-void beebotSMPPlanner::callbackSetRobotPose(const nav_msgs::Odometry::ConstPtr& msg){
-
-
+void beebotSMPPlanner::callbackSetRobotPose(const nav_msgs::Odometry::ConstPtr& msg){   
 
 }
 

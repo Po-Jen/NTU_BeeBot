@@ -5,7 +5,7 @@
     <remap from="/scan" to="/beebot/laser/scan" />
     
     <!-- HERE THE PLUGINS CAN BE ADDED IN IN THE PARAMETER BASE_GLOBAL_PLANNER-->    
-    <param name="base_global_planner" value="ADStarPlanner" />
+    <param name="base_global_planner" value="beebot_smp_planner" />
 
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/utils/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/utils/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
@@ -14,6 +14,7 @@
     <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/utils/config/base_local_planner_params.yaml" command="load" />
     
     <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
+    <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/utils/config/dwa_local_planner_params.yaml" command="load" />
     
     
     <!-- SAMPLING BASED SPECIFIC PARAMETERS-->

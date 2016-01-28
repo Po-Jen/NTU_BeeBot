@@ -1,5 +1,0 @@
-<library path="lib/libbeebot_smp_planner">
-	<class name="beebot_rrt_planner/beebotSMPPlannerROS" type="beebot_smp_planner::beebotSMPPlanner" base_class_type="nav_core::BaseGlobalPlanner">
-		<description> This is a sampling-based global planner plugin for Beebot. </description>
-	</class>
-</library>	

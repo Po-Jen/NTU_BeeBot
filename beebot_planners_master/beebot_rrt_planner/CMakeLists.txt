@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(beebot_rrt_planner)
+ADD_DEFINITIONS(-std=c++0x) # C++ 11 is required
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  costmap_2d
   geometry_msgs
   nav_core
   nav_msgs
   pluginlib
+  costmap_2d
+  navfn
+	global_planner
   roscpp
   rospy
   std_msgs
@@ -17,12 +17,38 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
 )
 
-## System dependencies are found with CMake's conventions
 find_package(cmake_modules REQUIRED)
+
+
 
 # add qt4 to the project
 FIND_PACKAGE(Eigen REQUIRED)
 FIND_PACKAGE(Boost REQUIRED)
+
+
+
+catkin_package(
+
+  CATKIN_DEPENDS
+    geometry_msgs
+    nav_core
+    nav_msgs
+    roscpp
+    rospy
+    std_msgs
+    tf
+    visualization_msgs
+    costmap_2d
+    pluginlib
+    navfn
+		global_planner
+
+  LIBRARIES
+    beebot_smp_planner
+
+
+)
+
 
 FIND_PACKAGE( OpenMP REQUIRED)
 if(OPENMP_FOUND)
@@ -32,221 +58,65 @@ if(OPENMP_FOUND)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
-# find_package(Boost REQUIRED COMPONENTS system)
-
-
-## Uncomment this if the package has a setup.py. This macro ensures
-## modules and global scripts declared therein get installed
-## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
-
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
-## To declare and build messages, services or actions from within this
-## package, follow these steps:
-## * Let MSG_DEP_SET be the set of packages whose message types you use in
-##   your messages/services/actions (e.g. std_msgs, actionlib_msgs, ...).
-## * In the file package.xml:
-##   * add a build_depend tag for "message_generation"
-##   * add a build_depend and a run_depend tag for each package in MSG_DEP_SET
-##   * If MSG_DEP_SET isn't empty the following dependency has been pulled in
-##     but can be declared for certainty nonetheless:
-##     * add a run_depend tag for "message_runtime"
-## * In this file (CMakeLists.txt):
-##   * add "message_generation" and every package in MSG_DEP_SET to
-##     find_package(catkin REQUIRED COMPONENTS ...)
-##   * add "message_runtime" and every package in MSG_DEP_SET to
-##     catkin_package(CATKIN_DEPENDS ...)
-##   * uncomment the add_*_files sections below as needed
-##     and list every .msg/.srv/.action file to be processed
-##   * uncomment the generate_messages entry below
-##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
-
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
-
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
-
-## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
-
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   geometry_msgs#   nav_msgs#   std_msgs#   visualization_msgs
-# )
-
-################################################
-## Declare ROS dynamic reconfigure parameters ##
-################################################
-
-## To declare and build dynamic reconfigure parameters within this
-## package, follow these steps:
-## * In the file package.xml:
-##   * add a build_depend and a run_depend tag for "dynamic_reconfigure"
-## * In this file (CMakeLists.txt):
-##   * add "dynamic_reconfigure" to
-##     find_package(catkin REQUIRED COMPONENTS ...)
-##   * uncomment the "generate_dynamic_reconfigure_options" section below
-##     and list every .cfg file to be processed
-
-## Generate dynamic reconfigure parameters in the 'cfg' folder
-# generate_dynamic_reconfigure_options(
-#   cfg/DynReconf1.cfg
-#   cfg/DynReconf2.cfg
-# )
-
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if you package contains header files
-## LIBRARIES: libraries you create in this project that dependent projects also need
-## CATKIN_DEPENDS: catkin_packages dependent projects also need
-## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-  INCLUDE_DIRS 
-     include
-  LIBRARIES 
-     beebot_rrt_planner
-  CATKIN_DEPENDS 
-     costmap_2d 
-     geometry_msgs 
-     nav_core 
-     nav_msgs 
-     pluginlib 
-     roscpp 
-     rospy 
-     std_msgs 
-     tf 
-     visualization_msgs
-#  DEPENDS system_lib
-)
 
 ###########
 ## Build ##
 ###########
+include_directories(${Eigen_INCLUDE_DIRS})
 
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
 include_directories(
-  ${catkin_INCLUDE_DIRS}
-  ${Eigen_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/include/
   ${CMAKE_CURRENT_SOURCE_DIR}/src/
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a C++ library
-# add_library(beebot_rrt_planner
-#   src/${PROJECT_NAME}/beebot_rrt_planner.cpp
-# )
 
-# Declare kdTree lib
+# RRT PLANNER
+
+## Declare KdTree lib
 add_library(BEEBOT_RRT_PLANNER_KDTREE_LIB ${CMAKE_CURRENT_SOURCE_DIR}/include/smp/external_libraries/kdtree/kdtree.c)
 
-# Setting SOURCES variable
-# TODO TODO TODO
-set (SOURCES_RRT 
-       src/beebot_smp_planner.cpp
-       include/beebot_rrt_planner/beebot_smp_planner.h)
-set(SOURCES 
-      src/costmap_layers_dyn_rec_handler
-      include/beebot_rrt_planner/costmap_layers_dyn_rec_handler.h
-      src/thetastar_leading_rrt.cpp
-      include/beebot_rrt_planner/thetastar_leading_rrt.h 
-      include/beebot_rrt_planner/costmap_model.cpp 
-      include/beebot_rrt_planner/trajectory.cpp 
-      include/beebot_rrt_planner/grid.cpp 
-      include/beebot_rrt_planner/cell.cpp
-      )
 
-# ==============================================================================
+# Setting SOURCES variables
+set(SOURCES_RRT src/beebot_smp_planner.cpp include/beebot_rrt_planner/beebot_smp_planner.h)
+
+set(SOURCES
+    src/costmap_layers_dyn_rec_handler.cpp 
+    include/${PROJECT_NAME}/costmap_layers_dyn_rec_handler.h 
+    src/thetastar_leading_rrt.cpp 
+    include/${PROJECT_NAME}/thetastar_leading_rrt.h 
+    include/${PROJECT_NAME}/costmap_model.cpp 
+    include/${PROJECT_NAME}/trajectory.cpp 
+    include/${PROJECT_NAME}/grid.cpp 
+    include/${PROJECT_NAME}/cell.cpp
+
+)
+
+
+
 # Plugin
 add_library(beebot_smp_planner  ${SOURCES_RRT} ${SOURCES})
-target_link_libraries(beebot_smp_planner ${catkin_LIBRARIES}
-                                         ${BOOST_LIBRARIES}
-                                         ${BEEBOT_RRT_PLANNER_KDTREE_LIB}
-                                         )
-add_dependencies(beebot_smp_planner beebot_smp_planner_gencfg ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(beebot_smp_planner ${catkin_LIBRARIES} ${BOOST_LIBRARIES} BEEBOT_RRT_PLANNER_KDTREE_LIB)
+
+add_dependencies(beebot_smp_planner beebot_rrt_planner_gencfg ${catkin_EXPORTED_TARGETS})
+
 add_dependencies(beebot_smp_planner nav_msgs_gencpp)
-# ==============================================================================
 
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(beebot_rrt_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-## Declare a C++ executable
-# add_executable(beebot_rrt_planner_node src/beebot_rrt_planner_node.cpp)
+install(TARGETS beebot_smp_planner
+       ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+       LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 
-## Add cmake target dependencies of the executable
-## same as for the library above
-# add_dependencies(beebot_rrt_planner_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+       )
 
-## Specify libraries to link a library or executable target against
-# target_link_libraries(beebot_rrt_planner_node
-#   ${catkin_LIBRARIES}
-# )
+install(FILES beebot_smp_planner_plugin.xml
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
 
-#############
-## Install ##
-#############
 
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
-
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-## Mark executables and/or libraries for installation
- install(TARGETS beebot_smp_planner 
-   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-
- )
-
-## Mark cpp header files for installation
- install(DIRECTORY include/${PROJECT_NAME}/
-   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-   PATTERN ".svn" EXCLUDE
- )
-
-## Mark other files for installation (e.g. launch and bag files, etc.)
- install(FILES
-   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
- )
-
-#############
-## Testing ##
-#############
-
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_beebot_rrt_planner.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
-
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  PATTERN ".svn" EXCLUDE
+)

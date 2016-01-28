@@ -43,6 +43,7 @@
   <build_depend>costmap_2d</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>nav_core</build_depend>
+  <build_depend>navfn</build_depend>
   <build_depend>nav_msgs</build_depend>
   <build_depend>pluginlib</build_depend>
   <build_depend>roscpp</build_depend>
@@ -50,9 +51,12 @@
   <build_depend>std_msgs</build_depend>
   <build_depend>tf</build_depend>
   <build_depend>visualization_msgs</build_depend>
+  <build_depend>global_planner</build_depend>
+
   <run_depend>costmap_2d</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>nav_core</run_depend>
+  <run_depend>navfn</run_depend>
   <run_depend>nav_msgs</run_depend>
   <run_depend>pluginlib</run_depend>
   <run_depend>roscpp</run_depend>
@@ -60,11 +64,11 @@
   <run_depend>std_msgs</run_depend>
   <run_depend>tf</run_depend>
   <run_depend>visualization_msgs</run_depend>
+  <run_depend>global_planner</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <!-- Other tools can request additional information be placed here -->
-
+    <nav_core plugin="${prefix}/beebot_smp_planner_plugin.xml"/>
   </export>
 </package>
