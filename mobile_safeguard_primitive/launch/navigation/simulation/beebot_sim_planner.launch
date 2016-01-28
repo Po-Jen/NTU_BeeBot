@@ -22,7 +22,7 @@ Usage:
   <!-- fire up Gazebo and Rviz for simulation and visualization-->
   <include file="$(find simulation_tobot)/beebot_control/launch/beebot_control.launch">
      <arg name="world_file" value="$(find simulation_tobot)/maps/my_2nd_test_map.world" />
-     <arg name="rvizconfig" value="$(find mobile_safeguard_primitive)/launch/navigation/utils/rviz/test_planner.rviz" />
+     <arg name="rvizconfig" value="$(find mobile_safeguard_primitive)/launch/navigation/utils/rviz/motion_planning_display.rviz" />
   </include>
   
    <!-- Use hector slam instead of gmapping -->
@@ -34,5 +34,5 @@ Usage:
    </node>
 
   <!-- MY PLANNER !! -->
-
+  <!-- TODO-->
 </launch>
