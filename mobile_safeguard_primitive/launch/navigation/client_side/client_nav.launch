@@ -7,7 +7,11 @@ on a single robot, then activates both files on the robot side.
    <arg name="show_rviz" default="true"/>
 
    <!--launch gmapping-->
-   <include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>
+   <!--<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>-->
+   <!-- Use hector slam instead of gmapping -->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/SLAM/hector_slam.launch" >
+     <arg name="save_map_path" value="$(find mobile_safeguard_primitive)/launch/navigation/maps/" />
+  </include>
 
    <!--To switch to gmapping, comment out the following two nodes, the map_server and the odom_map_broadcaster-->
    <!--load in blank map into map_server-->
@@ -18,7 +22,7 @@ on a single robot, then activates both files on the robot side.
   <node name="og_builder_stage" pkg="riskrrt" type="og_builder_stage" output="screen" args="4 0.5"/>-->
 
    <!-- fire up AMCL for pose estimation using particle filter-->
-   <include file="$(find mobile_safeguard_primitive)/launch/start_amcl.launch"/>
+   <!--<include file="$(find mobile_safeguard_primitive)/launch/start_amcl.launch"/>-->
 
    <!--Turn on teleoperation on keyboard-->
    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
