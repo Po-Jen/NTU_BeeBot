@@ -11,6 +11,7 @@ on a single robot, then activates both files on the robot side.
    <!-- Use hector slam instead of gmapping -->
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/SLAM/hector_slam.launch" >
      <arg name="save_map_path" value="$(find mobile_safeguard_primitive)/launch/navigation/maps/" />
+     <arg name="scan_topic" value="/scan" />
   </include>
 
    <!--To switch to gmapping, comment out the following two nodes, the map_server and the odom_map_broadcaster-->
