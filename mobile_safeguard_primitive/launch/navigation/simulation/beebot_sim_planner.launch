@@ -26,7 +26,9 @@ Usage:
   </include>
   
    <!-- Use hector slam instead of gmapping -->
-  <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/SLAM/hector_slam.launch" />
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/SLAM/hector_slam.launch" >
+    <arg name="save_map_path" value="$(find mobile_safeguard_primitive)/launch/navigation/maps/simulation/" />
+  </include>
    
   <!--Fire up teleop -->
    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard">
