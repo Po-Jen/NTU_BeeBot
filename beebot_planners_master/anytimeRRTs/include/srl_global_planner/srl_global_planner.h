@@ -439,7 +439,16 @@ public:
     */
     void publishTree();
   
+/************************ ANYTIMERRT EXCLUSIVE ZONE !! *************************/
 
+    double selCost ;
+    
+    double cost_bound ;
+    double dist_bias ;   // distance bias, known as T.db in the paper
+    double cost_bias ;   // cost bias, known as T.cb in the paper
+    double delta_d, delta_c ; // decreasing dist_bias by a δd each iteration and increasing cost by δc
+    double epsilon_f ;   // each succesive solution was guaranteed to be epsilon_f less costly than the previous solution.
+/************************ END OF ANYTIMERRT DEFINITIONS *************************/    
 
     double cellwidth_;  ///<  @brief Cell width
 

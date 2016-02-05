@@ -1201,7 +1201,22 @@ else {
             iterations=i;
 
         }
-       double min_cost = min_time_reachability.get_best_cost ();
+       //double min_cost = min_time_reachability.get_best_cost ();
+
+	
+       // Here is the implementation of AnytimeRRT
+       selCost = dist_bias * min_time_reachability.get_best_cost () + cost_bias * min_time_reachability.cost ;
+	          
+       double min_cost = selCost ;
+       
+       int min_cost_index ;
+       // typeparam = 2
+       for (int i = 1 ; i < 2; i++)  {
+		   if (selCost < min_cost)  {
+			   min_cost = selCost ;
+			   min_cost_index = i ;
+		   }
+	   }
 
        if(BRANCHBOUND){
 
@@ -1222,6 +1237,14 @@ else {
                 curr_cost_=min_time_reachability.cost;
                 end_time_solution=ros::WallTime::now().toSec() -begin_time_solution;
 
+                // AnytimeRRT is here !!
+                cost_bound = (1 - epsilon_f) * min_time_reachability.cost ;
+                dist_bias = dist_bias - delta_d ;
+                cost_bias = cost_bias - delta_c ;
+    	        if(dist_bias<0) dist_bias=0;
+    	        if(cost_bias>1) cost_bias=1.0;                
+                
+                
         // if(min_smoothness.foundTraj==true){
             break;
             }
@@ -1449,7 +1472,7 @@ void  Srl_global_planner::initialize(std::string name, costmap_2d::Costmap2DROS*
         this->DISPLAY_METRICS=0;
         this->ADD_COST_PATHLENGTH=1;
         this->no_fails=0;
-        this->curr_cost_=0;
+//        this->curr_cost_=0;
         this->MAXTIME=0;
         this->NUMBER_UPDATE_TRAJ=0;
         this->NOANIM=0;
@@ -1466,6 +1489,18 @@ void  Srl_global_planner::initialize(std::string name, costmap_2d::Costmap2DROS*
         trajectory_ = new Trajectory();
         this->cnt_make_plan_ = 0;
         this->cnt_no_plan_ = 0;
+        
+        // setting anytimeRRT parameters
+        // Following the value given by the work of Luo YuanFu
+        this->cost_bound = 100000 ;  //infinity
+        this->curr_cost_= 100000 ; // infinity
+        this->dist_bias = 1.0;
+        this->cost_bias = 0.0;
+        this->delta_d = 0.1;
+        this->delta_c = 0.1;
+        this->epsilon_f = 0.04;
+        
+        
         ros::NodeHandle node("~/anytimeRRTs");
         nh_ =  node;
 
