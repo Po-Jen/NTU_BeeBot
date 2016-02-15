@@ -1,7 +1,7 @@
 <launch>
 
 
-<node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen" launch-prefix="gdb -ex run --args">
+<node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
         <remap from="/dom" to="//beebot_diff_drive_controller/odom" />
         <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" />
 
@@ -248,20 +248,20 @@
         <!-- MOVE BASE -->
 
         <!-- load additional move_base params -->
-        <rosparam file="$(find srl_global_planner)/config/move_base.yaml" command="load" />
+        <rosparam file="$(find anytimeRRTs)/config/move_base.yaml" command="load" />
 
         <!-- load global navigation specific parameters -->
-        <rosparam file="$(find srl_global_planner)/config/common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find anytimeRRTs)/config/common_params.yaml" command="load" ns="global_costmap" />
 
 
-        <rosparam file="$(find srl_global_planner)/config/global_costmap_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find anytimeRRTs)/config/global_costmap_params.yaml" command="load" ns="global_costmap" />
 
 
         <!-- use the DWA as local planner for the spencer robot -->
 
          <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/> 
 
-        <param name="base_global_planner" value="srl_global_planner/Srl_global_plannerROS"/>
+        <param name="base_global_planner" value="anytimeRRTs/AnytimeRRTsROS"/>
 
 
 
