@@ -3,6 +3,7 @@
 #include <pluginlib/class_list_macros.h>
 
 
+
 #define TESTM 0
 
 
@@ -597,7 +598,7 @@ void Srl_global_planner::publishPath(Trajectory *t){
     visualization_msgs::Marker path_marker_;
     path_marker_.header.frame_id = planner_frame_;
     path_marker_.header.stamp = ros::Time();
-    path_marker_.ns = "Srl_global_planner";
+    path_marker_.ns = "anytimeRRT_planner";
     path_marker_.id = 1;
 
     path_marker_.type = visualization_msgs::Marker::POINTS;
@@ -1124,11 +1125,12 @@ if(DEB_RRT>0)
     }
 
 
-
 if(TIMECOUNTER){
     
     while(timep<curr_MAXTIME && min_time_reachability.cntUpdates<curr_NUM_UPDATES ){
 
+
+    
 
         if(timep>curr_MAXTIME)
             break;
@@ -1163,6 +1165,7 @@ if(TIMECOUNTER){
                 if( DEB_RRT>0)
                   ROS_INFO("First Solution after Seconds: %f", end_time_solution);
 
+                  
                 first_sol++;
              }
 
@@ -1222,6 +1225,8 @@ else {
                 curr_cost_=min_time_reachability.cost;
                 end_time_solution=ros::WallTime::now().toSec() -begin_time_solution;
 
+                
+                
         // if(min_smoothness.foundTraj==true){
             break;
             }
@@ -1247,7 +1252,7 @@ else {
     if(DEB_RRT>0)
       ROS_INFO( "Try to Get Solution " );
 
-    min_time_reachability.get_solution (trajectory_final);
+    min_time_reachability.get_solution (trajectory_final);            // GET THE TRAJECTORY SOLUTION
 
 
 
@@ -1321,6 +1326,7 @@ else {
 
     if(!NOANIM)
         publishTree();
+
 
 
 
