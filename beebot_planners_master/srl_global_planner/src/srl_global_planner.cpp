@@ -1309,8 +1309,11 @@ else {
     if(!NOANIM)
         publishTree();
 
+    /****************** THIS IS FOR OUTPUTTING DATA PURPOSE ******************/
 
+    publishRelevantData (timeIter_, curr_cost_) ;
 
+	
     return 1;
 
 }

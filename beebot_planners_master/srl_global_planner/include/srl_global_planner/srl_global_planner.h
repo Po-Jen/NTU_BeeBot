@@ -410,6 +410,17 @@ public:
     * @return void
     */
     void publishTree();
+    
+    /****************** THIS IS FOR OUTPUTTING DATA PURPOSE ******************/
+	void publishRelevantData (float timeIter_, double curr_cost_)  {
+		std::fstream relevantData ("experimental_data/time_vs_cost.txt") ;
+		relevantData << "time for each iteration\t" << "|\t" << "current cost\n" << std::endl
+					<< "-----------------------------------" << endl ;
+		for (int i = 0 ; i < Nit_; i++) {
+			relevantData << timeIter_ << "\t|\t" << curr_cost_ << std::endl ;
+		}
+		relevantData.close() ;
+	}
 
 
     double cellwidth_;  ///<  @brief Cell width
