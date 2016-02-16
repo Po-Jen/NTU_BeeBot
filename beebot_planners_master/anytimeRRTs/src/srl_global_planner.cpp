@@ -3,6 +3,7 @@
 #include <pluginlib/class_list_macros.h>
 
 
+
 #define TESTM 0
 
 
@@ -597,7 +598,7 @@ void Srl_global_planner::publishPath(Trajectory *t){
     visualization_msgs::Marker path_marker_;
     path_marker_.header.frame_id = planner_frame_;
     path_marker_.header.stamp = ros::Time();
-    path_marker_.ns = "Srl_global_planner";
+    path_marker_.ns = "anytimeRRT_planner";
     path_marker_.id = 1;
 
     path_marker_.type = visualization_msgs::Marker::POINTS;
@@ -1124,11 +1125,12 @@ if(DEB_RRT>0)
     }
 
 
-
 if(TIMECOUNTER){
     
     while(timep<curr_MAXTIME && min_time_reachability.cntUpdates<curr_NUM_UPDATES ){
 
+
+    
 
         if(timep>curr_MAXTIME)
             break;
@@ -1163,6 +1165,7 @@ if(TIMECOUNTER){
                 if( DEB_RRT>0)
                   ROS_INFO("First Solution after Seconds: %f", end_time_solution);
 
+                  
                 first_sol++;
              }
 
@@ -1237,12 +1240,15 @@ else {
                 curr_cost_=min_time_reachability.cost;
                 end_time_solution=ros::WallTime::now().toSec() -begin_time_solution;
 
+<<<<<<< HEAD
                 // AnytimeRRT is here !!
                 cost_bound = (1 - epsilon_f) * min_time_reachability.cost ;
                 dist_bias = dist_bias - delta_d ;
                 cost_bias = cost_bias - delta_c ;
     	        if(dist_bias<0) dist_bias=0;
     	        if(cost_bias>1) cost_bias=1.0;                
+=======
+>>>>>>> 8d9dcb3b7b31bd125766ecbe9f0b7a93412a312f
                 
                 
         // if(min_smoothness.foundTraj==true){
@@ -1270,7 +1276,7 @@ else {
     if(DEB_RRT>0)
       ROS_INFO( "Try to Get Solution " );
 
-    min_time_reachability.get_solution (trajectory_final);
+    min_time_reachability.get_solution (trajectory_final);            // GET THE TRAJECTORY SOLUTION
 
 
 
@@ -1344,6 +1350,7 @@ else {
 
     if(!NOANIM)
         publishTree();
+
 
 
 

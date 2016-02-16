@@ -17,7 +17,7 @@ static_map: true
 robot_base_frame: base_link
 # specifications for the footprint of the robot as polygon (in meters)
 # footprint: [ [0.756, 0.455], [0.756, -0.455], [-0.791, -0.455], [-0.791, 0.455] ] # real footprint
-#footprint: [[0.796, 0.495], [0.796, -0.495], [-0.831, -0.495], [-0.831, 0.495] ] # larger footprint
+# footprint: [[0.796, 0.495], [0.796, -0.495], [-0.831, -0.495], [-0.831, 0.495] ] # larger footprint
 
 footprint: [[0.35, 0.35], [0.35, -0.35], [-0.35, -0.35], [-0.35, 0.35] ]  
 
