@@ -24,8 +24,9 @@
           --shutdown-timeout 3"/>
 
   <!--remap from="beebot_diff_drive_controller/cmd_vel" to="cmd_vel"/-->
+<!--  
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
     <param name="default_topic" value="/beebot_diff_drive_controller/cmd_vel"/>
   </node> 
-
+-->
 </launch>
