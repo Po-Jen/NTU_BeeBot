@@ -164,7 +164,8 @@
 
 
         <!-- Goal Biasing valid only with TYPE_SAMPLING == 4 -->
-        <param name="GOAL_BIASING" value="1" type="int"/>
+        <!--<param name="GOAL_BIASING" value="1" type="int"/>-->
+        <param name="GOAL_BIASING" value="4" type="int"/>
 
         <param name="GOAL_BIASING_ORIENTATION_RANGE" value="0" type="double"/>
 

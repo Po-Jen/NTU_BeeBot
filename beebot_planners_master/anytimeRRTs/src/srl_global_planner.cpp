@@ -1126,6 +1126,9 @@ if(DEB_RRT>0)
 
 
 if(TIMECOUNTER){
+	// Charly opens a document and puts all time registration information in there !!
+    ofstream timeRegistration ;
+    timeRegistration.open("AnytimeRRTs_iteration_time_registration.txt") ;
     
     while(timep<curr_MAXTIME && min_time_reachability.cntUpdates<curr_NUM_UPDATES ){
 
@@ -1164,10 +1167,13 @@ if(TIMECOUNTER){
 
                 if( DEB_RRT>0)
                   ROS_INFO("First Solution after Seconds: %f", end_time_solution);
+                  // Charly wants the time exported exported exported !!
+                  timeRegistration << NUMBER_UPDATE_TRAJ << "%d solution after " << end_time_solution << "%f seconds.\n" ;
 
                   
                 first_sol++;
              }
+
 
 
             }
@@ -1182,6 +1188,8 @@ if(TIMECOUNTER){
 
         }
 
+        timeRegistration.close() ;
+        
     }
 }
 
@@ -1240,15 +1248,13 @@ else {
                 curr_cost_=min_time_reachability.cost;
                 end_time_solution=ros::WallTime::now().toSec() -begin_time_solution;
 
-<<<<<<< HEAD
                 // AnytimeRRT is here !!
                 cost_bound = (1 - epsilon_f) * min_time_reachability.cost ;
                 dist_bias = dist_bias - delta_d ;
                 cost_bias = cost_bias - delta_c ;
     	        if(dist_bias<0) dist_bias=0;
     	        if(cost_bias>1) cost_bias=1.0;                
-=======
->>>>>>> 8d9dcb3b7b31bd125766ecbe9f0b7a93412a312f
+
                 
                 
         // if(min_smoothness.foundTraj==true){
@@ -1260,11 +1266,16 @@ else {
 }
 
 
+
+
     if(FIRSTSOLUTION==0){
         end_time_solution=ros::WallTime::now().toSec()-begin_time_solution;
+        
+
 
         if( DEB_RRT>0)
           ROS_INFO("%d Solution after Seconds: %f",NUMBER_UPDATE_TRAJ, end_time_solution);
+          
     }
 
 
@@ -1276,7 +1287,9 @@ else {
     if(DEB_RRT>0)
       ROS_INFO( "Try to Get Solution " );
 
+
     min_time_reachability.get_solution (trajectory_final);            // GET THE TRAJECTORY SOLUTION
+
 
 
 
