@@ -10,6 +10,11 @@
 #include <iostream>
 #include <srl_global_planner/srl_trajectory.h>
 
+
+// Time counter
+#include <chrono>
+
+
 // Grid planner
 #include <srl_global_planner/thetastar_leading_rrt.h>
 

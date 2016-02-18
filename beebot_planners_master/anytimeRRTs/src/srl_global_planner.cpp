@@ -1124,6 +1124,17 @@ if(DEB_RRT>0)
         curr_NUM_UPDATES = NUMBER_UPDATE_TRAJ;
     }
 
+// Charly wants the time to find the first solution
+// and have its exported
+ofstream myfile ;
+myfile.open("/home/charly/anytimeRRTs_time_register.txt") ;
+
+myfile << "time\t\tcost" << std::endl 
+       << "----------------------------" << std::endl ;
+
+if(DEB_RRT>0)
+  ROS_INFO_STREAM ("Openning document to register execution time !!") ;
+
 
 if(TIMECOUNTER){
     
@@ -1136,8 +1147,21 @@ if(TIMECOUNTER){
             break;
 
         begin_time_ext_ros=ros::WallTime::now().toSec();
+        
+        // chrono timer
+        auto startTime = std::chrono::high_resolution_clock::now() ;
+        
         planner.iteration ();
         timep+=  ros::WallTime::now().toSec() - begin_time_ext_ros;
+        // chrono timer
+        auto endTime = std::chrono::high_resolution_clock::now() ;
+        
+        // chrono timer duration
+        myfile << "\t" << std::chrono::duration_cast<std::chrono::microseconds> (endTime - startTime).count() << std::endl 
+               << "or, timep+: " << timep ;
+        
+        
+        
         it++;
 
         publishSample(planner.statex,planner.statey,planner.statetheta,it);
@@ -1161,6 +1185,9 @@ if(TIMECOUNTER){
             curr_cost_=min_time_reachability.cost;
             if(first_sol==0){
                 end_time_solution=ros::WallTime::now().toSec() -begin_time_solution;
+                
+                // Charly wants this time info 
+                myfile << "First solution after seconds: " << end_time_solution << std::endl ;
 
                 if( DEB_RRT>0)
                   ROS_INFO("First Solution after Seconds: %f", end_time_solution);
@@ -1240,15 +1267,14 @@ else {
                 curr_cost_=min_time_reachability.cost;
                 end_time_solution=ros::WallTime::now().toSec() -begin_time_solution;
 
-<<<<<<< HEAD
+
                 // AnytimeRRT is here !!
                 cost_bound = (1 - epsilon_f) * min_time_reachability.cost ;
                 dist_bias = dist_bias - delta_d ;
                 cost_bias = cost_bias - delta_c ;
     	        if(dist_bias<0) dist_bias=0;
     	        if(cost_bias>1) cost_bias=1.0;                
-=======
->>>>>>> 8d9dcb3b7b31bd125766ecbe9f0b7a93412a312f
+
                 
                 
         // if(min_smoothness.foundTraj==true){
@@ -1260,6 +1286,11 @@ else {
 }
 
 
+
+
+   if(DEB_RRT>0)
+      ROS_INFO ("Execution tkime registering is done. The document is closed.") ;
+
     if(FIRSTSOLUTION==0){
         end_time_solution=ros::WallTime::now().toSec()-begin_time_solution;
 
@@ -1267,6 +1298,8 @@ else {
           ROS_INFO("%d Solution after Seconds: %f",NUMBER_UPDATE_TRAJ, end_time_solution);
     }
 
+// Charly closes the document
+myfile.close() ;
 
     nrew_=rw/iterations;
     timeIter_=timep/iterations;
