@@ -9,8 +9,9 @@ on a single robot, then activates both files on the robot side.
    <!--launch gmapping-->
    <!--<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>-->
    <!-- Use hector slam instead of gmapping -->
+
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/SLAM/hector_slam.launch" >
-     <arg name="save_map_path" value="$(find mobile_safeguard_primitive)/launch/navigation/maps/" />
+     <arg name="save_map_path" value="$(find mobile_safeguard_primitive)/launch/navigation/maps/hector_slam_feb_19/" />
      <arg name="scan_topic" value="/scan" />
   </include>
 

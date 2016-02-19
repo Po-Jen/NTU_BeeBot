@@ -2,8 +2,8 @@
         <arg name="teleop" default="false"/>
 
 	<!--launch tf-->
-	<include file="$(find mobile_safeguard_primitive)/launch/rtabmapping/tf_config/my_start_tf.launch">
-        </include>
+	<include file="$(find simulation_tobot)/beebot_description/launch/beebot_rviz.launch">
+        <!---->
 
 	<!--launch motor driver-->
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
