@@ -1137,9 +1137,7 @@ if(DEB_RRT>0)
 
 
 if(TIMECOUNTER){
-	// Charly opens a document and puts all time registration information in there !!
-    ofstream timeRegistration ;
-    timeRegistration.open("AnytimeRRTs_iteration_time_registration.txt") ;
+
     
     while(timep<curr_MAXTIME && min_time_reachability.cntUpdates<curr_NUM_UPDATES ){
 
@@ -1194,8 +1192,7 @@ if(TIMECOUNTER){
 
                 if( DEB_RRT>0)
                   ROS_INFO("First Solution after Seconds: %f", end_time_solution);
-                  // Charly wants the time exported exported exported !!
-                  timeRegistration << NUMBER_UPDATE_TRAJ << "%d solution after " << end_time_solution << "%f seconds.\n" ;
+
 
                   
                 first_sol++;
@@ -1215,7 +1212,7 @@ if(TIMECOUNTER){
 
         }
 
-        timeRegistration.close() ;
+
         
     }
 }
@@ -1275,10 +1272,7 @@ else {
                 curr_cost_=min_time_reachability.cost;
                 end_time_solution=ros::WallTime::now().toSec() -begin_time_solution;
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 613ad53cc912f1232a544accb25a56fdb9204c9e
                 // AnytimeRRT is here !!
                 cost_bound = (1 - epsilon_f) * min_time_reachability.cost ;
                 dist_bias = dist_bias - delta_d ;
@@ -1299,12 +1293,11 @@ else {
 
 
 
-<<<<<<< HEAD
+
    if(DEB_RRT>0)
       ROS_INFO ("Execution tkime registering is done. The document is closed.") ;
 
-=======
->>>>>>> 613ad53cc912f1232a544accb25a56fdb9204c9e
+
     if(FIRSTSOLUTION==0){
         end_time_solution=ros::WallTime::now().toSec()-begin_time_solution;
         
