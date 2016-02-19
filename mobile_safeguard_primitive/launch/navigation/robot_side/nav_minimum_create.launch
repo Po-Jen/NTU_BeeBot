@@ -1,15 +1,30 @@
 <launch>
-        <arg name="teleop" default="false"/>
+   <arg name="teleop" default="false"/>
 
+<<<<<<< HEAD
 	<!--launch tf-->
 	<include file="$(find simulation_tobot)/beebot_description/launch/beebot_rviz.launch">
         <!---->
+=======
+    <!--load the URDF/xacro model of the robot-->
+   <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find simulation_tobot)/beebot_description/urdf/beebot.xacro' " />
+   
+   <param name="robot_description" command="$(arg urdf_file)" />
+    
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+     <param name="publish_frequency" type="double" value="20.0" />
+   </node>   
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+	
+>>>>>>> a7d168f7b303e51bb67ffd430d038f8ae9e5eb91
 
 	<!--launch motor driver-->
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
 
 	<!--turn on laser range finder-->
-        <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node"/>
+        <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node">
+          <param name="frame_id" type="string" value="hokuyo_link" />
+        </node>
         <!--<node pkg="urg_node" type="urg_node" name="urg_node"/>-->
 
 	<!--turn on odometer-->
