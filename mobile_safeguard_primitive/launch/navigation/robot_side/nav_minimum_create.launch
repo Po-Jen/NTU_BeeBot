@@ -1,11 +1,10 @@
 <launch>
    <arg name="teleop" default="false"/>
 
-<<<<<<< HEAD
 	<!--launch tf-->
 	<include file="$(find simulation_tobot)/beebot_description/launch/beebot_rviz.launch">
         <!---->
-=======
+
     <!--load the URDF/xacro model of the robot-->
    <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find simulation_tobot)/beebot_description/urdf/beebot.xacro' " />
    
@@ -16,7 +15,6 @@
    </node>   
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 	
->>>>>>> a7d168f7b303e51bb67ffd430d038f8ae9e5eb91
 
 	<!--launch motor driver-->
 	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
