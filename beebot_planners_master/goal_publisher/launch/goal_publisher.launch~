@@ -1,0 +1,12 @@
+<launch>
+<!--
+Usage:
+1. fire up this launch file
+2. modify the value in goal_x and goal_y according to what you got by reading
+   PoseStamped goal topic.
+-->
+  <node pkg="goal_publisher" type="goal_pub" name="goal_pub" >
+    <param name="goal_x" value="0.0" type="float" />
+    <param name="goal_y" value="5.0" type="float" />
+  </node>
+</launch>
