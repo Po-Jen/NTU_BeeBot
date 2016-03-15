@@ -10,15 +10,17 @@ is attachd together with this file.
    </include>
 
    <!-- Run a static transform between /base_link and /base_footprint needed for SLAM -->
-   <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 0 0 0 /base_link /base_footprint 100" />
+   <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 -0.065 0 0 0 /base_link /base_footprint 100" />
   
   <!-- Launch laser odometry -->
-  <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/odometries/laser_odometry.launch"/>
-
+<!--  <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/odometries/laser_odometry.launch"/>
+-->
   <!-- Launch visual odometry -->
+<!--
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/odometries/visual_odometry.launch"/>
-
+-->
   <!-- Launch EKF filtered odometry. Published topic: /odometry/filtered -->
+<!--
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/odometries/ekf_filtered_odom.launch"/>
-
+-->
 </launch>

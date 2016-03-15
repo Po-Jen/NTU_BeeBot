@@ -8,22 +8,14 @@ on a single robot, then activates both files on the robot side.
 
    <!--launch gmapping-->
    <!--<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>-->
+
+
    <!-- Use hector slam instead of gmapping -->
+
   <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/SLAM/hector_slam.launch" >
-     <arg name="save_map_path" value="$(find mobile_safeguard_primitive)/launch/navigation/maps/" />
      <arg name="scan_topic" value="/scan" />
   </include>
 
-   <!--To switch to gmapping, comment out the following two nodes, the map_server and the odom_map_broadcaster-->
-   <!--load in blank map into map_server-->
-   <!--<node name="map_server" pkg="map_server" type="map_server" 
-             args="$(find mobile_safeguard_primitive)/launch/navigation/maps/blank_map.yaml"/>-->
-  <!-- Map builder -->
-<!--  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find riskrrt)/worlds/corridor/map.world" respawn="false" output="screen"/>
-  <node name="og_builder_stage" pkg="riskrrt" type="og_builder_stage" output="screen" args="4 0.5"/>-->
-
-   <!-- fire up AMCL for pose estimation using particle filter-->
-   <!--<include file="$(find mobile_safeguard_primitive)/launch/start_amcl.launch"/>-->
 
    <!--Turn on teleoperation on keyboard-->
    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>

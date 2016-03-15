@@ -130,7 +130,7 @@
         value=1 RRT* with only one phase
         value=2 RRT* full
         -->
-        <param name="type_planner" value="0" type="int"/>
+        <param name="type_planner" value="2" type="int"/>
 
         <!-- If BOX == 1 BallBox Theorem Applied when Nearest Vertex is choosed -->
         <param name="BOX" value="0" type="int"/>
@@ -160,7 +160,7 @@
         <!-- if TYPE_SAMPLING == 3 support for Theta*-RRT -->
         <!-- if TYPE_SAMPLING == 4 support set as the entire state space-->
         <!-- if TYPE_SAMPLING == 5 Path Biasing along the current available trajectory-->
-        <param name="TYPE_SAMPLING" value="3" type="int"/>
+        <param name="TYPE_SAMPLING" value="3" type="int"/> 
 
 
         <!-- Goal Biasing valid only with TYPE_SAMPLING == 4 -->

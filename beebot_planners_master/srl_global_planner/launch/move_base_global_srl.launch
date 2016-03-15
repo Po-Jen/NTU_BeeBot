@@ -1,9 +1,9 @@
 <launch>
 
 
-<node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen" launch-prefix="gdb -ex run --args">
-        <remap from="/dom" to="//beebot_diff_drive_controller/odom" />
-        <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" />
+<node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen" >
+       <!-- <remap from="/dom" to="//beebot_diff_drive_controller/odom" />
+        <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" /> -->
 
         <param name="planner_frame" value="map" type="string"/>
         <param name="local_planner_frame" value="odom" type="string"/>
@@ -81,8 +81,8 @@
         - max number of seconds allowed or
         - max number of RRT iterations allowed
         -->
+      <!--  <param name="max_iterations" value="100" type="int"/> -->
         <param name="max_iterations" value="100" type="int"/>
-
 
 
         <!-- Not currently used -->
@@ -130,7 +130,9 @@
         value=1 RRT* with only one phase
         value=2 RRT* full
         -->
-        <param name="type_planner" value="0" type="int"/>
+      <!--  <param name="type_planner" value="0" type="int"/> -->
+        <param name="type_planner" value="2" type="int"/>
+
 
         <!-- If BOX == 1 BallBox Theorem Applied when Nearest Vertex is choosed -->
         <param name="BOX" value="0" type="int"/>
