@@ -5,8 +5,18 @@ Usage:
 2. modify the value in goal_x and goal_y according to what you got by reading
    PoseStamped goal topic.
 -->
+  <!--1. for sim map-->
+  <arg name="goal_x" value="-9.67" />
+  <arg name="goal_y" value="5.01" />
+
+  <!--2. full map -->
+<!--
+  <arg name="goal_x" value="-10.0" />
+  <arg name="goal_y" value="4.85" />
+-->
+
   <node pkg="goal_publisher" type="goal_pub" name="goal_pub" >
-    <param name="goal_x" value="0.0" type="double" />
-    <param name="goal_y" value="5.0" type="double" />
+    <rosparam param="goal_x" subst_value="True">$(arg goal_x)</rosparam>
+    <rosparam param="goal_y" subst_value="True">$(arg goal_y)</rosparam>
   </node>
 </launch>

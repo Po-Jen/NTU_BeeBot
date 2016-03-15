@@ -10,16 +10,16 @@ Here, we will load in a saved map built within a simulated environment.
 
   <!--Load in map. Comment out the ones you need-->
   <!--1. sim_map-->
-<!--
+
   <arg name="in_map_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/sim_map.yaml" />
   <arg name="in_map_world" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/sim_map.world" />
--->
+
 
   <!--2. partial map feb 19-->
-
+<!--
   <arg name="in_map_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/partialmap_feb_19.yaml" />
   <arg name="in_map_world" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/partialmap_feb_19.world" />
-
+-->
 
   <!--3. room 302 map -->
 <!--

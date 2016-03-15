@@ -12,11 +12,11 @@ int main(int argc,char** argv)
   
   ros::NodeHandle n;
   
-  float goal_x = 0.;
-  float goal_y = 5.0;
+  float goal_x ;
+  float goal_y ;
   
-  n.getParam ("goal_x",  goal_x) ;
-  n.getParam ("goal_x",  goal_y) ;
+  n.param ("goal_x", goal_x) ;
+  n.param ("goal_x", goal_y) ;
 
   ros::Publisher goal_pub;
   std::string goal_topic_name = "/move_base_simple/goal";
@@ -24,8 +24,6 @@ int main(int argc,char** argv)
     
   geometry_msgs::PoseStamped goal;
   goal.header.frame_id = "map";
-//  goal.pose.position.x = 0.;
-//  goal.pose.position.y = 5.0;
 
   goal.pose.position.x = goal_x ;
   goal.pose.position.y = goal_y ;
@@ -33,7 +31,7 @@ int main(int argc,char** argv)
   goal.pose.orientation = tf::createQuaternionMsgFromYaw(0.0);
   ros::Rate r(1);
   r.sleep();
-  for(int i=0;i<100;i++)
+  for(int i=0;i<1000;i++)
     goal_pub.publish(goal);
 
     ROS_INFO_ONCE("Goal was published");
