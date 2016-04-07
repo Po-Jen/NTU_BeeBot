@@ -1,0 +1,47 @@
+<launch>
+  <arg name="gmapping" default="true"/>
+  <arg name="blank_map" default="false"/>
+  <arg name="cam_ns" default="/lower_camera"/>
+
+  <!-- launch tf-->
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/beebot_bringup.launch"/>
+
+  <!--Launch gmapping-->
+  <group if="$(arg gmapping)">
+    <include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>
+  </group>
+
+  <!-- To switch to blank map, set the argument blank_map to true, and gmapping to false-->
+  <group if="$(arg blank_map)">
+    <node name="map_server" pkg="map_server" type="map_server" 
+        args="$(find mobile_safeguard_primitive)/launch/SLAMMOT/maps/blank_map.yaml"/>
+    <!-- Run a static transform between /odom and /map-->
+    <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100"/>
+  </group>
+
+  <!-- launch motor driver-->
+  <include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
+
+  <!-- Turn on laser range finder-->
+  <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node"/>
+  <!--<node pkg="urg_node" type="urg_node" name="urg_node"/>-->
+
+  <!--Turn on Xtion (the lower camera)-->
+  <include file="$(find openni2_launch)/launch/openni2.launch" ns="$(arg cam_ns)"/>
+
+  <!-- ODOMETRY-->
+  <!--Fire up wheel odom publisher-->
+  <node pkg="odom_base_publisher" type="odom_base_publisher_node" name="odom_base_publisher_node"/>
+  <!-- Fire up laser odometry with hector_slam-->
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/laser_odometry.launch" />
+  <!-- Fire up visual odometry-->
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/visual_odometry.launch">
+    <arg name="cam_ns" value="$(arg cam_ns)">
+  </include>
+  <!--Fire up robot localization -->
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/ekf_filtered_odom.launch"/>
+
+  <!-- launch AMCL for self localization-->
+  <include file="$(find mobile_safeguard_primitive)/launch/SLAMMOT/beebot_amcl.launch"/>
+
+</launch>    

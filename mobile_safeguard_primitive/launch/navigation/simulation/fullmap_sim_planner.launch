@@ -1,0 +1,63 @@
+<launch>
+<!--
+Usage: This file is intended to plan trajectory on a already known map. 
+Here, we will load in a saved map built within a simulated environment.
+-->
+  <arg name="scan_topic" default="/base_scan" />
+
+  <!--Show robot model for esthetic reason?-->
+  <arg name="show_robot" value="true" />
+
+  <!--Load in map. Comment out the ones you need-->
+  <!--1. sim_map-->
+<!--
+  <arg name="in_map_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/sim_map.yaml" />
+  <arg name="in_map_world" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/sim_map.world" />
+-->
+
+  <!--2. partial map feb 19-->
+<!--
+  <arg name="in_map_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/partialmap_feb_19.yaml" />
+  <arg name="in_map_world" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/partialmap_feb_19.world" />
+-->
+
+  <!--3. room 302 map -->
+
+  <arg name="in_map_yaml" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/room_302_map.yaml" />
+  <arg name="in_map_world" default="$(find mobile_safeguard_primitive)/launch/navigation/utils/maps/room_302_map.world" />
+
+
+  <!--Load in map and fire up AMCL-->
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/simulation/map_loader_localizer.launch" >
+    <arg name="map_in" value="$(arg in_map_yaml)" />
+    <arg name="scan_topic" default="$(arg scan_topic)" />
+    <arg name="show_robot" value="$(arg show_robot)" />
+  </include>
+
+  <!--Load in motor driver-->
+  <!--/odom -> /base_footprint -->
+  <node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen">
+      <rosparam file="$(find mobile_safeguard_primitive)/launch/navigation/utils/arbotix_sim_drive/fake_turtlebot_with_head_arbotix.yaml" command="load" />
+      <param name="sim" value="true"/>
+  </node>
+
+  <!--use Stage ROS to imitate odom and laser, most importantly the Laser Scan !!-->
+  <node pkg="stage_ros" type="stageros" name="stageros" 
+        args="$(arg in_map_world)" respawn="false" output="screen"/>
+
+
+  <!--Fire up teleop-->
+   <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" />
+
+  <!--Fire up different planners
+      The available options:
+      AD*: roslaunch sbpl_lattice_planner move_base_sbpl.launch
+      Anytime RRT/RRT*: roslaunch srl_global_planner move_base_global_srl.launch
+      Anytime Dynamic RRT*: roslaunch anytimeRRTs move_base_global_srl.launch
+  -->
+  
+  <!--fire up Rviz-->
+  <node pkg="rviz" type="rviz" name="rviz" 
+        args="-d $(find mobile_safeguard_primitive)/launch/navigation/utils/rviz/stage_ros_gui.rviz"/>
+
+</launch>

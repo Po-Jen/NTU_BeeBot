@@ -2,7 +2,10 @@
 <package>
   <name>mobile_safeguard_primitive</name>
   <version>0.0.0</version>
-  <description>The mobile_safeguard_primitive package</description>
+  <description>
+    mobile_safeguard_primitive package provides all related functionalities for 
+    autonomous navigation in dynamic environment for our beebots.
+  </description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
@@ -40,20 +43,53 @@
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>geometry_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>pcl_conversions</build_depend>
+  <build_depend>pcl_ros</build_depend>
   <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
   <build_depend>std_msgs</build_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>roscpp</run_depend>
-  <run_depend>std_msgs</run_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>spencer_tracking_msgs</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>gridmap_2d</build_depend>
+  <build_depend>sbpl</build_depend>
+  <!--<build_depend>riskrrt</build_depend>\-->
+  <build_depend>visualization_msgs</build_depend>
 
+  <run_depend>tf</run_depend>
+  <run_depend>spencer_tracking_msgs</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>pcl_conversions</run_depend>
+  <run_depend>pcl_ros</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>message_generation</run_depend>
+  <run_depend>cmake_modules</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>gridmap_2d</run_depend>
+  <run_depend>sbpl</run_depend>
+  <run_depend>sbpl</run_depend>  
+  <!--<run_depend>riskrrt</run_depend>  -->
+  <run_depend>visualization_msgs</run_depend>
+  <run_depend>message_runtime</run_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <!-- You can specify that this package is a metapackage here: -->
-    <!-- <metapackage/> -->
-
-    <!-- Other tools can request additional information be placed here -->
-
+	<nodelet plugin="${prefix}/nodelet_plugins.xml" />
+	<rviz plugin="${prefix}/plugin_description.xml"/>
+    <costmap_2d plugin="${prefix}/costmap_plugins.xml"/>
   </export>
 </package>

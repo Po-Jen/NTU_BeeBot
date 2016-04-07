@@ -1,0 +1,18 @@
+<launch>
+  <arg name="rgb_camera_info" value="/camera/rgb/camera_info"/>
+   <arg name="rgb_rimg_ect" value="/camera/rgb/image_color"/>  <!--Rectified color image-->
+   <arg name="depReg_imgrect" value="/camera/depth/image"/>  <!--Rectified depth image-->
+   <arg name="out_cloud" value="camera/depth_registered/points"/>
+
+  <node pkg="nodelet" type="nodelet" name="standalone_nodelet" args="manager" output="screen"/>
+
+  <!-- Construct point cloud of the rgb and depth topics -->
+  <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="load depth_image_proc/point_cloud_xyzrgb standalone_nodelet --no-bond">
+    <remap from="rgb/camera_info" to="$(arg rgb_camera_info)" />  
+    <remap from="rgb/image_rect_color" to="$(arg rgb_rimg_ect)"/>  
+    <remap from="depth_registered/image_rect" to="$(arg depReg_imgrect)"/>  
+    <remap from="depth_registered/points" to="$(arg out_cloud)"/>
+
+    <!--<param name="queue_size" type="int" value="10"/>-->
+  </node>
+</launch>

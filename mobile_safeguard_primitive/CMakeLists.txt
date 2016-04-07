@@ -5,14 +5,28 @@ project(mobile_safeguard_primitive)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
+  cv_bridge
+  pcl_conversions
+  pcl_ros
   roscpp
+  rospy
+  sensor_msgs
   std_msgs
+  image_transport
+  cv_bridge
+  tf
+  message_generation
+  nodelet
+  geometry_msgs
+  gridmap_2d
+#  riskrrt
+  visualization_msgs
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SBPL REQUIRED sbpl)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -44,11 +58,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+ add_message_files(
+   FILES
+   OccupancyGridArray.msg
+   PoseTwistStamped.msg
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -65,10 +79,12 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   geometry_msgs#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   geometry_msgs
+   std_msgs
+   nav_msgs
+)
 
 ###################################
 ## catkin specific configuration ##
@@ -79,40 +95,74 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
+# not needed for SBPL with CMake config
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES mobile_safeguard_primitive
-#  CATKIN_DEPENDS geometry_msgs roscpp std_msgs
-#  DEPENDS system_lib
+  INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
+#  LIBRARIES riskrrt
+  DEPENDS sbpl  
+  CATKIN_DEPENDS message_runtime
 )
 
 ###########
 ## Build ##
 ###########
 
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
+  ${SBPL_INCLUDE_DIRS}
+  ${SBPL_LIBRARY_DIRS}
+  ${OpenCV_INCLUDE_DIRS} 
+  ${Boost_INCLUDE_DIRS}
+  ${mobile_safeguard_primitive_INCLUDE_DIRS}
+  ${SBPL_LIBRARY_DIRS}
+#  ${riskrrt_INCLUDE_DIRS}
 )
+
+#include_directories(${PROJECT_SOURCE_DIR}/include/)
+#set (HEADERS ${PROJECT_SOURCE_DIR}/include/people_filtering.h)
+
+#add_library(${PROJECT_NAME} src/beebot_DStarLite_planner.cpp)
 
 ## Declare a cpp library
 # add_library(mobile_safeguard_primitive
 #   src/${PROJECT_NAME}/mobile_safeguard_primitive.cpp
 # )
 
+#add_library(ADStar_planner src/adstar_planner.cpp
+#)
+
+
 ## Declare a cpp executable
-add_executable(mobile_safeguard_primitive_node src/mobile_safeguard_primitive.cpp)
+add_executable(mobile_safeguard_primitive_node  src/mobile_safeguard_primitive.cpp)
+add_executable(slammot_y_shaped_tube            src/slammot_y_shaped_tube.cpp)
+#add_executable(preProcessing                    src/preProcessing.cpp)
+#  I commented out people_filter because temporarily it is not possible to link to spencer_tracking_msgs/DetectedPersons.h
+#add_executable(people_filter                    src/people_filter.cpp)
+#add_executable(beebot_2d_planner_node           src/beebot_planner_2d.cpp)
+#add_executable(path2traj_converter              src/path2traj_conv.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(mobile_safeguard_primitive_node mobile_safeguard_primitive_generate_messages_cpp)
+#add_dependencies(path2traj_converter            ${catkin_EXPORTED_TARGETS})
+
+
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(mobile_safeguard_primitive_node
-  ${catkin_LIBRARIES}
-)
+target_link_libraries(mobile_safeguard_primitive_node   ${catkin_LIBRARIES})
+target_link_libraries(slammot_y_shaped_tube             ${catkin_LIBRARIES})
+#target_link_libraries(preProcessing                     ${catkin_LIBRARIES} 
+#                                                        ${PCL_LIBRARIES})
+#target_link_libraries(people_filter                     ${catkin_LIBRARIES}
+#                                                        ${PCL_LIBRARIES})
+#target_link_libraries(beebot_2d_planner_node            ${PROJECT_NAME}
+#                                                        ${catkin_LIBRARIES})
+#target_link_libraries(path2traj_converter               ${catkin_LIBRARIES})
+#target_link_libraries(${PROJECT_NAME}                   ${SBPL_LIBRARIES} 
+#                                                        ${catkin_LIBRARIES})
+
 
 #############
 ## Install ##
@@ -148,16 +198,11 @@ target_link_libraries(mobile_safeguard_primitive_node
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
+#install(TARGETS ${PROJECT_NAME}
+#        DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#)
+#install(TARGETS beebot_2d_planner_node
+#        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 
-#############
-## Testing ##
-#############
 
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_mobile_safeguard_primitive.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
-
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)

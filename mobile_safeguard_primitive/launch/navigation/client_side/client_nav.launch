@@ -1,0 +1,32 @@
+<launch>
+<!--
+This launch file works in conjunction with beebot_nav.launch 
+and runs on the client side. However, if the project is run 
+on a single robot, then activates both files on the robot side.
+-->
+   <arg name="show_rviz" default="true"/>
+
+   <!--launch gmapping-->
+   <!--<include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch"/>-->
+
+
+   <!-- Use hector slam instead of gmapping -->
+
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/SLAM/hector_slam.launch" >
+     <arg name="scan_topic" value="/scan" />
+  </include>
+
+
+   <!--Turn on teleoperation on keyboard-->
+   <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
+
+   <!--fire up move_base and load in corresponding parameters-->
+   <!--TODO-->
+
+
+   <!--fire up Rviz with corresponding graphical config-->
+   <group if="$(arg show_rviz)">
+     <node pkg="rviz" type="rviz" name="rviz" 
+           args="-d $(find mobile_safeguard_primitive)/launch/navigation/utils/rviz/motion_planning_display.rviz"/>
+   </group>
+</launch>

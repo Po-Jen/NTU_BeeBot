@@ -1,0 +1,9 @@
+<launch>
+   <!--Launch openni2-->
+    <include file="$(find openni2_launch)/launch/openni2.launch"/>
+
+   <!--Launch y_shaped tube-->
+   <node pkg="mobile_safeguard_primitive" type="slammot_y_shaped_tube" name="slammot_y_shaped_tube"/>
+
+   <!--Launch Spencer tracking single rgbd sensor-->
+</launch>

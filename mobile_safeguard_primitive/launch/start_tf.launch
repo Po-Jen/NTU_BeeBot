@@ -8,9 +8,9 @@
   <include file="$(find mobile_safeguard_primitive)/launch/hokuyo.launch" />
 
   <!-- Load the URDF/Xacro model of our robot -->
-  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find simulation_tobot)/URDF/tobot.urdf.xacro'" />
+  <arg name="urdf_file" default="$(find simulation_tobot)/URDF/tobot.urdf.xacro" />
    
-  <param name="robot_description" command="$(arg urdf_file)" />
+  <param name="robot_description" command="$(find xacro)/xacro.py $(arg urdf_file)" />
     
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
       <param name="publish_frequency" type="double" value="20.0" />

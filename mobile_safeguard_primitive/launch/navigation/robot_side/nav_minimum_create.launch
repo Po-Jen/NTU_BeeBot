@@ -1,0 +1,38 @@
+<launch>
+   <arg name="teleop" default="false"/>
+
+	<!--launch tf-->
+	<include file="$(find simulation_tobot)/beebot_description/launch/beebot_rviz.launch">
+        <!---->
+
+    <!--load the URDF/xacro model of the robot-->
+   <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find simulation_tobot)/beebot_description/urdf/beebot.xacro' " />
+   
+   <param name="robot_description" command="$(arg urdf_file)" />
+    
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+     <param name="publish_frequency" type="double" value="20.0" />
+   </node>   
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+	
+
+	<!--launch motor driver-->
+	<include file="$(find tobotdrivers)/launch/TobotDriver.launch"/>
+
+	<!--turn on laser range finder-->
+        <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node">
+          <param name="frame_id" type="string" value="hokuyo_link" />
+        </node>
+        <!--<node pkg="urg_node" type="urg_node" name="urg_node"/>-->
+
+	<!--turn on odometer-->
+	<node pkg="odom_base_pubisher" type="odom_base_pubisher_node" name="odom_base_pubisher_node"/>
+
+	<!--Turn on teleoperation on keyboard-->
+        <group if="$(arg teleop)">
+        	<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard"/>
+        </group>
+        
+        <!--Turn on Xtion-->
+        <include file="$(find openni2_launch)/launch/openni2.launch"/>
+</launch>

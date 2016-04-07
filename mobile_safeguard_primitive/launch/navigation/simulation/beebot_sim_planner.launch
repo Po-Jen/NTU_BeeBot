@@ -1,0 +1,45 @@
+<launch>
+<!--
+this launch file is used for testing the SBPL's AD* planner.
+This file is dedicated to simulation with Gazebo. There will be
+its sister launch files coming up to run beebot in the actual world.
+
+Usage:
+
+1. Launch beebot_2d_planner_node. It runs on ADStar and RSTAR
+   algorithm. By default it runs on ADStar. If you need switch 
+   to one of both planners, add
+   <param name="planner_type" value="[desired_planner]"/> within
+   the node tag.
+
+2. Change the map_file tag to the desired map directory. If you load
+   in the .world file with the wrong format, Gazebo will launch neither
+   the robot nor the map.
+-->
+
+  <param name="/use_sim_time" value="true" />
+  
+  <!-- fire up Gazebo and Rviz for simulation and visualization-->
+  <include file="$(find simulation_tobot)/beebot_control/launch/beebot_control.launch">
+     <arg name="world_file" value="$(find simulation_tobot)/maps/my_2nd_test_map.world" />
+     <arg name="rvizconfig" value="$(find mobile_safeguard_primitive)/launch/navigation/utils/rviz/motion_planning_display.rviz" />
+  </include>
+
+   <!-- Use hector slam instead of gmapping -->-
+  <include file="$(find mobile_safeguard_primitive)/launch/navigation/utils/SLAM/hector_slam.launch" >
+    <arg name="save_map_path" value="$(find mobile_safeguard_primitive)/launch/navigation/maps/simulation/" />
+  </include>
+
+  <!--Gmapping-->
+<!--  <include file="$(find mobile_safeguard_primitive)/launch/gmapping.launch" >
+    <arg name="scan_topic" value="/beebot/laser/scan" />
+  </include>
+-->   
+  <!--Fire up teleop -->
+   <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard">
+     <remap from="/cmd_vel" to="/beebot_diff_drive_controller/cmd_vel" />
+   </node>
+
+  <!-- MY PLANNER !! -->
+  <!-- TODO-->
+</launch>

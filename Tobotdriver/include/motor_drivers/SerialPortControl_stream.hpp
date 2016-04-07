@@ -20,6 +20,19 @@
 #include <boost/lexical_cast.hpp>
 #include "ros/ros.h"
 
+#include <sstream>
+
+// For converting number to string (What a mess !!)
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
+
 int testin;
 
 //That must be parameters !!!
@@ -53,27 +66,49 @@ class SerialPortControl{
 		//ros::param::get("/TobotDriver/NodeleftWheel", _LWHEEL);
 		//ros::param::get("/TobotDriver/NodeRightWheel", _RWHEEL);
 		//ros::param::get("/TobotDriver/TICKNUM", _nTick);
-		_pnode.param<std::string>("NodeleftWheel", _LWHEEL, "1");
-		_pnode.param<std::string>("NodeleftRheel", _RWHEEL, "2");
-		_pnode.param<std::string>("NodeLifter", _LIFTER, "3");
+		_pnode.param<std::string>("NodeleftWheel", _LWHEEL, "3");
+		_pnode.param<std::string>("NoderightRheel", _RWHEEL, "2");
+		_pnode.param<std::string>("NodeLifter", _LIFTER, "1");
 		_pnode.param<double>("TICKNUM", _nTick, 600000);
 		_pnode.param<double>("TICKNUMLIFT", _nTickLift, 500000);
 		//_LWHEEL="1";
 		//_RWHEEL="1";
-		//std::string PORT ="/dev/ttyUSB0";
-		std::string PORT;
-		_pnode.param<std::string>("Port", PORT, "/dev/ttyUSB0");
+		std::string PORT ="/dev/ttyUSB0";
+		//std::string PORT;		
+		//std::string PORT="/dev/ttyUSB1";
 		double Baud;
+		_pnode.setParam("Port", PORT);
+//		_pnode.param<std::string>("Port", PORT, "/dev/ttyUSB2");
+
+	
 		//ros::param::get("/TobotDriver/BaudRate", Baud);
 		_pnode.param<double>("BaudRate", Baud, 9600);
 		std::cout << "The motor is=> Baud "<< Baud<<" Port "<< PORT<<std::endl;
-		_motor.Open(PORT);		
+
+		_motor.Open(PORT);	
+
+                // **********************************************************************
+                // This part is added and modified by Charly on Sept 9, 2015
+                std::string defaultPort = "/dev/ttyUSB0" ;
+                std::string port_ns = "/dev/ttyUSB" ;
+
+                if (PORT.compare(defaultPort) != 0 ) {
+                  for (int i = 0 ; i < 10 ; i++) {
+                    PORT = port_ns + patch::to_string( i ) ;
+                    if ( _motor.good() ) {
+         	      _pnode.setParam("Port", PORT);             
+                      break ;
+                    }
+                  }
+                }
+                // ***********************************************************************
+
 		//8 data bits
 		//1 stop bit
 		//No parity
 		 if ( ! _motor.good() ){
 			std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
-			<< "Error: Could not open serial port "<<PORT
+			<< "ABC:Error: Could not open serial port "<<PORT
 			<< std::endl ;
 			exit(1) ;
 		}

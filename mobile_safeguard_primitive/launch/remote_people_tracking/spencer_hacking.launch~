@@ -1,0 +1,86 @@
+<launch>
+     <!--
+         To use this launch file, a RGB-D sensor, a laser rangefinder and optionally a pair of wheel encoders are required.
+         First, make sure that the sensors are turned on and running normally. Next, roslaunch this launch file.
+         If you are launching RGB-D sensor from elsewhere, set the "load driver" argument to false. If you don't
+         have an odometry, set "dummy_transforms" to true. Do remember ajudst and insert the "height_above_ground"
+         argument correctly so that people can be detected and tracked. Since the people detection trained 
+         data are obtained with the RGB-D sensor located 1.6 m above the ground, lower distance less than 1.0 m
+         may not yield any results at all, but somewhat near 1.6 the detector can still function properly.
+     -->
+
+    <!-- Launch file arguments -->
+    <arg name="height_above_ground" default="1.3"/>  <!-- in meters, assumes a horizontally oriented RGB-D sensor; important for accurate detection -->
+    <arg name="load_driver" default="true"/>  <!-- set to false if you are already running OpenNi from elsewhere -->
+    <arg name="visualization" default="false"/>
+    <arg name="dummy_transforms" default="true"/>
+
+    <!--Settings for RGB-D detector-->
+     <arg name="laser_detector" default="false"/>
+    <arg name="upper_body" default="true"/>
+    <arg name="hog" default="true"/>
+    <arg name="rgbd_detection_id_increment" default="20"/>
+
+    <!--Settings for LaserScan detector-->
+    <arg name="adaboost_model" default="lms500"/> <!--lms200 or lms500-->
+    <arg name="laser_detection_id_increment" default="20"/>
+    <arg name="laser_max_distance" default="15"/>
+
+    <!-- ================================
+           Run OpenNi2 driver
+           ================================ -->
+    <group if="$(arg load_driver)">
+        <include file="$(find openni2_launch)/launch/openni2.launch">
+          <arg name="depth_registration" default="true"/>
+        </include>
+    </group>
+
+    <!-- OpenNi2 uses slightly different topic names than OpenNi1, so remap the topic that our system expects -->
+    <!--<remap from="camera/rgb/image_color" to="camera/rgb/image_rect_color"/>-->
+
+    <!-- Set ground plane distance -->
+    <rosparam param="/spencer/perception_internal/people_detection/ground_plane/distance" subst_value="true">$(arg height_above_ground)</rosparam>
+
+    <!-- Set up dummy transforms into an imaginary robot and odom frame -->
+    <group if="$(arg dummy_transforms)">
+        <node name="tf_base_footprint" pkg="tf" type="static_transform_publisher" args="0 0 $(arg height_above_ground) 0 0 0 base_footprint rgbd_front_top_link 10"/>
+        <node name="tf_odom"           pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 odom base_footprint 10"/>
+    </group>
+
+    <!-- ==================================== 
+           RGBD Detector
+           ==================================== -->    
+    <group ns="/spencer/perception_internal/people_detection">
+
+        <!-- RWTH fixed groundplane -->
+        <include file="$(find rwth_ground_plane)/launch/ground_plane_really_fixed.launch">
+            <arg name="ground_plane" value="/spencer/perception_internal/rwth_ground_plane"/>
+            <arg name="rate" value="30.0"/> <!-- limits how fast upper-body and HOG detector can run -->     
+        </include>
+
+        <!-- Front RGB-D upper body -->
+        <include file="$(find rwth_upper_body_detector)/launch/upper_body_detector.launch"  if="$(arg upper_body)">
+            <arg name="detected_persons" value="/spencer/perception_internal/detected_persons/rgbd_front_top/upper_body"/>
+            <arg name="camera_namespace" value="/camera"/>
+            <arg name="upper_body_detections" value="upper_body_detector/detections" />
+            <arg name="upper_body_bb_centres" value="upper_body_detector/bounding_box_centres" />
+            <arg name="upper_body_image" value="image" />
+            <arg name="ground_plane" value="/spencer/perception_internal/rwth_ground_plane" />
+            <arg name="detection_id_offset" value="3"/>
+            <arg name="detection_id_increment" value="$(arg rgbd_detection_id_increment)"/>
+        </include>
+
+        <!-- Front RGB-D HOG -->
+        <include file="$(find rwth_ground_hog)/launch/ground_hog_with_GP.launch" ns="rgbd_front_top" if="$(arg hog)">
+            <arg name="world_scale" value="0.001"/>
+            <arg name="detected_persons" value="/spencer/perception_internal/detected_persons/rgbd_front_top/hog"/>
+            <arg name="camera_namespace" value="/camera"/>
+            <arg name="detections" value="hog/detections" />
+            <arg name="result_image" value="hog/image" />
+            <arg name="ground_plane" value="/spencer/perception_internal/rwth_ground_plane" />
+            <arg name="detection_id_offset" value="4"/>
+            <arg name="detection_id_increment" value="$(arg rgbd_detection_id_increment)"/>
+        </include>
+    </group>
+    
+</launch>
